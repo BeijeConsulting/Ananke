@@ -22,27 +22,42 @@ public class Cartella {
 		
 		int limit = 0;
 		
-		for(int i=0; i<COLS; i++)
+		for(int i=0; i<ROWS; i++)
 		{
-			for(int k=0; k<ROWS; k++)
+			for(int k=0; k<COLS; k++)
 			{
-				if(spaces.contains(i))
+				if(spaces.contains(k))
 				{
 					card[i][k]=0;
 					
 				}			
 				else
 				{
-					
+					if(limit<=2)
+					{
+						card[i][k]=decine(k,pool);
+						limit++;
+						if(i!=0)
+						{
+						if(card[i][k]<card[i-1][k])
+						{
+							int temp = card[i-1][k];
+							card[i-1][k]= card[i][k];
+							card[i][k] = temp;
+						}
+					else {
+						card[i][k]=0;
+					}
+					}
 				}
 			}
 		}
-			
+			spaces.clear();
+			this.setSpaces();
+		}	
 		
 		return card;
 	}
-	
-	
 	
 	
 	public int decine(int num, ArrayList<Integer> pooly)
@@ -107,8 +122,7 @@ public class Cartella {
 		
 		for(int i=0; i<4;i++)
 		{
-			spaces.add(gen.nextInt(9));   //RISOLVERE BUG SPAZI RIPETUTI. provare shuffle su list per cambiare k 
-											//ogni volta
+			spaces.add(gen.nextInt(9));   
 		}
 		
 		return spaces;
@@ -120,17 +134,29 @@ public class Cartella {
 	}
 	
 	
-	
-@Override
-	public String toString() {
-		return "";
+	public void  print()
+	{
+		for(int i = 0; i<ROWS; i++)
+		{
+			for(int k=0; k<COLS ; k++)
+			{
+				if(card[i][k]==0)
+				{
+					System.out.print(" ");
+				}
+				else System.out.println(card[i][k]);
+			}
+		}
 	}
+	
+	
+	
 
 
 
 //class fields
-private static final int COLS=3, ROWS=9;
-private int[][] card = new int[COLS][ROWS];
+private static final int COLS=9, ROWS=3;
+private int[][] card = new int[ROWS][COLS];
 private Random gen = new Random();
 private static int count=0;
 }
