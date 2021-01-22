@@ -93,6 +93,8 @@ public class Cartella{
 		
 		//for(int i = 0; i < 3; i++) {System.out.println(vColDaDue[i]);}
 		
+		
+		//Seleziona il range di numeri della colonna da generare
 		for(int i = 0; i < 9; i++) {
 			
 			switch (i) {
@@ -184,5 +186,29 @@ public class Cartella{
 	
 	
 	
-	
+	public void visualizzaCartella2() {
+		
+		
+		int[][] vCard = new int[3][9];
+		int[] contRig = {0,0,0};
+		int rig = 0;
+		
+		for(int k = 0; k < 3; k++) {
+			for(int i = 0; i < 3; i++) {
+				for(int j = 0; j < 3; j++) {
+					do {
+						rig = Utility.rand(0, 2);
+					}while(contRig[rig] < 4 || vCard[i][rig] != 0 );
+				}
+				
+			}
+			
+			
+		}
+		
+		
+		
+		
+		
+	}
 }
