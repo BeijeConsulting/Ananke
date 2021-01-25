@@ -14,6 +14,7 @@ public class Rubrica {
         String comando;
 
         //prendo il primo comando che mi porta nel ciclo
+        //
         stampaListaComandi();
         comando = inputTastiera.nextLine();
 
