@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.capitoli123;
 
 public class Piramide{
 	public void stampaNumeri(int n){
