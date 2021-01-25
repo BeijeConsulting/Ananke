@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.esercizietti;
 
 public class StringAndStringBuilderTest {
 	public static void main(String[] args) {
@@ -12,7 +12,7 @@ public class StringAndStringBuilderTest {
 		System.out.println("Name&SecondName: " + firstAndSecond);
 		
 		//ora abbiamo tre oggetti stringa referenziati dentro alla string pool
-		//mentre firstAndSecond è un oggetto non nella string pool
+		//mentre firstAndSecond ï¿½ un oggetto non nella string pool
 		
 		System.out.println("Char at index 5 of your name: " + name.charAt(5) );
 		System.out.println("No. That was the 6th. It's:  " + name.charAt(4) );

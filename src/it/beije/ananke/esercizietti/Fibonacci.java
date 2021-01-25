@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.esercizietti;
 
 import java.util.Random;
 public class Fibonacci{

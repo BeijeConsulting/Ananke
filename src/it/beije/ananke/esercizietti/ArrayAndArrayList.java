@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.esercizietti;
 
 import java.util.Random;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class ArrayAndArrayList {
 		
 		//ora usiamo altri metodi
 		int numRand = rand.nextInt(15);
-		System.out.println("\nIl numero " + numRand + " è presente nell'array? " + (Arrays.binarySearch(arrayNumeri, numRand)>0));
+		System.out.println("\nIl numero " + numRand + " ï¿½ presente nell'array? " + (Arrays.binarySearch(arrayNumeri, numRand)>0));
 		
 	
 		

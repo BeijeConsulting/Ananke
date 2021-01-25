@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.esercizietti;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ public class MethodsRidefinition {
 	public static String strngInsert(String orig, int offset, String add) {
 		
 		//devo trovare l'offset in orig (...)-> orig[offset-1]
-		//perciò controllare che offset>0
+		//perciï¿½ controllare che offset>0
 		
 		int index;
 		String result = "";
