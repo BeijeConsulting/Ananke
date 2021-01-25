@@ -5,7 +5,7 @@ package it.beije.ananke.rubrica;
 //devo modificare il file, non sovrascrivere ogni volta che lo apro.
 
 import java.util.Scanner;
-
+//
 public class Rubrica {
 
     public static void main(String[] args) {
