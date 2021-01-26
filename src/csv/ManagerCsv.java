@@ -17,24 +17,7 @@ public class ManagerCsv {
 		
 		contatti=new ArrayList<>();
 	if(file.exists()) {
-		FileReader fileReader = new FileReader(file);
-		BufferedReader bufferedReader = new BufferedReader(fileReader);
-		List<String> rows = new ArrayList<String>();
-		bufferedReader.readLine();
-		while (bufferedReader.ready()) {
-//			System.out.println(r++ + " : " + bufferedReader.readLine());
-			rows.add(bufferedReader.readLine());
-		}
-			bufferedReader.close();
-			fileReader.close();
-			for (String row : rows) {
-			String[] rs = row.split(";");
-				aggiungiContatto(new Contatto(rs[0],rs[1],rs[3],rs[2]));
-				
-				
-			
-		}
-		
+		contatti=readCsv("rubrica.csv");
 	}else {
 		creazione(file);
 		
@@ -63,7 +46,65 @@ public class ManagerCsv {
 		 fileWriter.close();
 	 }
 	
+	 public void salvaListaContatti(ArrayList<Contatto> x, String nome) throws IOException {
+		 File	 file= new File(nome);
+		 FileWriter fileWriter = new FileWriter(file);
+		 fileWriter.write("Nome;Cognome;Email;Tel;\n");
+		 for(Contatto c:x) {
+			fileWriter.write(c.toString()+"\n");
+			 
+		 }
+		 fileWriter.close();
+	 }
 	 
+	 public ArrayList<Contatto> readCsv(String nome) throws IOException {
+		 ArrayList<Contatto> result=new ArrayList<>();
+	File	 file= new File(nome);
+		 FileReader fileReader = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			List<String> rows = new ArrayList<String>();
+			bufferedReader.readLine();
+			while (bufferedReader.ready()) {
+//				System.out.println(r++ + " : " + bufferedReader.readLine());
+				rows.add(bufferedReader.readLine());
+			}
+				bufferedReader.close();
+				fileReader.close();
+				for (String row : rows) {
+				String[] rs = row.split(";");
+					result.add(new Contatto(rs[0],rs[1],rs[3],rs[2]));
+					
+					
+				
+			}
+			
+			return result;
+	 }
+	
+	 public void stampaDaFile(String nome) throws IOException {
+		 ArrayList<Contatto> result=new ArrayList<>();
+	File	 file= new File(nome);
+		 FileReader fileReader = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			List<String> rows = new ArrayList<String>();
+			System.out.println(bufferedReader.readLine());
+			while (bufferedReader.ready()) {
+//				System.out.println(r++ + " : " + bufferedReader.readLine());
+				rows.add(bufferedReader.readLine());
+			}
+				bufferedReader.close();
+				fileReader.close();
+				for (String row : rows) {
+				String[] rs = row.split(";");
+					new Contatto(rs[0],rs[1],rs[3],rs[2]).toString();
+					
+					
+				
+			}
+			
+	 }
+	 
+	
 	
 
 }

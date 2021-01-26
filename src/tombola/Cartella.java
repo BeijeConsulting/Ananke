@@ -41,11 +41,14 @@ public class Cartella {
 			}
 			}
 		}else {
+		
+			
 			for (int i = 0; i < 3; i++) {
 				int estratti = 0;
 				while (estratti != 5) {
 					for (int j = 0; j < 9; j++) {
-						if (r.nextBoolean()&&numeri[i][j]==0) {
+						/*
+						if (r.nextBoolean()&&numeri[i][j]==0&&controlloColonna(j,2)==false) {
 							int z=estrazione.getNumero(j + 1);
 							while(this.controlloNumero(z)) 
 								z=estrazione.getNumero(j + 1);
@@ -55,14 +58,38 @@ public class Cartella {
 								break;
 							
 						}
+						
+*/
+							if (numeri[i][j]==0) {
+						
+								int z=estrazione.getNumeroSR(j + 1);
+								if(z!=-1) {					
+								numeri[i][j] = z;
+								estratti++;
+								}
+								
+								if (estratti == 5)
+									break;
+								
+								
+							
+								}
+							
+							
+						}
 					}
 
 				}
 				}
+				
+					}
+
+				
+				
 			
 			
-		}
-	}
+		
+	
 
 	public int getnCartella() {
 		return nCartella;
@@ -159,6 +186,22 @@ int zeri=0;
 				if(numeri[i][j]==x)
 					return true;
 			
+		return false;
+	
+}
+private  boolean controlloColonna(int indice,int c) {
+		
+		int conta=0;
+		if(numeri[0][indice]!=0)
+			conta++;
+		if(numeri[1][indice]!=0)
+			conta++;
+		if(numeri[2][indice]!=0)
+			conta++;
+			
+		if(conta==c)
+		return true;
+		else 
 		return false;
 	
 }
