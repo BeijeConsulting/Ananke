@@ -1,8 +1,10 @@
 package it.beije.ananke.file;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -25,7 +27,7 @@ public class CsvManager {
 		//System.out.println(r++ + " : " + bufferedReader.readLine());
 	
 		
-/*		FileReader fileReader = new FileReader(file);	
+	FileReader fileReader = new FileReader(file);	
 //		FileReader fileReader = new FileReader("/temp/rubrica.txt");
 //		System.out.println(fileReader);		
 //		while (fileReader.ready()) {
@@ -46,23 +48,47 @@ public class CsvManager {
 		System.out.println("rows size : " + rows.size());
 		System.out.println(rows);
 		
+//		for (String row : rows) {
+//			String[] rs = row.split(";");
+////			for (String r : rs) {
+////				System.out.println(r);
+//			for (int i = rs.length-1; i >= 0; i--) {
+//				System.out.println(rs[i]);
+//			}
+//			System.out.println("--------");
+//
+//			StringTokenizer tokenizer = new StringTokenizer(row, ";");
+//			while (tokenizer.hasMoreTokens()) {
+//				String r = tokenizer.nextToken();
+//				System.out.println(r);
+//			}
+//			System.out.println("========");
+//		}
+		
+		//Scrivo nuovo file
+		File newFile = new File("/temp/nuovo.txt");
+		System.out.println("new file : " + newFile.getAbsolutePath());
+		System.out.println("new file exists ? " + newFile.exists());
+		
+		FileWriter fileWriter = new FileWriter(newFile);
+//		fileWriter.write("questa è una prova");
+		
 		for (String row : rows) {
 			String[] rs = row.split(";");
-//			for (String r : rs) {
-//				System.out.println(r);
 			for (int i = rs.length-1; i >= 0; i--) {
 				System.out.println(rs[i]);
+				fileWriter.write(rs[i]);
+				fileWriter.write(';');
 			}
+			fileWriter.write('\n');
 			System.out.println("--------");
 
-			StringTokenizer tokenizer = new StringTokenizer(row, ";");
-			while (tokenizer.hasMoreTokens()) {
-				String r = tokenizer.nextToken();
-				System.out.println(r);
-			}
-			System.out.println("========");
 		}
-		*/
+
+		
+		fileWriter.flush();
+		fileWriter.close();		
+
 	}
 	
 	public static void stampaDir(String path) {
