@@ -1,6 +1,6 @@
 package it.beije.ananke.capitolo5.astrazione;
 
-public class Chromebook extends Notebook{
+public class Chromebook extends Notebook implements Prova{
     private String CPU;
     private String GPU;
     private String IOS;
@@ -42,21 +42,21 @@ public class Chromebook extends Notebook{
     public void connect() {
         System.out.println("Il tuo chromebook è connesso a: " + getBrowser());
     }
-//
-//    @Override
-//    public void play() {
-//        System.out.println("Non sono adatto per giocare");
-//    }
-//
-//    @Override
-//    public void work() {
-//        System.out.println("Non sono adatto per lavorare");
-//    }
-//
-//    @Override
-//    public void start() {
-//        System.out.println("Avvio non riuscito");
-//    }
+
+    @Override
+    public void play() {
+        System.out.println("Non sono adatto per giocare");
+    }
+
+    @Override
+    public void work() {
+        System.out.println("Non sono adatto per lavorare");
+    }
+
+    @Override
+    public void start() {
+        System.out.println("Avvio non riuscito");
+    }
 
 
 }

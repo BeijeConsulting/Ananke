@@ -17,5 +17,9 @@ public class PCTest {
         asus.work();
 
         asus.printSoftware();
+
+        Chromebook chromebook = new Chromebook("Intercore i7", "Nvidia GeForce" , "Microsoft" , "ssd GB");
+        System.out.println(chromebook.effettuaRicerca("Ciao"));
+        chromebook.start();
     }
 }
