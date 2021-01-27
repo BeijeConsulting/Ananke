@@ -1,4 +1,4 @@
-
+package it.beije.ananke.XMLtoCSV.src;
 public class Contatto {
 
 	public String name;
