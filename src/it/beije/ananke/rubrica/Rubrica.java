@@ -31,12 +31,9 @@ public class Rubrica {
 	List<Contatto> list;
 
 	public void aggiungiContattoSulFile(Contatto c) throws Exception {
-		
 			aggiungiContatto(c);
 			scriviRubricaCSV();
 			scriviRubricaXML();
-			
-			
 	}
 	
 	public void caricaRubricaDaSCV() throws IOException {
@@ -81,7 +78,7 @@ public class Rubrica {
 
 	
 	
-	private void scriviRubricaCSV() throws Exception {
+	public void scriviRubricaCSV() throws Exception {
 		
 		File f1 = new File("C:\\Users\\Padawan06\\Desktop\\rubrica.csv");
 		FileWriter fw = new FileWriter(f1);

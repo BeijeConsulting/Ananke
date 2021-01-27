@@ -38,13 +38,33 @@ public class Main {
 				mail = s.next();
 				
 				c = new Contatto(nome, cognome, numeroTel, mail);
-				R.aggiungiContattoSulFile(c);
+				R.aggiungiContatto(c);
 				//R.aggiungiContatto(c);
+				break;
+				
+			case "F":
+				
+				System.out.println("Inserisci Nome:");
+				nome = s.next();
+				System.out.println("Inserisci Cognome:");
+				cognome = s.next();
+				System.out.println("Inserisci Num di telefono:");
+				numeroTel = s.next();
+				System.out.println("Inserisci Email:");
+				mail = s.next();
+				
+				c = new Contatto(nome, cognome, numeroTel, mail);
+				R.aggiungiContattoSulFile(c);
+				
 				break;
 				
 			case "V":
 				
 				R.visualizzaRubrica();
+				break;
+				
+			case "C":
+				
 				break;
 				
 			default: 
@@ -58,6 +78,8 @@ public class Main {
 			
 		}
 		
+		R.scriviRubricaCSV();
+		R.scriviRubricaXML();
 		s.close();
 	}
 	
@@ -72,6 +94,8 @@ public class Main {
 	System.out.println("MENU:");
 	System.out.println("______________________________________");
 	System.out.println("N: Inserisci nuovo contatto");
+	System.out.println("F: Inserisci nuovo contatto e salva su file immediatamente");
+	System.out.println("c: Cerca contatto");
 	System.out.println("V: Visualizza intera Rubrica ");}
 
 }
