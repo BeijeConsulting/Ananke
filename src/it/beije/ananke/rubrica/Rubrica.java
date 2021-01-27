@@ -58,9 +58,9 @@ public class Rubrica {
     }
 
     public void orderByAsc() {
-        Collections.sort(contacts, Comparator.comparing(Contact::getFirstname));
+        Collections.sort(contacts, Comparator.comparing(Contact::getFirstname)); //(c1,c2)-> c1.getFirstName().compare(c2.getFirstName());
         for (Contact c : contacts) {
-            System.out.println(c.toString());
+            System.out.println(c);
         }
         this.write(contacts);
     }
