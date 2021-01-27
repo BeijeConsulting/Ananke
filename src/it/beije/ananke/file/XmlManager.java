@@ -24,7 +24,7 @@ public class XmlManager {
         DocumentBuilder builder = factory.newDocumentBuilder();
 		
         // Load the input XML document, parse it and return an instance of the Document class.
-        Document document = builder.parse("/temp/rubrica.xml");
+        Document document = builder.parse("C:\\Users\\Padawan01\\IdeaProjects\\git\\Ananke\\src\\it\\beije\\ananke\\xmlmanager\\rubrica.xml");
         
         Element docElement = document.getDocumentElement();       
         System.out.println(docElement.getTagName());
@@ -47,6 +47,7 @@ public class XmlManager {
         for (int i = 0; i < elementiContatto.getLength(); i++) {
         	Contatto contatto = new Contatto();
         	Element c = (Element)elementiContatto.item(i);
+			System.out.println(c.getTagName());
         	
 //        	//NON FARE
 //        	if (c.getElementsByTagName("email") != null && c.getElementsByTagName("email").getLength() > 0) {
@@ -60,6 +61,8 @@ public class XmlManager {
       	
         	//System.out.println("c.getTextContent : " + c.getTextContent());
            	NodeList valori = c.getChildNodes();
+
+			System.out.println(valori.getLength());
             //System.out.println(valori.getLength());
             for (int j = 0; j < valori.getLength(); j++) {
             	Node n = valori.item(j);

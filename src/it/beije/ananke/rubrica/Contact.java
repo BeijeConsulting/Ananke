@@ -6,6 +6,10 @@ public class Contact {
     private String phoneNumber;
     private String email;
 
+    public Contact() {
+
+    }
+
     public Contact(String firstname, String lastName, String phoneNumber, String email) {
         this.firstname = firstname;
         this.lastName = lastName;
