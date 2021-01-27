@@ -60,7 +60,7 @@ public class XmlManager {
       	
         	//System.out.println("c.getTextContent : " + c.getTextContent());
            	NodeList valori = c.getChildNodes();
-            //System.out.println(valori.getLength());
+            
             for (int j = 0; j < valori.getLength(); j++) {
             	Node n = valori.item(j);
             	if (n instanceof Element) {
