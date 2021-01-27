@@ -1,6 +1,6 @@
 package csv;
 
-public class Contatto {
+public class Contatto implements Comparable{
 private String nome;
 private String cognome;
 private String tel;
@@ -39,6 +39,12 @@ public void setEmail(String email) {
 @Override
 public String toString() {
 	return nome+";"+cognome+";"+email+";"+tel;
+}
+@Override
+public int compareTo(Object o) {
+Contatto c= (Contatto)o;
+	return nome.compareTo(c.getNome());
+	
 }
 
 }
