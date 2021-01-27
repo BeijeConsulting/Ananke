@@ -14,8 +14,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import it.beije.ananke.Contatto;
-
+import it.beije.ananke.rubrica.Contatto;
 
 public class XmlManager {
 
@@ -68,16 +67,16 @@ public class XmlManager {
             		System.out.println(valore.getTagName() + " : " + valore.getTextContent());
             		switch (valore.getTagName()) {
 					case "nome":
-						contatto.setName(valore.getTextContent());
+						contatto.setNome(valore.getTextContent());
 						break;
 					case "cognome":
-						contatto.setSurname(valore.getTextContent());
+						contatto.setCognome(valore.getTextContent());
 						break;
 					case "telefono":
-						contatto.setTelephone(valore.getTextContent());
+						contatto.setNumeroTel(valore.getTextContent());
 						break;
 					case "email":
-						contatto.setEmail(valore.getTextContent());
+						contatto.setMail(valore.getTextContent());
 						break;
 
 					default:
