@@ -1,6 +1,6 @@
 package it.beije.ananke.inherance;
 
-public class Scimpanzè extends Mammiferi implements Gestazione, SpostamentoQuattroZampe, SpostamentoDueZampe{
+public class Scimpanze extends Mammiferi implements Gestazione, SpostamentoQuattroZampe, SpostamentoDueZampe{
     @Override
     void stampaSpecifiche() {
         getRegno();
@@ -10,7 +10,7 @@ public class Scimpanzè extends Mammiferi implements Gestazione, SpostamentoQuat
         tempoGestazione();
         dueZampe();
         quattroZampe();
-        velocitàMax();
+        velocitaMax();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class Scimpanzè extends Mammiferi implements Gestazione, SpostamentoQuat
     }
 
     @Override
-    public void velocitàMax() {
+    public void velocitaMax() {
         System.out.println("Le mie capacità mi permettono di muovermi agilmente tra i rami degli alberi");
     }
 }

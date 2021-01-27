@@ -1,15 +1,15 @@
 package it.beije.ananke.inherance;
 
-public class Aquila extends Uccelli implements CapacitàVolare, DespositoUova{
+public class Aquila extends Uccelli implements CapacitaVolare, DespositoUova{
     @Override
     void stampaSpecifiche() {
         getRegno();
         getPhylum();
         getClasse();
         getSpecie();
-        quantitàUova();
+        quantitaUova();
         volare();
-        velocitàMax();
+        velocitaMax();
     }
 
     @Override
@@ -18,12 +18,12 @@ public class Aquila extends Uccelli implements CapacitàVolare, DespositoUova{
     }
 
     @Override
-    public void quantitàUova() {
+    public void quantitaUova() {
         System.out.println("Depongo da 1 a 3 uova");
     }
 
     @Override
-    public void velocitàMax() {
+    public void velocitaMax() {
         System.out.println("In picchiata raggiungo i 320 km/h");
     }
 }

@@ -1,15 +1,15 @@
 package it.beije.ananke.inherance;
 
-public class SerpenteVolanteDelParadiso extends Rettili implements Strisciamento, CapacitàVolare{
+public class SerpenteVolanteDelParadiso extends Rettili implements Strisciamento, CapacitaVolare {
     @Override
     void stampaSpecifiche() {
         getRegno();
         getPhylum();
         getClasse();
         getSpecie();
-        quantitàUova();
+        quantitaUova();
         strisciando();
-        velocitàMax();
+        velocitaMax();
     }
 
     @Override
@@ -18,12 +18,12 @@ public class SerpenteVolanteDelParadiso extends Rettili implements Strisciamento
     }
 
     @Override
-    public void quantitàUova() {
+    public void quantitaUova() {
         System.out.println("Depongo fino a 10 uova");
     }
 
     @Override
-    public void velocitàMax() {
+    public void velocitaMax() {
         System.out.println("I miei voli durano pochi secondi ma posso raggiungere i 40 km/h");
     }
 }

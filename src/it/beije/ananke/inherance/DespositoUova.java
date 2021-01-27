@@ -2,5 +2,5 @@ package it.beije.ananke.inherance;
 
 public interface DespositoUova {
 
-    abstract void quantitàUova();
+    abstract void quantitaUova();
 }

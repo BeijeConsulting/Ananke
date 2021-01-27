@@ -22,7 +22,7 @@ public class Enciclopedia {
         SerpenteVolanteDelParadiso serpenteVolanteDelParadiso = new SerpenteVolanteDelParadiso();
         animali.add(serpenteVolanteDelParadiso);
 
-        Scimpanzè scimpanze = new Scimpanzè();
+        Scimpanze scimpanze = new Scimpanze();
         animali.add(scimpanze);
 
         Tigre tigre = new Tigre();

@@ -14,7 +14,7 @@ public class Tigre extends Mammiferi implements SpostamentoQuattroZampe, Gestazi
         getSpecie();
         tempoGestazione();
         quattroZampe();
-        velocitàMax();
+        velocitaMax();
     }
 
     @Override
@@ -23,7 +23,7 @@ public class Tigre extends Mammiferi implements SpostamentoQuattroZampe, Gestazi
     }
 
     @Override
-    public void velocitàMax() {
+    public void velocitaMax() {
         System.out.println("La mia velocità massima è di 65 km/h");
     }
 }

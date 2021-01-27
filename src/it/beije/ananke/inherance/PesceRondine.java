@@ -1,16 +1,16 @@
 package it.beije.ananke.inherance;
 
-public class PesceRondine extends Pesci implements CapacitàNuotare, CapacitàVolare{
+public class PesceRondine extends Pesci implements CapacitaNuotare, CapacitaVolare {
     @Override
     void stampaSpecifiche() {
         getRegno();
         getPhylum();
         getClasse();
         getSpecie();
-        quantitàUova();
+        quantitaUova();
         nuotare();
         volare();
-        velocitàMax();
+        velocitaMax();
     }
 
     @Override
@@ -19,12 +19,12 @@ public class PesceRondine extends Pesci implements CapacitàNuotare, CapacitàVo
     }
 
     @Override
-    public void quantitàUova() {
+    public void quantitaUova() {
         System.out.println("Non ho un dato sulla media delle uova deposte");
     }
 
     @Override
-    public void velocitàMax() {
+    public void velocitaMax() {
         System.out.println("Riesco a volare per 45 secondi");
     }
 }

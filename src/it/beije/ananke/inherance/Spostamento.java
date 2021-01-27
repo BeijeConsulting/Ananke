@@ -1,5 +1,5 @@
 package it.beije.ananke.inherance;
 
 public interface Spostamento {
-    void velocitàMax();
+    void velocitaMax();
 }

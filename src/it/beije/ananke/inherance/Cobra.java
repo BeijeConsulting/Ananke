@@ -7,9 +7,9 @@ public class Cobra extends Rettili implements Strisciamento{
         getPhylum();
         getClasse();
         getSpecie();
-        quantitàUova();
+        quantitaUova();
         strisciando();
-        velocitàMax();
+        velocitaMax();
     }
 
     @Override
@@ -18,12 +18,12 @@ public class Cobra extends Rettili implements Strisciamento{
     }
 
     @Override
-    public void quantitàUova() {
+    public void quantitaUova() {
         System.out.println("Depongo da 20 a 40 uova");
     }
 
     @Override
-    public void velocitàMax() {
+    public void velocitaMax() {
         System.out.println("Raggiungo  20 km/h");
     }
 }

@@ -1,17 +1,17 @@
 package it.beije.ananke.inherance;
 
-public class Anatra extends Uccelli implements CapacitàVolare, CapacitàNuotare, DespositoUova, SpostamentoDueZampe{
+public class Anatra extends Uccelli implements CapacitaVolare, CapacitaNuotare, DespositoUova, SpostamentoDueZampe{
     @Override
     void stampaSpecifiche() {
         getRegno();
         getPhylum();
         getClasse();
         getSpecie();
-        quantitàUova();
+        quantitaUova();
         nuotare();
         dueZampe();
         volare();
-        velocitàMax();
+        velocitaMax();
     }
 
     @Override
@@ -20,12 +20,12 @@ public class Anatra extends Uccelli implements CapacitàVolare, CapacitàNuotare
     }
 
     @Override
-    public void quantitàUova() {
+    public void quantitaUova() {
         System.out.println("Depongo dalle 8 alle 13 uova");
     }
 
     @Override
-    public void velocitàMax() {
+    public void velocitaMax() {
         System.out.println("Posso raggiungere i 130 km/h");
     }
 }
