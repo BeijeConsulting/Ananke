@@ -96,8 +96,8 @@ public class XmlManager {
 
 /*
 <?xml version="1.0" encoding="UTF-8"?>
-<rubrica>
-    <contatto>
+<rubrica<>
+    contatto>
         <nome>Carlo</nome>
         <cognome>Bianchi</cognome>
         <telefono>3337658231</telefono>
