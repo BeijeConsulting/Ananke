@@ -21,7 +21,7 @@ public class Tombola {
 			numeriDisponibili.add(i);
 		}
 		while(numeriDisponibili.size()!=0) {
-			contatorecartella++;
+
 			cartelle.add(new Cartella(contatorecartella));
 			System.out.println("Ho creato la cartella numero " + contatorecartella);
 			numeripercartella=0;
@@ -34,11 +34,19 @@ public class Tombola {
 				if((i==3 && numeripercartella<=3) || (i==4 && numeripercartella<=5)||(i==5 && numeripercartella<=7)||(i==6 && numeripercartella<=9) ||(i==7 && numeripercartella<=11)||(i==8 && numeripercartella<=13) ) {
 					contanumericolonna = 2;
 				}
+				else if ((i==8 && numeripercartella==14)) {
+					contanumericolonna = 1;
+				}
 				else {
 					contanumericolonna = (int) ((Math.random()*3));
 				}
 				//	System.out.println("Per questa colonna estrarremo numeri : "+ contanumericolonna);
-				numerolimitecolonna += 10;
+				if(i==0)
+					numerolimitecolonna += 9;
+				else if (i>=1 && i<=7)
+					numerolimitecolonna += 10;
+				else
+					numerolimitecolonna += 11;
 				//	System.out.println(numerolimitecolonna);
 				for(int j=0;j<3;j++) {
 					if (contanumericolonna==0) {
@@ -53,8 +61,8 @@ public class Tombola {
 						}
 						else {
 							b=true;	
-							System.out.print(x + " ");
-							numeriEstratti[contaNumeriEstr]= x;
+							//System.out.print(x + " ");
+							//	numeriEstratti[contaNumeriEstr]= x;
 							contaNumeriEstr++;
 							cartelle.get(contatorecartella).setNumeri(x, j, i);
 						}
@@ -74,7 +82,9 @@ public class Tombola {
 				System.out.println("");
 			}
 			//faccio i 2 for che mi stampino col getter? la cartella
-			
+			contatorecartella++;
 		}
+		for(int i=0;i<cartelle.size();i++)
+			cartelle.get(i).getNumeri();
 	}
 }

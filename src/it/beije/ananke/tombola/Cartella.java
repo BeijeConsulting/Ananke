@@ -9,10 +9,16 @@ public class Cartella {
 	public int getIdcartella() {
 		return idcartella;
 	}
-	public int[][] getNumeri() {
-		return numeri;
+	public void getNumeri() {
+		for(int i=0;i<3;i++) {
+			for(int j=0;j<9;j++) {
+				System.out.print(numeri[i][j] + "	");
+			}
+			System.out.println("");
+		}
+		System.out.println("-----------------------------------------");
 	}
-	public void setNumeri(int numero, int x, int y) {
-		numeri[x][y] = numero;
+	public void setNumeri(int numero, int riga, int colonna) {
+	this.numeri[riga][colonna] = numero;
 	}
 }
