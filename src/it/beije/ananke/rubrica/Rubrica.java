@@ -36,17 +36,18 @@ public class Rubrica {
 			scriviRubricaXML();
 	}
 	
-	public void caricaRubricaDaSCV() throws IOException {
-		this.list = leggiRubricaCSV();
+	public void caricaRubricaDaSCV(String path) throws IOException {
+		this.list = leggiRubricaCSV(path);
+		
 	}
 	
 	public void caricaRubricaDaXML() throws IOException, ParserConfigurationException, SAXException {
 		this.list = leggiRubricaXML();
 	}
 	
-	public List<Contatto> leggiRubricaCSV() throws IOException{
+	private List<Contatto> leggiRubricaCSV(String path) throws IOException{
 		
-		File file = new File("C:\\Users\\Padawan06\\Desktop\\A");
+		File file = new File(path);
 		FileReader fileReader = new FileReader(file);	
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		
@@ -56,25 +57,30 @@ public class Rubrica {
 		while (bufferedReader.ready()) {
 
 			rows.add(bufferedReader.readLine());
+			
 		}
 		
-		Contatto c = new Contatto();
-		
+				
 		for (String row : rows) {
+			
 			String[] rs = row.split(";");
-					
+			Contatto c = new Contatto();		
 			c.setNome(rs[0]);
 			c.setCognome(rs[1]);
 			c.setNumeroTel(rs[2]);
 			c.setMail(rs[3]);
 					
 			lR.add(c);
+			
 		}
 		
-		bufferedReader.close();
 		
+		bufferedReader.close();
 		return lR;
 	}
+		
+		
+	
 
 	
 	
@@ -85,7 +91,7 @@ public class Rubrica {
 		String s;
 		
 		for(Contatto c : list) {
-			s=c.getNome() + ";" + c.getCognome() + ";" + c.getNumeoroTel() + ";" + c.getMail();
+			s=c.getNome() + ";" + c.getCognome() + ";" + c.getNumeoroTel() + ";" + c.getMail()+ "\n";
 			fw.write(s);
 		}
 		
@@ -162,7 +168,7 @@ public class Rubrica {
         DocumentBuilder builder = factory.newDocumentBuilder();
         List<Contatto> contatti = new ArrayList<Contatto>();
 		
-        Document document = builder.parse("/temp/rubrica.xml");
+        Document document = builder.parse("C:\\Users\\Padawan06\\Desktop\\rubrica.xml");
         
         Element docElement = document.getDocumentElement();  
         

@@ -10,18 +10,21 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		
 		Scanner s = new Scanner(System.in);
-		String comando = s.next();
-		Rubrica R = new Rubrica();
 		
+		Rubrica R = new Rubrica();
 		Contatto c;
 		String nome;
 		String cognome;
 		String numeroTel;
 		String mail;
 		
-		stampaMenu();
+		R.caricaRubricaDaSCV("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.txt");
+	//	R.visualizzaRubrica();
 		
-		while (!comando.equalsIgnoreCase("exit")) {
+		stampaMenu();
+		String comando = s.next();
+		
+		while (!comando.equalsIgnoreCase("E")) {
 			
 			stampaMenu();
 			switch(comando) {
@@ -73,13 +76,13 @@ public class Main {
 				break;
 			
 			}
-			
+			stampaMenu();
 			comando = s.next();
 			
 		}
 		
 		R.scriviRubricaCSV();
-		R.scriviRubricaXML();
+		//R.scriviRubricaXML();
 		s.close();
 	}
 	
@@ -90,12 +93,16 @@ public class Main {
 	
 	
 	public static void stampaMenu() {
-	
+		
+	System.out.println("\n\n");
 	System.out.println("MENU:");
 	System.out.println("______________________________________");
 	System.out.println("N: Inserisci nuovo contatto");
 	System.out.println("F: Inserisci nuovo contatto e salva su file immediatamente");
-	System.out.println("c: Cerca contatto");
-	System.out.println("V: Visualizza intera Rubrica ");}
+	System.out.println("C: Cerca contatto");
+	System.out.println("V: Visualizza intera Rubrica ");
+	System.out.println("E: Per Terminare ");
+	
+	}
 
 }
