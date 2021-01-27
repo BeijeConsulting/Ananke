@@ -6,6 +6,8 @@ public class TestAnimals {
 	
 		Tiger beast = new Tiger();
 		Shark fish = new Shark();
+		Eagle bird = new Eagle();
+		
 		
 		System.out.println("About tiger:");
 		beast.eatMeat();
@@ -15,6 +17,10 @@ public class TestAnimals {
 		fish.swimSpeed();
 		fish.eatMeat();
 
+		
+		System.out.println("\nAbout Eagle:");
+		System.out.println("Has feathers: " + bird.hasFeathers());
+		System.out.println("Average fly speed: " + bird.speed() + " Km/h");
 	}
 
 }

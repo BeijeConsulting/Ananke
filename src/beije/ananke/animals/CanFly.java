@@ -4,5 +4,8 @@ public interface CanFly {
 
 	int speed();
 	
-	boolean hasFeathers();
+	public default boolean hasFeathers()
+	{
+		return true;
+	}
 }

@@ -15,12 +15,6 @@ public class Eagle extends Birds implements CanFly, Carnivorous {
 	}
 
 	@Override
-	public boolean hasFeathers() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
 	public void pecks() {
 		
 		System.out.println("A beautiful beak that catches preys");
