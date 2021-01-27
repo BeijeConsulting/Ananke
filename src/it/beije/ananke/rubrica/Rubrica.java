@@ -2,6 +2,7 @@ package it.beije.ananke.rubrica;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +12,11 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -26,11 +32,56 @@ public class Rubrica {
 
 	public void aggiungiContattoSulFile(Contatto c) throws Exception {
 		
-			this.aggiungiContatto(c);
-			this.salvaRubricaSuFile();
+			aggiungiContatto(c);
+			scriviRubricaCSV();
+			scriviRubricaXML();
+			
+			
+	}
+	
+	public void caricaRubricaDaSCV() throws IOException {
+		this.list = leggiRubricaCSV();
+	}
+	
+	public void caricaRubricaDaXML() throws IOException, ParserConfigurationException, SAXException {
+		this.list = leggiRubricaXML();
+	}
+	
+	public List<Contatto> leggiRubricaCSV() throws IOException{
+		
+		File file = new File("C:\\Users\\Padawan06\\Desktop\\A");
+		FileReader fileReader = new FileReader(file);	
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		
+		List<String> rows = new ArrayList<String>();
+		List<Contatto> lR = new ArrayList<>();
+		
+		while (bufferedReader.ready()) {
+
+			rows.add(bufferedReader.readLine());
+		}
+		
+		Contatto c = new Contatto();
+		
+		for (String row : rows) {
+			String[] rs = row.split(";");
+					
+			c.setNome(rs[0]);
+			c.setCognome(rs[1]);
+			c.setNumeroTel(rs[2]);
+			c.setMail(rs[3]);
+					
+			lR.add(c);
+		}
+		
+		bufferedReader.close();
+		
+		return lR;
 	}
 
-	private void salvaRubricaSuFile() throws Exception {
+	
+	
+	private void scriviRubricaCSV() throws Exception {
 		
 		File f1 = new File("C:\\Users\\Padawan06\\Desktop\\rubrica.csv");
 		FileWriter fw = new FileWriter(f1);
@@ -41,26 +92,72 @@ public class Rubrica {
 			fw.write(s);
 		}
 		
+		fw.flush();
 		fw.close();
 		
 	}
 
 	
-	public void aggiungiContatto(Contatto c) {
-		list.add(c);
-	}
-
 	
-	public void visualizzaRubrica() {
-		System.out.println("-----------------Rubrica-----------------");
+	
+	public void scriviRubricaXML() throws ParserConfigurationException, IOException, SAXException, TransformerException {
 		
-		for(Contatto c:list) {
-			System.out.println(c.getNome() + ";" + c.getCognome() + ";" + c.getNumeoroTel() + ";" + c.getMail());
-		}
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
 		
-		System.out.println("-----------------------------------------");
+        Document document = builder.newDocument();
+        Element utenti = document.createElement("Rubrica");
+        document.appendChild(utenti);
+        
+        //...
+        Element utente = null;
+        Element nome = null;
+        Element cognome = null;
+        Element tel = null;
+        Element mail = null;
+        
+        for (int i = 0; i < this.list.size(); i++) {
+        	
+        	utente = document.createElement("contatto");
+        	//utente.setAttribute("id", Integer.toString(i));//meglio che i + ""
+        	
+        	nome = document.createElement("nome");
+        	nome.setTextContent(list.get(i).getNome());
+        	utente.appendChild(nome);
+        	
+        	cognome = document.createElement("cognome");
+        	cognome.setTextContent(list.get(i).getCognome());
+        	utente.appendChild(cognome);
+        	
+        	tel = document.createElement("telefono");
+        	tel.setTextContent(list.get(i).getNumeroTel());
+        	utente.appendChild(tel);
+        	
+        	mail = document.createElement("email");
+        	mail.setTextContent(list.get(i).getMail());
+        	utente.appendChild(mail);
+        	
+        	utenti.appendChild(utente);
+        	
+        	
+        }
+        
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(document);
 		
-	}
+		StreamResult result = new StreamResult(new File("/temp/utenti.xml"));
+
+		
+		StreamResult syso = new StreamResult(System.out);
+
+		transformer.transform(source, result);
+		transformer.transform(source, syso);
+
+		System.out.println("File saved!");
+		
+		
+}
 	
 	public List<Contatto> leggiRubricaXML()  throws ParserConfigurationException, IOException, SAXException {
 		
@@ -121,9 +218,24 @@ public class Rubrica {
 	}
 
 		
+	public void aggiungiContatto(Contatto c) {
+		list.add(c);
+	}
+
+	
+	public void visualizzaRubrica() {
+		System.out.println("-----------------Rubrica-----------------");
 		
+		for(Contatto c:list) {
+			System.out.println(c.getNome() + ";" + c.getCognome() + ";" + c.getNumeoroTel() + ";" + c.getMail());
+		}
+		
+		System.out.println("-----------------------------------------");
 		
 	}
+		
+		
+}
 	
 
 
