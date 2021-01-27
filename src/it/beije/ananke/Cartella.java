@@ -72,22 +72,50 @@ public class Cartella {
 		}
 	}
 	
-	public boolean controlloOrdine(int colonna, int riga, int numero) {
+	public boolean controlloVuoto(int colonna, int riga) {
 		if(cartella[riga][colonna] == 0) {
-			if(riga == 0) {
-				return true;
-			}else if(riga == 1){
-				if(numero > cartella[0][colonna]) {
-					return true;
-				}
-			}else if(riga == 2) {
-				if(numero > cartella[1][colonna] && numero > cartella[0][colonna]) {
+//			if(riga == 0) {
+//				return true;
+//			}else if(riga == 1){
+//				if(numero > cartella[0][colonna]) {
+//					return true;
+//				}
+			//}else 
+			if(riga == 2) {
+//				if(numero > cartella[1][colonna] && numero > cartella[0][colonna]) {
 					if(cartella[0][colonna]==0 || cartella[1][colonna]==0) {
 						return true;
+					}else{
+						return false;
 					}
-				}
+//				}
+			}return true;
+		}else {
+			return false;
+		}
+	}
+	
+	public boolean scambio(int num1,int num2){
+		if(num1>num2) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	public void ordina() {
+		for(int colonna = 0; colonna < 9; colonna++) {
+			if(scambio(cartella[0][colonna], cartella[1][colonna])){
+				int temp = cartella[0][colonna];
+				cartella[0][colonna] = cartella[1][colonna];
+				cartella[1][colonna] = temp;
 			}
-		}return false;
+			if(scambio(cartella[1][colonna], cartella[2][colonna])){
+				int temp = cartella[1][colonna];
+				cartella[1][colonna] = cartella[2][colonna];
+				cartella[2][colonna] = temp;
+			}
+		}
 	}
 	
 	public void riempiCartella() {
@@ -95,7 +123,7 @@ public class Cartella {
 			for(int num = 0; num < 5; num++) {
 				int numero = creaRandom();
 				int colonna = this.controlloColonna(numero);
-				if(controlloOrdine(colonna, riga, numero)) {
+				if(controlloVuoto(colonna, riga)) {
 					if(!numeri.contains(numero)){
 						cartella[riga][colonna] = numero;
 						numeri.add(numero);
@@ -107,5 +135,7 @@ public class Cartella {
 				}
 			}
 		}
+		ordina();
+		
 	}
 }
