@@ -28,7 +28,7 @@ public class Main {
 		
 		while (!comando.equalsIgnoreCase("E")) {
 			
-			stampaMenu();
+			//stampaMenu();
 			switch(comando) {
 				
 			case "N":
@@ -82,12 +82,20 @@ public class Main {
 				R.eliminaContatto(parolaChiave);
 				break;
 				
+			case "M":
+				
+				System.out.println("Inserisci parola chiave per il contatto da eliminare:");
+				parolaChiave = s.next();
+				R.modificaContatto(parolaChiave);
+				break;
+				
 			default: 
 				
 				System.out.println("IL COMANDO SELZIONATO NON ESISTE! Riprova\n\n");
 				break;
 			
 			}
+			
 			stampaMenu();
 			comando = s.next();
 			
@@ -108,14 +116,15 @@ public class Main {
 		
 	System.out.println("\n\n");
 	System.out.println("MENU:");
-	System.out.println("----------------------------------------------------------");
+	System.out.println("-----------------------------------------------------------");
 	System.out.println("N: Inserisci nuovo contatto");
 	System.out.println("F: Inserisci nuovo contatto e salva su file immediatamente");
 	System.out.println("C: Cerca contatto");
 	System.out.println("V: Visualizza intera Rubrica");
-	System.out.println("D: Per eliminare un contatto da rubrica ");
+	System.out.println("D: Elimina un contatto da rubrica ");
+	System.out.println("M: Modifica un contatto in rubrica ");
 	System.out.println("E: Per Terminare ");
-	System.out.println("----------------------------------------------------------");
+	System.out.println("-----------------------------------------------------------");
 	System.out.println();
 	
 	}

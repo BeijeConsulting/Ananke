@@ -319,6 +319,117 @@ public class Rubrica {
 		}
 
 	}
+
+	public void modificaContatto(String parolaChiave) {
+		
+		List<Contatto> lContatti = new ArrayList<>();
+		List<Integer> lIndici = new ArrayList();
+		int i = 0;
+		Scanner s = new Scanner(System.in);
+		Contatto contatto;
+		
+		for(Contatto c : listC) {
+			
+			if(c.getNome().equals(parolaChiave) || c.getCognome().equals(parolaChiave) ) {
+				lContatti.add(c);
+				lIndici.add(i);
+			}
+			
+			i++; // conta l'indice corrente
+		}
+		
+		if(lContatti.size() == 1) {
+			
+			this.listC.remove(lIndici.get(0).intValue());
+		}
+		
+		else {
+			
+			System.out.println();
+			System.out.println("------------------------------");
+			System.out.println("QAULE CONTATTO VUOI MODIFICARE!");
+			System.out.println("------------------------------");
+			i = 0;
+			for(Contatto c : lContatti) {
+				i++;
+				System.out.print( i + " - ( ");
+				
+				System.out.print(c.getNome() + "  " + c.getCognome() + "  " 
+						+ c.getNumeoroTel() + "  " + c.getMail());
+				
+				System.out.println(" )");
+		}
+		
+			System.out.println("-----------------------------------------");
+			
+			String comando = s.next();
+			int indiceDaEliminare = Integer.parseInt(comando);
+			
+			System.out.println("------------------------------");
+			System.out.println("QAULE CAMPO VUOI MODIFICARE!");
+			System.out.println("------------------------------");
+			System.out.println("1) Nome");
+			System.out.println("2) Cognome");
+			System.out.println("3) Numero di telefono");
+			System.out.println("4) Email");
+			comando = s.next();
+			
+			switch(comando) {
+			
+			case "1":
+				
+				indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
+				contatto = lContatti.get(lIndici.get(indiceDaEliminare).intValue());
+				String nuovoNome =  s.next();
+				contatto.setNome(nuovoNome);
+				this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
+				this.listC.add(contatto);
+				
+				break;
+				
+			case "2":
+				
+				indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
+				contatto = lContatti.get(lIndici.get(indiceDaEliminare).intValue());
+				String nuovoCognome =  s.next();
+				contatto.setNome(nuovoCognome);
+				this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
+				this.listC.add(contatto);
+				
+				break;
+			
+			case "3":
+				
+				indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
+				contatto = lContatti.get(lIndici.get(indiceDaEliminare).intValue());
+				String nuovoNumTel =  s.next();
+				contatto.setNome(nuovoNumTel);
+				this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
+				this.listC.add(contatto);
+				break;
+			
+			case "4":
+				
+				indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
+				contatto = lContatti.get(lIndici.get(indiceDaEliminare).intValue());
+				String nuovoEmail =  s.next();
+				contatto.setNome(nuovoEmail);
+				this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
+				this.listC.add(contatto);
+				break;
+			
+			
+			}
+			
+			indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
+			this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
+			
+			
+			
+		}
+
+		
+	}
 	
 	
 }
