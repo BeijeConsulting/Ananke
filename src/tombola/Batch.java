@@ -66,52 +66,14 @@ public class Batch {
 			}
 			System.out.print("\n\n");
 		}
-		
-		
-		
-		//devo distribuire altri 36 numeri
-		for(int j = 0; j < COLONNE; j++) {
-			System.out.println("Colonna " + j);
-			for(int i = 0; i < tot.size() && areThereAny(j, set); i++) {
-				System.out.println("Sono nel for " + i);
-				prov = r.nextInt(RIGHE);
-				if(tot.get(i).isEmpty(prov, j)) {
-					//check colonna
-					System.out.println("La casella è vuota");
-					if(tot.get(i).checkColonne(j) == 1) {
-						System.out.println("La colonna è okay");
-						//check riga
-						if(tot.get(i).checkRiga(prov) == 1) {
-							System.out.println("La riga è okay");
-							val = secondExtraction(j, set);
-							tot.get(i).singular.get(j).set(prov, val);
-							tot.get(i).checkr[prov] += 1;
-							tot.get(i).checkc[j] += 1;
-							set.set(set.indexOf(val), null);
-							System.out.println("Sto mettendo l'elemento " + val);
-						}
-					}//fine check colonna
-				}//fine controllo se casella è vuota
-				
-				if(areThereAny(j, set)) {
-					if(i == tot.size() - 1) {
-						i = -1;
-						System.out.println("Start again");
-					}
-				}else {
-					i = OUT;
-					System.out.println("OUT!");
-				}
-			}//fine for sulle cartelle
-			j++;
-		}//se ci sono altri numeri da smistare ricomincia
+
 		System.out.println("Sono uscito dal while");
+		
+		
+		
 	}
-			
-		
-		
-		
-		
+				
+	
 	
 	
 	public int extractNumber(int decina, ArrayList<Integer> set) {

@@ -13,7 +13,7 @@ public class CsvManager {
 
 	public static void main(String[] args) throws Exception {
 		
-		File file = new File("/temp/rubrica.txt");
+		File file = new File("C:/Users/Padawan04/Desktop/Snippets/Rubrica.txt");
 		System.out.println("file : " + file.getAbsolutePath());
 		System.out.println("file exists ? " + file.exists());
 		System.out.println("is a dir ? " + file.isDirectory());
@@ -57,7 +57,7 @@ public class CsvManager {
 //		}
 		
 		//Scrivo nuovo file
-		File newFile = new File("/temp/nuovo.txt");
+		File newFile = new File("C:/Users/Padawan04/Desktop/Snippets/Rubrica.txt");
 		System.out.println("new file : " + newFile.getAbsolutePath());
 		System.out.println("new file exists ? " + newFile.exists());
 		
