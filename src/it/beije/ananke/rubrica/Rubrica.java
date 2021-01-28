@@ -28,7 +28,7 @@ import org.xml.sax.SAXException;
 
 public class Rubrica {
 	
-	List<Contatto> list;
+	List<Contatto> listC;
 
 	public void aggiungiContattoSulFile(Contatto c) throws Exception {
 			aggiungiContatto(c);
@@ -37,12 +37,12 @@ public class Rubrica {
 	}
 	
 	public void caricaRubricaDaSCV(String path) throws IOException {
-		this.list = leggiRubricaCSV(path);
+		this.listC = leggiRubricaCSV(path);
 		
 	}
 	
-	public void caricaRubricaDaXML() throws IOException, ParserConfigurationException, SAXException {
-		this.list = leggiRubricaXML();
+	public void caricaRubricaDaXML(String path) throws IOException, ParserConfigurationException, SAXException {
+		leggiRubricaXML(path);
 	}
 	
 	private List<Contatto> leggiRubricaCSV(String path) throws IOException{
@@ -90,7 +90,7 @@ public class Rubrica {
 		FileWriter fw = new FileWriter(f1);
 		String s;
 		
-		for(Contatto c : list) {
+		for(Contatto c : listC) {
 			s=c.getNome() + ";" + c.getCognome() + ";" + c.getNumeoroTel() + ";" + c.getMail()+ "\n";
 			fw.write(s);
 		}
@@ -119,25 +119,25 @@ public class Rubrica {
         Element tel = null;
         Element mail = null;
         
-        for (int i = 0; i < this.list.size(); i++) {
+        for (int i = 0; i < this.listC.size(); i++) {
         	
         	utente = document.createElement("contatto");
         	//utente.setAttribute("id", Integer.toString(i));//meglio che i + ""
         	
         	nome = document.createElement("nome");
-        	nome.setTextContent(list.get(i).getNome());
+        	nome.setTextContent(listC.get(i).getNome());
         	utente.appendChild(nome);
         	
         	cognome = document.createElement("cognome");
-        	cognome.setTextContent(list.get(i).getCognome());
+        	cognome.setTextContent(listC.get(i).getCognome());
         	utente.appendChild(cognome);
         	
         	tel = document.createElement("telefono");
-        	tel.setTextContent(list.get(i).getNumeroTel());
+        	tel.setTextContent(listC.get(i).getNumeroTel());
         	utente.appendChild(tel);
         	
         	mail = document.createElement("email");
-        	mail.setTextContent(list.get(i).getMail());
+        	mail.setTextContent(listC.get(i).getMail());
         	utente.appendChild(mail);
         	
         	utenti.appendChild(utente);
@@ -149,7 +149,7 @@ public class Rubrica {
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(document);
 		
-		StreamResult result = new StreamResult(new File("/temp/utenti.xml"));
+		StreamResult result = new StreamResult(new File("C:\\Users\\Padawan06\\Desktop\\rubricaCOPIA.xml"));
 
 		
 		StreamResult syso = new StreamResult(System.out);
@@ -162,14 +162,14 @@ public class Rubrica {
 		
 }
 	
-	public List<Contatto> leggiRubricaXML()  throws ParserConfigurationException, IOException, SAXException {
+	public void leggiRubricaXML(String path)  throws ParserConfigurationException, IOException, SAXException {
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        List<Contatto> contatti = new ArrayList<Contatto>();
+        List<Contatto> lContatti = new ArrayList<>();
 		
-        Document document = builder.parse("C:\\Users\\Padawan06\\Desktop\\rubrica.xml");
-        
+      //  Document document = builder.parse("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.xml");
+        Document document = builder.parse(path);
         Element docElement = document.getDocumentElement();  
         
         NodeList elementiContatto = docElement.getElementsByTagName("contatto");
@@ -212,33 +212,40 @@ public class Rubrica {
 					}
             	}
             }
-            contatti.add(contatto);
+            lContatti.add(contatto);
         }
         
-        System.out.println("contatti size : " + contatti.size());
-        return contatti;
+        this.listC = lContatti;
+        System.out.println("contatti letti : " + listC.size());
+
         
 	}
 
 		
 	public void aggiungiContatto(Contatto c) {
-		list.add(c);
+		listC.add(c);
 	}
 
 	
 	public void visualizzaRubrica() {
 		System.out.println("-----------------Rubrica-----------------");
 		
-		for(Contatto c:list) {
-			System.out.println(c.getNome() + ";" + c.getCognome() + ";" + c.getNumeoroTel() + ";" + c.getMail());
+		for(Contatto c : this.listC) {
+			System.out.println(c.getNome() + "  " + c.getCognome() + "  " + c.getNumeoroTel() + "  " + c.getMail());
 		}
 		
 		System.out.println("-----------------------------------------");
 		
 	}
 		
+	public void getSize() {
 		
+		System.out.println("Contatti in rubrica : " + this.listC.size());
+		
+	}
 }
+
+
 	
 
 

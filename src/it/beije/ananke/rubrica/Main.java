@@ -18,8 +18,10 @@ public class Main {
 		String numeroTel;
 		String mail;
 		
-		R.caricaRubricaDaSCV("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.txt");
+		//R.caricaRubricaDaSCV("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.txt");
 	//	R.visualizzaRubrica();
+		R.leggiRubricaXML("C:\\Users\\Padawan06\\Desktop\\A\\rubrica2.xml");
+		R.getSize();
 		
 		stampaMenu();
 		String comando = s.next();
@@ -82,7 +84,7 @@ public class Main {
 		}
 		
 		R.scriviRubricaCSV();
-		//R.scriviRubricaXML();
+		R.scriviRubricaXML();
 		s.close();
 	}
 	
