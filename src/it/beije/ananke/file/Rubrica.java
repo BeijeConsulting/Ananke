@@ -49,7 +49,7 @@ public class Rubrica {
 		System.out.println("Benvenuto nella tua rubrica! Cosa vuoi fare?");
 		System.out.println("-Digita 0 per vedere lo stato della tua rubrica");
 		System.out.println("-Digita 1 per aggiungere una nuova voce");
-		System.out.println("-Digita 2 per modificare una voce");
+		System.out.println("-Digita 2 per creare una nuova rubrica");
 		System.out.println("-Digita 3 per uscire");
 		System.out.println("-Digita 4 per ristampare il menù");
 		
@@ -61,7 +61,7 @@ public class Rubrica {
 		switch(i) {
 			case "0": stampa(path, s); break;
 			case "1": aggiungiVoce(path, s); break;
-			case "2": 
+			case "2": inizializzaNuova(s, path);
 			case "3": break;
 			case "4": break;
 			default: System.out.println("L'opzione selezionata non è valida.");
@@ -180,6 +180,13 @@ public class Rubrica {
  	}
 	
 	
+	public void inizializzaNuova(Scanner s, String path) throws Exception {
+		ArrayList<Contatto> contatti = new ArrayList<>();
+		Contatto cont = defContatto(path, s);
+		contatti.add(cont);
+		write(path, contatti, s);
+	}
+	
 	
 	public void aggiungiVoce(String path, Scanner s) throws Exception {
 		ArrayList<Contatto> contatti = read(path, s);
@@ -230,6 +237,10 @@ public class Rubrica {
 		File newFile = new File(path);
 		FileWriter fw = new FileWriter(newFile);
 		
+		contatti.remove(0);
+		StringBuilder prima = new StringBuilder("NOME;COGNOME;EMAIL;TELEFONO\n");
+		fw.write(prima.toString());
+		
 		for (Contatto con : contatti) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(con.getName()).append(";")
@@ -258,6 +269,8 @@ public class Rubrica {
         Element telephone = null;
         
         for(int i = 0; i < contatti.size(); i++) {
+        	
+        	//creazione elementi
         	utente = document.createElement("utente");
         	name = document.createElement("name");
         	name.setTextContent(contatti.get(i).getName());
@@ -268,15 +281,18 @@ public class Rubrica {
         	telephone = document.createElement("telephone");
         	telephone.setTextContent(contatti.get(i).getTelephone());
         	
+        	//append
         	utente.appendChild(name);
         	utente.appendChild(surname);
         	utente.appendChild(email);
         	utente.appendChild(telephone);
         	rubrica.appendChild(utente);
         	
+        	
         	TransformerFactory transformerFactory = TransformerFactory.newInstance();
     		Transformer transformer = transformerFactory.newTransformer();
     		DOMSource source = new DOMSource(document);
+    		
     		
     		StreamResult result = new StreamResult(new File(path));
 
