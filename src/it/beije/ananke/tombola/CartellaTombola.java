@@ -52,7 +52,9 @@ public class CartellaTombola {
 
                     //se però sono alla fine che non ho ancora avuto almeno una colonna da un solo numero
                     //devo per forza mettere solo un numero
-                    if((colonneDaUnNumero%2 == 0) && (i == disponibili.size() - 1) ){
+
+                    //TODO:no non va bene così
+                    if((colonneDaUnNumero < 3) && (disponibili.size() - i > colonneDaUnNumero) ){
                         numeriDaEstrarre = 1;
                         colonneDaUnNumero++;
                     }

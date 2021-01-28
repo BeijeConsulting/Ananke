@@ -4,6 +4,20 @@ package it.beije.ananke.rubrica;
 //un elenco di contatti.
 //devo modificare il file, non sovrascrivere ogni volta che lo apro.
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,24 +26,68 @@ import java.util.Scanner;
 public class Rubrica {
 
     private static List<Contatto> rubrica = new ArrayList<>();
-    private static final String PATH = "C:\\Users\\Padawan02\\Desktop";
-    private static final String NOME_FILE = "rubrica.txt";
+    private static final String PATH = "C:\\Users\\Padawan02\\Desktop\\esercizietti\\rubrica";
 
     public static void main(String[] args) {
 
         Scanner inputTastiera = new Scanner(System.in);
-        String path = PATH + "/" + NOME_FILE;
+        String path;
         String comando;
 
-        //apro il file della rubrica. se non è presente dovrebbe crearlo
-        //creando un oggetto fileWriter
+        File directory = new File(PATH);
+        File[] files = directory.listFiles();
+        int i=0;
 
-        leggiContatti(path);
+        if(files == null) {
+            System.out.println("C'è stato un problema. Riavvia l'applicatico");
+        }
+        else{
+            if(files.length > 0) {
+                //esiste già un file dal quale leggere
 
-        //lo scanner con il file lo creo solo dopo aver aperto e creato il filewriter
+                System.out.println("Quale file vuoi leggere?\n");
+
+                for (File file : files) {
+                    System.out.println("[" + i + "]\t" + file.getName());
+                    i++;
+                }
+
+                //faccio scegliere il file da leggere
+                int numeroFile = Integer.parseInt(inputTastiera.nextLine().trim());
+                String nomeFile = files[numeroFile].getName();
+
+                //capisco se è un file xml o csv
+                String nome = nomeFile.split("\\.")[0];
+                String estensione = (nomeFile.split("\\."))[1];
+
+                path = PATH + "\\" + nomeFile;
+
+                if (estensione.equals("xml")) {
+                    try {
+                        leggiContattiXml(path);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    if (estensione.equals("csv"))
+                        leggiContattiCsv(path);
+                    else {
+                        System.out.println("Mi dispiace ma non riesco a leggere un file di tale estensione");
+                        return;
+                    }
+                }
+            }
+            else{
+                //non esistono file presenti nella directory
+                System.out.println("Non sono ancora presenti file nella directory." +
+                        "\nUna volta completate le operazioni potrai crearne uno\n");
+
+                //non essendoci un file da cui leggere non faccio nulla a rubrica
+                //che è gà stata inizializzata in linea
+            }
+        }
 
         //prendo il primo comando che mi porta nel ciclo
-
         stampaListaComandi();
         comando = inputTastiera.nextLine();
 
@@ -83,12 +141,62 @@ public class Rubrica {
 
         }while(!comando.equals("q"));
 
-        scriviSuFile(path);
+        System.out.println("Su quale file vuoi salvare le modifiche alla rubrica?" +
+                "\nDigita il numero corrispondente al file che vuoi, o un numero non presente per creare un nuovo file.");
+
+        //listo tutti i file presenti nella directory
+
+        String nomeFile = null;
+
+        if(files != null) {
+
+            i = 0;
+
+            for (File file : files) {
+                System.out.println("[" + i + "]\t" + file.getName());
+                i++;
+            }
+
+            //faccio scegliere il file su cui salvare
+            int numeroFile = Integer.parseInt(inputTastiera.nextLine());
+
+            if(numeroFile < files.length)
+                nomeFile = files[numeroFile].getName();
+            else {
+                System.out.println("Digita il nome del file con l'estensione csv/xml.");
+                nomeFile = inputTastiera.nextLine();
+            }
+
+        }
+
+        //capisco se è un file xml o csv
+
+        String nome = null;
+        String estensione = null;
+
+        if(nomeFile != null) {
+            nome = nomeFile.split("\\.")[0];
+            estensione = (nomeFile.split("\\."))[1];
+        }
+
+        path = PATH + "\\" + nomeFile;
+
+        if(estensione.equals("xml")) {
+            try {
+                scriviSuFileXml(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            if (estensione.equals("csv"))
+                scriviSuFileCsv(path);
+        }
 
     }
 
     private static void stampaListaComandi() {
-        System.out.println("Ciao! Ecco cosa puoi fare:\n" +
+        System.out.println("\nEcco cosa puoi fare:\n" +
                 "\t- i : inserisci un nuovo contatto;\n" +
                 "\t- u : aggiorna un contatto nella rubrica;\n" +
                 "\t- d : cancella un contatto esistente;\n" +
@@ -98,7 +206,7 @@ public class Rubrica {
     }
 
     //legge il file csv e tira fuori i contatti
-    private static void leggiContatti(String path){
+    private static void leggiContattiCsv(String path){
 
         rubrica = new ArrayList<>();
 
@@ -115,13 +223,13 @@ public class Rubrica {
                 String[] infoContatto = info.split(";");
                 Contatto contatto = new Contatto();
 
-                contatto.setNome(infoContatto[0]);
-                contatto.setCognome(infoContatto[1]);
-                contatto.setTelefono(infoContatto[2]);
-                contatto.setEmail(infoContatto[3]);
+                contatto.setNome(infoContatto[0].trim());
+                contatto.setCognome(infoContatto[1].trim());
+                contatto.setTelefono(infoContatto[2].trim());
+                contatto.setEmail(infoContatto[3].trim());
 
                 rubrica.add(contatto);
-                System.out.println(contatto.toString());
+                //System.out.println(contatto.toString());
 
             }
 
@@ -161,9 +269,64 @@ public class Rubrica {
             }
         }
 
+        stampaContatti();
+
     }
 
-    private static void scriviSuFile(String path) {
+    private static void leggiContattiXml(String path) throws ParserConfigurationException, IOException, SAXException {
+
+        rubrica = new ArrayList<>();
+
+        //servono per leggere e scrivere file xml.
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        //creo il documento virtuale
+        Document document = builder.parse(path);
+
+        Element docElement = document.getDocumentElement();
+        NodeList elementiContatto = docElement.getElementsByTagName("contatto");
+
+        for (int i = 0; i < elementiContatto.getLength(); i++) {
+
+            Contatto contatto = new Contatto();
+            Element c = (Element) elementiContatto.item(i);
+
+            NodeList valori = c.getChildNodes();
+            //System.out.println(valori.getLength());
+            for (int j = 0; j < valori.getLength(); j++) {
+                Node n = valori.item(j);
+                if (n instanceof Element) {
+                    Element valore = (Element) n;
+                    //System.out.println(valore.getTagName() + " : " + valore.getTextContent());
+                    switch (valore.getTagName()) {
+                        case "nome":
+                            contatto.setNome(valore.getTextContent().trim());
+                            break;
+                        case "cognome":
+                            contatto.setCognome(valore.getTextContent().trim());
+                            break;
+                        case "telefono":
+                            contatto.setTelefono(valore.getTextContent().trim());
+                            break;
+                        case "email":
+                            contatto.setEmail(valore.getTextContent().trim());
+                            break;
+
+                        default:
+                            System.out.println("elemento in contatto non riconosciuto");
+                            break;
+                    }
+                }
+            }
+            rubrica.add(contatto);
+        }
+
+        stampaContatti();
+
+    }
+
+    private static void scriviSuFileCsv(String path) {
 
         FileWriter writer = null;
 
@@ -196,12 +359,66 @@ public class Rubrica {
 
     }
 
+    private static void scriviSuFileXml(String path) throws ParserConfigurationException, TransformerException {
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        Document document = builder.newDocument();
+        Element listaContatti = document.createElement("rubrica");
+        document.appendChild(listaContatti);
+
+        Element contatto = null;
+        Element nome = null;
+        Element cognome = null;
+        Element telefono = null;
+        Element email = null;
+
+        for (int i = 0; i < rubrica.size(); i++) {
+
+            contatto = document.createElement("contatto");
+            //potrei fare anche contatto.setAttribte
+
+            nome = document.createElement("nome");
+            nome.setTextContent(rubrica.get(i).getNome());
+            contatto.appendChild(nome);
+
+            cognome = document.createElement("cognome");
+            cognome.setTextContent(rubrica.get(i).getCognome());
+            contatto.appendChild(cognome);
+
+            telefono = document.createElement("telefono");
+            telefono.setTextContent(rubrica.get(i).getTelefono());
+            contatto.appendChild(telefono);
+
+            email = document.createElement("email");
+            email.setTextContent(rubrica.get(i).getEmail());
+            contatto.appendChild(email);
+
+            listaContatti.appendChild(contatto);
+            //lui non aggiunge i tago con le identazioni corrette
+        }
+
+        //per scriverlo, bisogna prendere quello che c'è in memoria
+        //e realizzare uno stream
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(document);
+
+        //lo stream può essere sì un file, ma anche il s.out, ma anche la risposta alla chiamata http
+        StreamResult result = new StreamResult(new File(path));
+
+        transformer.transform(source, result);
+
+    }
+
     private static void inserisciContatto(){
 
         Scanner inputTastiera = new Scanner(System.in);
         Contatto contatto = new Contatto();
 
-        System.out.println("Inserisci i dati del nuovo contatto.");
+        System.out.println("\nInserisci i dati del nuovo contatto.");
         System.out.println("\nNome: ");
         contatto.setNome(inputTastiera.next().trim());
         System.out.println("\nCognome: ");
@@ -227,7 +444,7 @@ public class Rubrica {
             //aggiungo il contatto al mio arrayList
             rubrica.add(contatto);
 
-        System.out.println(contatto.toString());
+        System.out.println("\nHai aggiunto il seguente contatto alla rubrica:\t" + contatto.toString());
 
     }
 
@@ -281,12 +498,12 @@ public class Rubrica {
 
         Scanner inputTastiera = new Scanner(System.in);
 
-        System.out.println("Puoi cercare un contatto specificando solo alcuni parametri:\n" +
+        System.out.println("\nPuoi cercare un contatto specificando solo alcuni parametri:\n" +
                 "\t- n&c : cercare un contatto specificando nome e cognome;\n" +
                 "\t- t : cercare un contatto specificando il numero telefonico;\n" +
                 "\t- e : cercare un contatto specificando l'email;\n");
 
-        String comando = inputTastiera.nextLine();
+        String comando = inputTastiera.nextLine().trim();
 
         int index;
 
@@ -317,8 +534,8 @@ public class Rubrica {
 
         }
 
-        if(index > 0)
-            System.out.println("Ecco il contatto che cercavi:\n\t" + rubrica.get(index).toString());
+        if(index >= 0)
+            System.out.println("Ecco il contatto che cercavi:\t" + rubrica.get(index).toString());
         else
             System.out.println("Mi dispiace ma il contatto che cercavi non è in rubrica");
 
@@ -331,9 +548,9 @@ public class Rubrica {
         Scanner inputTastiera = new Scanner(System.in);
 
         System.out.println("Nome contatto: ");
-        String nome = inputTastiera.nextLine();
+        String nome = inputTastiera.nextLine().trim();
         System.out.println("Cognome contatto: ");
-        String cognome = inputTastiera.nextLine();
+        String cognome = inputTastiera.nextLine().trim();
 
         for (Contatto contatto: rubrica) {
 
@@ -351,7 +568,7 @@ public class Rubrica {
         Scanner inputTastiera = new Scanner(System.in);
 
         System.out.println("Telefono contatto: ");
-        String telefono = inputTastiera.nextLine();
+        String telefono = inputTastiera.nextLine().trim();
 
         for (Contatto contatto: rubrica) {
 
@@ -369,7 +586,7 @@ public class Rubrica {
         Scanner inputTastiera = new Scanner(System.in);
 
         System.out.println("Nome contatto: ");
-        String email = inputTastiera.nextLine();
+        String email = inputTastiera.nextLine().trim();
 
         for (Contatto contatto: rubrica) {
 
