@@ -29,7 +29,7 @@ public class Application {
 
 			 switch(s) {
 			 case "1":
-				 System.out.println("Funzione ancora da sviluppare.");
+				System.out.println(r1.toString());
 				 break;
 			 case "2":
 				 if(r1.addContact()) {

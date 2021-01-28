@@ -127,6 +127,25 @@ public class Rubrica {
 		
 		
 	}
+
+
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		int i=1;
+		
+	for(Contatti c : this.r) {
+		sb.append("Contatto: " + Integer.toString(i++) + "\n");
+		
+		sb.append("Name: " + c.getName()).append(" Surname: " + c.getSurname()).append(" Email: " + c.getEmail()).append(" Telephone: " + c.getCell());
+	sb.append("\n");
+	}
+	
+	return sb.toString();
+	}
+	
+	
 	
 	
 
