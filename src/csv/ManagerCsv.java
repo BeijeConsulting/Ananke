@@ -11,6 +11,9 @@ public class ManagerCsv {
 	
 	private List<Contatto> contatti;
 	File file;
+	
+	
+
 	public ManagerCsv() throws IOException {
 		
 		 file= new File("rubrica.csv");

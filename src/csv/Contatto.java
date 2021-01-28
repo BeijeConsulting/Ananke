@@ -5,6 +5,12 @@ private String nome;
 private String cognome;
 private String tel;
 private String email;
+public Contatto() {
+	 nome="";
+		cognome="";
+		 tel="";
+		 email="";
+	}
 public Contatto(String nome, String cognome, String tel, String email) {
 	super();
 	this.nome = nome;
