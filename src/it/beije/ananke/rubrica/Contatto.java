@@ -22,10 +22,10 @@ public class Contatto {
 	
 	public void visualizzaContatto() {
 		
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
+		System.out.print(this.getNome() + ";");
+		System.out.print(this.getCognome() + ";");
+		System.out.print(this.getNumeroTel() + ";");
+		System.out.println(this.getMail() + ";");
 	}
 	
 	

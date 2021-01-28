@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,8 +31,8 @@ public class Rubrica {
 	
 	List<Contatto> listC;
 
-	public void aggiungiContattoSulFile(Contatto c) throws Exception {
-			aggiungiContatto(c);
+	public void aggiungiContattoSulFile(String nome, String cognome, String numeroTel, String mail) throws Exception {
+			aggiungiContatto(nome, cognome, numeroTel, mail);
 			scriviRubricaCSV();
 			scriviRubricaXML();
 	}
@@ -157,7 +158,7 @@ public class Rubrica {
 		transformer.transform(source, result);
 		transformer.transform(source, syso);
 
-		System.out.println("File saved!");
+		//System.out.println("File saved!");
 		
 		
 }
@@ -222,8 +223,22 @@ public class Rubrica {
 	}
 
 		
-	public void aggiungiContatto(Contatto c) {
-		listC.add(c);
+	public void aggiungiContatto(String nome, String cognome, String numeroTel, String mail) {
+		
+		if(nome.length() == 0 && cognome.length() == 0 && numeroTel.length() == 0 && mail.length() == 0) {
+			 System.out.println("CONTATTO NON VALIDO, DEVI ISERIRE ALMENO UN CAMPO!");
+			 
+			 return;
+		}
+		
+			Contatto c = new Contatto();
+			
+			c.setNome(nome);
+			c.setCognome(cognome);
+			c.setNumeroTel(numeroTel);
+			c.setMail(mail);
+			
+			listC.add(c);
 	}
 
 	
@@ -243,6 +258,69 @@ public class Rubrica {
 		System.out.println("Contatti in rubrica : " + this.listC.size());
 		
 	}
+	
+	public void cercaContatti(String nomeCercato) {
+		
+		for(Contatto c : listC) {
+			if(c.getNome().equals(nomeCercato) || c.getCognome().equals(nomeCercato) ) {
+				c.visualizzaContatto();
+			}
+		}
+	}
+	
+	public void eliminaContatto(String nomeCercato) {
+		
+		List<Contatto> lContatti = new ArrayList<>();
+		List<Integer> lIndici = new ArrayList();
+		int i = 0;
+		Scanner s = new Scanner(System.in);
+		
+		for(Contatto c : listC) {
+			
+			if(c.getNome().equals(nomeCercato) || c.getCognome().equals(nomeCercato) ) {
+				lContatti.add(c);
+				lIndici.add(i);
+			}
+			
+			i++; // conta l'indice corrente
+		}
+		
+		if(lContatti.size() == 1) {
+			
+			this.listC.remove(lIndici.get(0).intValue());
+		}
+		
+		else {
+			
+			System.out.println();
+			System.out.println("------------------------------");
+			System.out.println("QAULE CONTATTO VUOI ELIMINARE!");
+			System.out.println("------------------------------");
+			i = 0;
+			for(Contatto c : lContatti) {
+				i++;
+				System.out.print( i + " - ( ");
+				
+				System.out.print(c.getNome() + "  " + c.getCognome() + "  " 
+						+ c.getNumeoroTel() + "  " + c.getMail());
+				
+				System.out.println(" )");
+		}
+		
+			System.out.println("-----------------------------------------");
+			
+			String comando = s.next();
+			int indiceDaEliminare = Integer.parseInt(comando);
+			indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
+			this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
+			
+			
+			
+		}
+
+	}
+	
+	
 }
 
 

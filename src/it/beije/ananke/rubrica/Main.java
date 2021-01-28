@@ -10,7 +10,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		
 		Scanner s = new Scanner(System.in);
-		
+		String parolaChiave;
 		Rubrica R = new Rubrica();
 		Contatto c;
 		String nome;
@@ -18,10 +18,10 @@ public class Main {
 		String numeroTel;
 		String mail;
 		
-		//R.caricaRubricaDaSCV("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.txt");
+		R.caricaRubricaDaSCV("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.txt");
 	//	R.visualizzaRubrica();
-		R.leggiRubricaXML("C:\\Users\\Padawan06\\Desktop\\A\\rubrica2.xml");
-		R.getSize();
+		//R.leggiRubricaXML("C:\\Users\\Padawan06\\Desktop\\A\\rubrica2.xml");
+		//R.getSize();
 		
 		stampaMenu();
 		String comando = s.next();
@@ -42,8 +42,8 @@ public class Main {
 				System.out.println("Inserisci Email:");
 				mail = s.next();
 				
-				c = new Contatto(nome, cognome, numeroTel, mail);
-				R.aggiungiContatto(c);
+				
+				R.aggiungiContatto(nome, cognome, numeroTel, mail);
 				//R.aggiungiContatto(c);
 				break;
 				
@@ -58,8 +58,8 @@ public class Main {
 				System.out.println("Inserisci Email:");
 				mail = s.next();
 				
-				c = new Contatto(nome, cognome, numeroTel, mail);
-				R.aggiungiContattoSulFile(c);
+				//c = new Contatto(nome, cognome, numeroTel, mail);
+				R.aggiungiContatto(nome, cognome, numeroTel, mail);
 				
 				break;
 				
@@ -70,6 +70,16 @@ public class Main {
 				
 			case "C":
 				
+				System.out.println("Inserisci Parola chiave da cercare:");
+				parolaChiave = s.next();
+				R.cercaContatti(parolaChiave);
+				break;
+				
+			case "D":
+				
+				System.out.println("Inserisci parola chiave per il contatto da eliminare:");
+				parolaChiave = s.next();
+				R.eliminaContatto(parolaChiave);
 				break;
 				
 			default: 
@@ -84,7 +94,7 @@ public class Main {
 		}
 		
 		R.scriviRubricaCSV();
-		R.scriviRubricaXML();
+		//R.scriviRubricaXML();
 		s.close();
 	}
 	
@@ -98,12 +108,15 @@ public class Main {
 		
 	System.out.println("\n\n");
 	System.out.println("MENU:");
-	System.out.println("______________________________________");
+	System.out.println("----------------------------------------------------------");
 	System.out.println("N: Inserisci nuovo contatto");
 	System.out.println("F: Inserisci nuovo contatto e salva su file immediatamente");
 	System.out.println("C: Cerca contatto");
-	System.out.println("V: Visualizza intera Rubrica ");
+	System.out.println("V: Visualizza intera Rubrica");
+	System.out.println("D: Per eliminare un contatto da rubrica ");
 	System.out.println("E: Per Terminare ");
+	System.out.println("----------------------------------------------------------");
+	System.out.println();
 	
 	}
 
