@@ -115,7 +115,7 @@ public class Rubrica {
 
                 case "f":
 
-                    cercaContatto();
+                    cercaContatti();
 
                     break;
 
@@ -396,7 +396,7 @@ public class Rubrica {
             contatto.appendChild(email);
 
             listaContatti.appendChild(contatto);
-            //lui non aggiunge i tago con le identazioni corrette
+            //lui non aggiunge i tag con le identazioni corrette
         }
 
         //per scriverlo, bisogna prendere quello che c'è in memoria
@@ -420,31 +420,45 @@ public class Rubrica {
 
         System.out.println("\nInserisci i dati del nuovo contatto.");
         System.out.println("\nNome: ");
-        contatto.setNome(inputTastiera.next().trim());
+        contatto.setNome(inputTastiera.nextLine().trim());
         System.out.println("\nCognome: ");
-        contatto.setCognome(inputTastiera.next().trim());
+        contatto.setCognome(inputTastiera.nextLine().trim());
         System.out.println("\nTelefono: ");
-        contatto.setTelefono(inputTastiera.next().trim());
+        contatto.setTelefono(inputTastiera.nextLine().trim());
         System.out.println("\nE-mail: ");
-        contatto.setEmail(inputTastiera.next().trim());
+        contatto.setEmail(inputTastiera.nextLine().trim());
 
-        boolean presente = false;
+        if(contatto.getNome().length() == 0  &&
+            contatto.getCognome().length() == 0  &&
+            contatto.getTelefono().length() == 0  &&
+            contatto.getEmail().length() == 0){
 
-        //controllo di non avere già il contatto
-        if(rubrica.size() > 0) {
-            for (Contatto contact : rubrica) {
-                if (contact.equals(contatto)) {
-                    presente = true;
-                    break;
+            System.out.println("Attenzione! Almeno un campo del contatto deve essere non vuoto");
+
+        }
+        else {
+
+            boolean presente = false;
+
+            //controllo di non avere già il contatto
+            if (rubrica.size() > 0) {
+                for (Contatto contact : rubrica) {
+                    if (contact.equals(contatto)) {
+                        presente = true;
+                        break;
+                    }
                 }
             }
+
+            if (!presente) {
+                //aggiungo il contatto al mio arrayList
+                rubrica.add(contatto);
+
+                System.out.println("\nHai aggiunto il seguente contatto alla rubrica:\t" + contatto.toString());
+            }
+            else
+                System.out.println("Attenzione! Il contatto era già presente in rubrica");
         }
-
-        if(!presente)
-            //aggiungo il contatto al mio arrayList
-            rubrica.add(contatto);
-
-        System.out.println("\nHai aggiunto il seguente contatto alla rubrica:\t" + contatto.toString());
 
     }
 
@@ -461,30 +475,66 @@ public class Rubrica {
                 "\t- e: email");
 
         String comando = inputTastiera.nextLine();
+        String vecchioCampo = null;
 
         switch (comando){
             case "n":
                 System.out.println("Nome: ");
+                vecchioCampo = rubrica.get(index).getNome();
                 rubrica.get(index).setNome(inputTastiera.nextLine());
                 break;
 
             case "c":
                 System.out.println("Cognome: ");
+                vecchioCampo = rubrica.get(index).getCognome();
                 rubrica.get(index).setCognome(inputTastiera.nextLine());
                 break;
 
             case "t":
                 System.out.println("Telefono: ");
+                vecchioCampo = rubrica.get(index).getTelefono();
                 rubrica.get(index).setTelefono(inputTastiera.nextLine());
                 break;
 
             case "e":
                 System.out.println("Email: ");
+                vecchioCampo = rubrica.get(index).getEmail();
                 rubrica.get(index).setEmail(inputTastiera.nextLine());
                 break;
 
             default:
 
+
+        }
+
+        if(rubrica.get(index).getNome().length() == 0  &&
+                rubrica.get(index).getCognome().length() == 0  &&
+                rubrica.get(index).getTelefono().length() == 0  &&
+                rubrica.get(index).getEmail().length() == 0){
+
+            System.out.println("Attenzione! Almeno un campo del contatto deve essere non vuoto");
+
+            //e rimetto a posto il vecchio valore del campo
+            switch (comando){
+                case "n":
+                    rubrica.get(index).setNome(vecchioCampo);
+                    break;
+
+                case "c":
+                    rubrica.get(index).setCognome(vecchioCampo);
+                    break;
+
+                case "t":
+                    rubrica.get(index).setTelefono(vecchioCampo);
+                    break;
+
+                case "e":
+                    rubrica.get(index).setEmail(vecchioCampo);
+                    break;
+
+                default:
+
+            }
         }
     }
 
@@ -492,6 +542,141 @@ public class Rubrica {
 
         rubrica.remove(cercaContatto());
 
+    }
+
+    private static void cercaContatti(){
+
+        List<Integer> indici = new ArrayList<>();
+
+        Scanner inputTastiera = new Scanner(System.in);
+
+        System.out.println("\nPuoi cercare un contatto specificando solo alcuni parametri:\n" +
+                "\t- n : cercare un contatto specificando nome;\n" +
+                "\t- c : cercare un contatto specificando cognome;\\n\"" +
+                "\t- t : cercare un contatto specificando il numero telefonico;\n" +
+                "\t- e : cercare un contatto specificando l'email;\n");
+
+        String comando = inputTastiera.nextLine().trim();
+
+        //cerco il contatto in modi diversi
+        switch (comando){
+
+            case "n":
+
+                indici = cercaContattiNome();
+
+                break;
+
+            case "c":
+
+                indici = cercaContattiCognome();
+
+                break;
+
+            case "t":
+
+                indici = cercaContattiTelefono();
+
+                break;
+
+            case "e":
+
+                indici = cercaContattiEmail();
+
+                break;
+
+            default:
+
+
+        }
+
+        if(indici.size() > 0) {
+            System.out.println("Ecco i contatti che cercavi:\t");
+            for (Integer indice: indici) {
+                System.out.println("\n\t[" + indice + "]\t" + rubrica.get(indice).toString() );
+            }
+        }
+        else
+            System.out.println("Mi dispiace ma il contatto che cercavi non è in rubrica");
+
+    }
+
+    private static ArrayList<Integer> cercaContattiNome(){
+
+        ArrayList<Integer> contattiTrovati = new ArrayList<>();
+
+        Scanner inputTastiera = new Scanner(System.in);
+
+        System.out.println("Nome contatto: ");
+        String nome = inputTastiera.nextLine().trim();
+
+        for (Contatto contatto: rubrica) {
+
+            if(contatto.getNome().equals(nome))
+                contattiTrovati.add(rubrica.indexOf(contatto));
+
+        }
+
+        return contattiTrovati;
+
+    }
+
+    private static ArrayList<Integer> cercaContattiCognome(){
+
+        ArrayList<Integer> contattiTrovati = new ArrayList<>();
+
+        Scanner inputTastiera = new Scanner(System.in);
+
+        System.out.println("Cognome contatto: ");
+        String cognome = inputTastiera.nextLine().trim();
+
+        for (Contatto contatto: rubrica) {
+
+            if(contatto.getCognome().equals(cognome))
+                contattiTrovati.add(rubrica.indexOf(contatto));
+
+        }
+
+        return contattiTrovati;
+    }
+
+    private static ArrayList<Integer> cercaContattiTelefono(){
+
+        ArrayList<Integer> contattiTrovati = new ArrayList<>();
+
+        Scanner inputTastiera = new Scanner(System.in);
+
+        System.out.println("Telefono contatto: ");
+        String telefono = inputTastiera.nextLine().trim();
+
+        for (Contatto contatto: rubrica) {
+
+            if(contatto.getTelefono().equals(telefono))
+                contattiTrovati.add(rubrica.indexOf(contatto));
+
+        }
+
+        return contattiTrovati;
+
+    }
+
+    private static ArrayList<Integer> cercaContattiEmail(){
+
+        ArrayList<Integer> contattiTrovati = new ArrayList<>();
+
+        Scanner inputTastiera = new Scanner(System.in);
+
+        System.out.println("Email contatto: ");
+        String email = inputTastiera.nextLine().trim();
+
+        for (Contatto contatto: rubrica) {
+
+            if(contatto.getEmail().equals(email))
+                contattiTrovati.add(rubrica.indexOf(contatto));
+
+        }
+
+        return contattiTrovati;
     }
 
     private static int cercaContatto(){
@@ -603,6 +788,61 @@ public class Rubrica {
         for (Contatto contatto: rubrica) {
             System.out.println("[" + (int) (rubrica.indexOf(contatto) + 1) + "]\t" + contatto.toString());
         }
+    }
+
+    /**
+     *
+     * @param contatto
+     * @param chiave
+     * @return true se la chiave è una chiave duplicata
+     */
+    private static boolean chiaveDuplicata(Contatto contatto, String chiave){
+
+        switch (chiave){
+
+            case "n&c":
+
+                for (Contatto contattoConfronto: rubrica) {
+
+                    //faccio il controllo per i duplicati, ma questo controllo è CASE SESITIVE
+                    //per fare CASE UNSESITIVE basta usare equalsIgnoreCase()
+                    if(contatto.getNome().equals(contattoConfronto.getNome()) &&
+                            contatto.getCognome().equals(contattoConfronto.getCognome()))
+                        return true;
+
+                }
+
+                break;
+
+            case "t":
+
+                for (Contatto contattoConfronto: rubrica) {
+
+                    if(contatto.getTelefono().equals(contattoConfronto.getTelefono()))
+                        return true;
+
+                }
+
+                break;
+
+            case "e":
+
+                for (Contatto contattoConfronto: rubrica) {
+
+                    if(contatto.getEmail().equals(contattoConfronto.getEmail()))
+                        return true;
+
+                }
+
+                break;
+
+            default:
+
+        }
+
+        //se arrivo alla fine, vuol dire che non ho trovato duplicati
+        return false;
+
     }
 
 }
