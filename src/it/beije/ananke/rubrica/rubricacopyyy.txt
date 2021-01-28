@@ -1,0 +1,10 @@
+Alan;Caligiuri;202032536;alan.caligiuri@tiscali.it;
+Alessandro;Fantastico;258963123;Alessandroiltop@gmail.com;
+Chiara;Negri;336523653;Chiara.negri@gmail.com;
+Federico;Giuliani;147536951;Federico.giuliani@gmail.com;
+Francesco;Gilardi;13466963;francesco.gilardi@gmail.com;
+Giulio;Golia;123456789;giulio.golia@gmail.com;
+Luisa;Alcini;3460209555;luisa.alcini@gmail.com;
+Massimo;Costante;141425253;massimo.costante@gmail.com;
+Sara;Allievi;258147258;sara.allievi@gmail.com;
+Stefano;Bestetti;3396153654;stefano.bestetti94@gmail.com;
