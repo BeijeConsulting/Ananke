@@ -16,6 +16,12 @@ import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,32 +33,64 @@ public class Rubrica {
 		
 	List<Contatto> contatti = new ArrayList<Contatto>();
 
-	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerException {
 		Rubrica rubrica = new Rubrica();
 		Scanner sc = new Scanner(System.in);
 
 		boolean controllo = false;
 		int opzioneScelta = 0;
-		while(!controllo) {
-			System.out.println("Seleziona l'operazione da svolgere \n1 = Aggiungi un contatto\n"
-					+ "2 = Importa la lista dei contatti da csv\n"
-					+ "3 = Esporta la lista dei contatti in un file csv\n"
-					+ "4 = Importa la lista dei contatti da un file xml");
-			try {
-				opzioneScelta = Integer.parseInt(sc.next());
-				controllo = true;
-			}catch(NumberFormatException e) {
-				System.out.println("Opzione non disponibile");
-			}
-		}
-		System.out.println("Inserire il path del file");
-		String filePath = sc.next();
+		boolean stop = false;
+		String filePath = "";
 		
-		switch(opzioneScelta) {
-			case 1: rubrica.aggiungiContatto(filePath);
-			case 2: rubrica.importaCsv(filePath);
-			case 3: rubrica.esportaCsv(filePath);
-			case 4: rubrica.importaXml(filePath);
+		while(!stop) {
+			while(!controllo) {
+				System.out.println("Seleziona l'operazione da svolgere \n"
+						+ "0 = Esci\n"
+						+ "1 = Aggiungi un contatto\n"
+						+ "2 = Importa la lista dei contatti da csv\n"
+						+ "3 = Esporta la lista dei contatti in un file csv\n"
+						+ "4 = Importa la lista dei contatti da un file xml\n"
+						+ "5 = Esporta la lista dei contatti in un file xml");
+				try {
+					opzioneScelta = Integer.parseInt(sc.next());
+					controllo = true;
+				}catch(NumberFormatException e) {
+					System.out.println("Opzione non disponibile");
+				}
+			}
+			if(opzioneScelta != 0) {
+				System.out.println("Inserire il path del file");
+				filePath = sc.next();
+			}
+			
+			switch(opzioneScelta) {
+				case 0: System.exit(0);
+				case 1: {
+					rubrica.aggiungiContatto(filePath);
+					break;
+				}
+				case 2: {
+					rubrica.importaCsv(filePath);
+					break;
+				}
+				case 3: {
+					rubrica.esportaCsv(filePath);
+					break;
+				}
+				case 4: {
+					rubrica.importaXml(filePath);
+					break;
+				}
+				case 5: {
+					rubrica.esportaXml(filePath);
+					break;
+				}
+			}
+			controllo = false;
+			System.out.println("Continuare? (s/n)");
+			if(sc.next().equalsIgnoreCase("n")) {
+				stop = true;
+			}
 		}
 		sc.close();
 	}
@@ -63,7 +101,6 @@ public class Rubrica {
 	
 	public void aggiungiContatto(String filePath) throws IOException {
 		
-		//String header = "nome;cognome;email;telefono";
 		Contatto contatto = new Contatto();
 		boolean stop = false;	
 		Scanner sc = new Scanner(System.in);
@@ -177,6 +214,60 @@ public class Rubrica {
         }
         contatti.add(contatto);
         }
+	}
+	
+	public void esportaXml(String filePath) throws ParserConfigurationException, TransformerException {
+
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+		
+        Document document = builder.newDocument();
+        Element elContatti = document.createElement("contatti");
+        document.appendChild(elContatti);
+        
+        //...
+        Element elContatto = null;
+        Element nome = null;
+        Element cognome = null;
+        Element email = null;
+        Element telefono = null;
+
+        for (Contatto contatto : contatti) {
+        	elContatto = document.createElement("contatto");
+        	
+        	nome = document.createElement("nome");
+        	nome.setTextContent(contatto.getNome());
+        	elContatto.appendChild(nome);
+        	
+        	cognome = document.createElement("cognome");
+        	cognome.setTextContent(contatto.getCognome());
+        	elContatto.appendChild(cognome);
+        	
+        	email = document.createElement("email");
+        	email.setTextContent(contatto.getEmail());
+        	elContatto.appendChild(email);
+        	
+        	telefono = document.createElement("telefono");
+        	telefono.setTextContent(contatto.getTelefono());
+        	elContatto.appendChild(telefono);	
+        	
+        	elContatti.appendChild(elContatto);
+        }
+        
+        
+		// write the content into xml file
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(document);
+		
+		StreamResult result = new StreamResult(new File(filePath));
+
+		try {
+			transformer.transform(source, result);
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
+        
 	}
 	
 
