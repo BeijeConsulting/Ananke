@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class RubricaMain {
 
 	public static void main(String[] args) throws IOException {
-		Rubrica r = new Rubrica("/Users/Padawan08/Desktop");
+		CsvManager r = new CsvManager("/Users/Padawan08/Desktop/Rubrica.csv");
 		r.aggiungiInRubrica();		
 		r.aggiornaRubrica();
 	}

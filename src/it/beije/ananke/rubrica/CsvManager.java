@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Rubrica {
+public class CsvManager {
 	private ArrayList<Contatto> contatti = new ArrayList<Contatto>();
 	private File file;
 
-	public Rubrica(String filePath) {
+	public CsvManager(String filePath) {
 		file = new File(filePath);
 		if (file.exists()) {
 			System.out.println("Il file " + file + " esiste già");
@@ -56,7 +56,7 @@ public class Rubrica {
 		String telephone="";
 		String email="";
 		String parola="";
-		while(!(parola.equalsIgnoreCase("si"))) {
+		while(!(parola.equalsIgnoreCase("no"))) {
 			System.out.println("Inserisci Nome");
 			name = scanner.nextLine();
 			System.out.println("Inserisci Cognome");
@@ -66,7 +66,7 @@ public class Rubrica {
 			System.out.println("Inserisci Mail");
 			email = scanner.nextLine();
 			aggiungiContattoInRubrica(new Contatto(name,surname,telephone,email));
-			System.out.println("Vuoi proseguire?");
+			System.out.println("Vuoi proseguire? IN CASO CONTRARIO DIGITA 'NO' ");
 			parola = scanner.nextLine();
 		}
 	}
