@@ -5,33 +5,10 @@ import java.io.*;
 
 public class Rubrica {
 
-	public static void main(String[] args) throws IOException {
-		
-		File rub = new File("C:/Users/Padawan03/Desktop/rubrica.txt");
-		File rub2 = new File("C:/Users/Padawan03/Desktop/rubrica2.txt");
-		
-		
-		//Testing readContacts
-//		ArrayList<Contatto> contatti = new Rubrica().readContacts(rub);
-//		
-//		for(Contatto el : contatti)
-//		{
-//			System.out.println(el);
-//		}
-//		
-//		//Testing writeContacts
-//		new Rubrica().writeContacts(rub2,contatti);
-//		new Rubrica().printFile(rub2);
-		
-		new Rubrica().openMenu();
-		
-		
-
-	}
 	
 	
 	//READ CONTACTS FROM FILE
-	 ArrayList<Contatto> readContacts(File file) throws IOException
+	 static ArrayList<Contatto> readContacts(File file) throws IOException
 	{
 		ArrayList<Contatto> cont = new ArrayList<>();
 		ArrayList<String> lines = new ArrayList<>();
@@ -54,8 +31,8 @@ public class Rubrica {
 	}
 	
 	
-	//WRITE CONTACTS ON FILE
-	 void writeContacts(File file, ArrayList<Contatto> list) throws IOException
+	//WRITE CONTACTS ON FILE csv
+	static  void writeContacts(File file, ArrayList<Contatto> list) throws IOException
 	{
 		FileWriter fw = new FileWriter(file);
 		
@@ -68,37 +45,17 @@ public class Rubrica {
 	}
 	
 	
-	//Interaction menu
-	 void openMenu() throws IOException
-	{
-		Scanner input = new Scanner(System.in);
-		
-		System.out.println("Ciao! Seleziona una funzionalità inserendo il numero corrispondente:");
-		
-		System.out.println("[1] aggiungiContatto\n[2] modificaContatto\n[3] eliminaContatto\n[4] "
-				+ "apri menu\n[5] esci");
-		
-		switch(input.nextInt())
-		{
-		case 1: aggiungiContatto(); break;
-		//case 2: Rubrica.modificaContatto();
-		case 3: eliminaContatto(); break;
-		case 4: openMenu(); break;
-		case 5: input.close();
-				break;
-		default: break;
-		}
-	}
 	
-	//Add contact to "Rubrica"
-	 void aggiungiContatto() throws IOException
+	//Add contact into rubrica
+	static void aggiungiContatto() throws IOException
 
 	{
 		Scanner input = new Scanner(System.in);
-		
+		String path = null;
+					
 		System.out.print("Inserisci il path in cui si trova la rubrica: ");
 		
-		String path = input.next();
+		path = input.next();
 		
 		Contatto toInsert = insertData();
 		
@@ -106,17 +63,66 @@ public class Rubrica {
 		
 		ArrayList<Contatto> contacts = readContacts(file);
 		
+		if(toInsert!=null)
+		{
 		contacts.add(toInsert);
-		
 		writeContacts(file,contacts);
 		
-		System.out.println("Contatto aggiunto.");
-		
+		System.out.println("Contatto aggiunto.");	
 		printFile(file);
-
+		
+		}
+		else {
+			  System.out.println("Devi inserire almeno un campo.\nRitorno al menu...\n");	
+			  input.close();
+		}
+		
+			
+	}
+	 
+	 //Support method for "aggiungiContatto"
+	 static Contatto insertData()
+	{
+		ArrayList<String> temp = new ArrayList<>();
+		int counter = 0;
+		Contatto cont = new Contatto();
+		Scanner takeIn = new Scanner(System.in);
+		System.out.print("Inserisci il nome del contatto: ");
+		cont.setName(takeIn.nextLine());
+		temp.add(cont.getName());
+		System.out.print("Inserisci il cognome del contatto: ");
+		cont.setLastName(takeIn.nextLine());
+		temp.add(cont.getLastName());
+		System.out.print("Inserisci il numero di telefono del contatto: ");
+		cont.setPhone(takeIn.nextLine());
+		temp.add(cont.getPhone());
+		System.out.print("Inserisci l'email del contatto: ");
+		cont.setEmail(takeIn.nextLine());  
+		temp.add(cont.getEmail());
+		
+		for(String el : temp)
+		{
+			if(el.equals(""))
+			{
+				counter++;
+			}
+		}
+		
+		takeIn.close();
+		
+		if(counter!=temp.size())
+		{
+			return cont;
+		}
+		else
+		{
+			return null;
+		}
+	
 	}
 
-	 void eliminaContatto() throws IOException
+	 //Delete contact from rubrica
+	 static void eliminaContatto() throws IOException
 	 {
 		 	Scanner input = new Scanner(System.in);
 		 	String email;
@@ -140,7 +146,7 @@ public class Rubrica {
 				if(co.getEmail().equalsIgnoreCase(email))
 				{
 					contacts.remove(co);
-					System.out.println("Cotatto eliminato");
+					System.out.println("Contatto eliminato");
 					System.out.println("Elenco contatti aggiornato:");
 					break;
 				}	
@@ -150,24 +156,7 @@ public class Rubrica {
 			System.exit(0);		
 	 }
 	 
-	 Contatto insertData()
-	{
-		Contatto cont = new Contatto();
-		Scanner takeIn = new Scanner(System.in);
-		System.out.print("Inserisci il nome del contatto: ");
-		cont.setName(capitalize(takeIn.next()));
-		System.out.print("Inserisci il cognome del contatto: ");
-		cont.setLastName(capitalize(takeIn.next()));
-		System.out.print("Inserisci il numero di telefono del contatto: ");
-		cont.setPhone(takeIn.next());
-		System.out.print("Inserisci l'email del contatto: ");
-		cont.setEmail(takeIn.next().toLowerCase());  
-		
-		takeIn.close();
-		
-		return cont;
-	}
-	
+	 
 	 String formatContact(String...data)
 	{
 		String formatted="";
@@ -179,7 +168,8 @@ public class Rubrica {
 		return formatted;
 	}
 	
-	 void printFile(File f) throws IOException
+	 //Printing a file
+	 static void printFile(File f) throws IOException
 	{
 			FileReader reader = new FileReader(f);
 			BufferedReader br = new BufferedReader(reader);
@@ -191,13 +181,6 @@ public class Rubrica {
 			br.close();
 			reader.close();	
 	}
-	
-	 String capitalize(String word)
-		{
-		 	String lower = word.toLowerCase();
-			String result = lower.substring(0, 1).toUpperCase() + lower.substring(1);
-			
-			return result;	
-		}
+
 
 }
