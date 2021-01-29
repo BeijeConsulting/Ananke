@@ -49,6 +49,7 @@ public class Rubrica {
                 try {
                     System.out.println("Inserisci nome");
                     firstName = scanner.nextLine();
+                    firstName = firstName.substring(0,1).toUpperCase() + firstName.substring(1).toLowerCase();
                     if (firstName.contains(";")) {
                         throw new IllegalArgumentException();
                     }
@@ -61,6 +62,7 @@ public class Rubrica {
                 try {
                     System.out.println("Inserisci cognome");
                     lastName = scanner.nextLine();
+                    lastName = lastName.substring(0,1).toUpperCase() + lastName.substring(1).toLowerCase();
                     if (lastName.contains(";")) {
                         throw new IllegalArgumentException();
                     }
@@ -84,7 +86,7 @@ public class Rubrica {
             while (true) {
                 try {
                     System.out.println("Inserisci mail");
-                    email = scanner.nextLine();
+                    email = scanner.nextLine().toLowerCase();
                     if (email.contains(";")) {
                         throw new IllegalArgumentException();
                     }
@@ -93,7 +95,7 @@ public class Rubrica {
                     System.out.println("Remove that damn ';'");
                 }
             }
-            contact = new Contact(firstName, lastName, phoneNumber, email);
+            contact = new Contact(lastName, lastName, phoneNumber, email);
 
         }
 
@@ -121,8 +123,6 @@ public class Rubrica {
         writeToXML(XMLroot, contacts);
     }
 
-
-    // Da verificare
     public void modifyContact() throws IOException, TransformerException, ParserConfigurationException {
         Scanner scanner = new Scanner(System.in);
 
@@ -151,6 +151,7 @@ public class Rubrica {
                                 try {
                                     System.out.println("set first name");
                                     String newFirstName = scanner.nextLine();
+                                    newFirstName = newFirstName.substring(0,1).toUpperCase() + newFirstName.substring(1).toLowerCase();
                                     if(newFirstName.contains(";")) {
                                         throw new IllegalArgumentException();
                                     }
@@ -166,6 +167,7 @@ public class Rubrica {
                                 try {
                                     System.out.println("set last name");
                                     String newLastName = scanner.nextLine();
+                                    newLastName = newLastName.substring(0,1).toUpperCase() + newLastName.substring(1).toLowerCase();
                                     if(newLastName.contains(";")) {
                                         throw new IllegalArgumentException();
                                     }
@@ -195,7 +197,7 @@ public class Rubrica {
                             while (true) {
                                 try {
                                     System.out.println("set email");
-                                    String newEmail = scanner.nextLine();
+                                    String newEmail = scanner.nextLine().toLowerCase();
                                     if(newEmail.contains(";")) {
                                         throw new IllegalArgumentException();
                                     }
