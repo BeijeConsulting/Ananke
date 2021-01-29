@@ -1,8 +1,8 @@
 package it.beije.ananke.rubrica;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+//                   import java.io.File;
+//import java.io.FileReader;
+//import java.io.FileWriter;
 import java.util.Scanner;
 
 public class Main {
@@ -12,7 +12,7 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 		String parolaChiave;
 		Rubrica R = new Rubrica();
-		Contatto c;
+		//Contatto c;
 		String nome;
 		String cognome;
 		String numeroTel;
@@ -22,7 +22,7 @@ public class Main {
 	//	R.visualizzaRubrica();
 		//R.leggiRubricaXML("C:\\Users\\Padawan06\\Desktop\\A\\rubrica2.xml");
 		//R.getSize();
-		
+		RubricaSQL.provaConnessione();
 		stampaMenu();
 		String comando = s.next();
 		
@@ -114,7 +114,7 @@ public class Main {
 	
 	public static void stampaMenu() {
 		
-	System.out.println("\n\n");
+	System.out.println("\n");
 	System.out.println("MENU:");
 	System.out.println("-----------------------------------------------------------");
 	System.out.println("N: Inserisci nuovo contatto");

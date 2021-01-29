@@ -11,7 +11,7 @@ import java.sql.Statement;
 public class JDBCmanager {
 	
 	public static final String DB_USER = "root";
-	public static final String DB_PASSWORD = "beije";
+	public static final String DB_PASSWORD = "Beije06";
 	public static final String DB_URL = "jdbc:mysql://localhost:3306/ananke?serverTimezone=CET";
 
 	public static void main(String[] args) {

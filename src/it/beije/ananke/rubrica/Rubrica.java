@@ -2,7 +2,7 @@ package it.beije.ananke.rubrica;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
+//import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,6 +35,10 @@ public class Rubrica {
 			aggiungiContatto(nome, cognome, numeroTel, mail);
 			scriviRubricaCSV();
 			scriviRubricaXML();
+	}
+	
+	public void caricaRubricaDaDB() {
+		this.listC = RubricaSQL.caricaContattiDaDB();
 	}
 	
 	public void caricaRubricaDaSCV(String path) throws IOException {
@@ -175,7 +179,6 @@ public class Rubrica {
         
         NodeList elementiContatto = docElement.getElementsByTagName("contatto");
         
-        
         for (int i = 0; i < elementiContatto.getLength(); i++) {
         	
         	Contatto contatto = new Contatto();
@@ -271,7 +274,7 @@ public class Rubrica {
 	public void eliminaContatto(String nomeCercato) {
 		
 		List<Contatto> lContatti = new ArrayList<>();
-		List<Integer> lIndici = new ArrayList();
+		List<Integer> lIndici = new ArrayList<>();
 		int i = 0;
 		Scanner s = new Scanner(System.in);
 		
@@ -314,6 +317,7 @@ public class Rubrica {
 			indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
 			this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
 			
+			s.close();
 			
 			
 		}
@@ -323,7 +327,7 @@ public class Rubrica {
 	public void modificaContatto(String parolaChiave) {
 		
 		List<Contatto> lContatti = new ArrayList<>();
-		List<Integer> lIndici = new ArrayList();
+		List<Integer> lIndici = new ArrayList<>();
 		int i = 0;
 		Scanner s = new Scanner(System.in);
 		Contatto contatto;
@@ -392,7 +396,7 @@ public class Rubrica {
 				indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
 				contatto = lContatti.get(lIndici.get(indiceDaEliminare).intValue());
 				String nuovoCognome =  s.next();
-				contatto.setNome(nuovoCognome);
+				contatto.setCognome(nuovoCognome);
 				this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
 				this.listC.add(contatto);
 				
@@ -403,7 +407,7 @@ public class Rubrica {
 				indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
 				contatto = lContatti.get(lIndici.get(indiceDaEliminare).intValue());
 				String nuovoNumTel =  s.next();
-				contatto.setNome(nuovoNumTel);
+				contatto.setNumeroTel(nuovoNumTel);
 				this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
 				this.listC.add(contatto);
 				break;
@@ -413,7 +417,7 @@ public class Rubrica {
 				indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
 				contatto = lContatti.get(lIndici.get(indiceDaEliminare).intValue());
 				String nuovoEmail =  s.next();
-				contatto.setNome(nuovoEmail);
+				contatto.setMail(nuovoEmail);
 				this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
 				this.listC.add(contatto);
 				break;
@@ -424,7 +428,7 @@ public class Rubrica {
 			indiceDaEliminare -= 1; // indice dell'elemento da eliminare tra qeulli stampati a schermo
 			this.listC.remove(lIndici.get(indiceDaEliminare).intValue());
 			
-			
+			s.close();
 			
 		}
 
