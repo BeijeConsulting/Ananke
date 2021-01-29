@@ -18,11 +18,12 @@ public class Main {
 		String numeroTel;
 		String mail;
 		
-		R.caricaRubricaDaSCV("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.txt");
+		//R.caricaRubricaDaSCV("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.txt");
+		R.caricaRubricaDaDB();
 	//	R.visualizzaRubrica();
 		//R.leggiRubricaXML("C:\\Users\\Padawan06\\Desktop\\A\\rubrica2.xml");
 		//R.getSize();
-		RubricaSQL.provaConnessione();
+		//RubricaSQL.provaConnessione();
 		stampaMenu();
 		String comando = s.next();
 		

@@ -226,30 +226,43 @@ public class RubricaSQL {
 	
 	public static List<Contatto> caricaContattiDaDB() {
 		
-		List<Contatto> list = new ArrayList<>();
+		List<Contatto> listC = new ArrayList<>();
 		Statement statement = null;
 		Connection connection = null;
 		ResultSet rs = null;
-		Contatto c = new Contatto();
-		
+		//Contatto c = new Contatto();
+		int i =0;
 		
 		try {
 			connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 			
 			statement = connection.createStatement();
 			
-			rs = statement.executeQuery("SELECT * FROM rubrica");
+			rs = statement.executeQuery("SELECT * FROM contatti");
 			
 			while (rs.next()) {
-
-				c.setNome( rs.getString("name"));
+				//System.out.println(rs.getString("name"));
+				Contatto c = new Contatto();
+				c.setNome(rs.getString("name"));
 				c.setCognome(rs.getString("surname"));
 				c.setMail(rs.getString("email"));
 				c.setNumeroTel(rs.getString("telephone"));
-				
-				list.add(c);
-
+				//System.out.println(c.getNome());
+				listC.add(c);
+				System.out.print(listC.get(i).getNome() + " ");
+				System.out.println(listC.get(i).getCognome());
+				i++;
 			}
+			
+			System.out.println("");
+			//System.out.println(list.toString());
+			for(int j = listC.size() - 1  ; j >= 0; j--) {
+				System.out.print(listC.get(j).getNome() + " ");
+				System.out.println(listC.get(j).getCognome());
+				
+			}
+			
+			
 			
 
 			
@@ -261,7 +274,7 @@ public class RubricaSQL {
 			try {
 				
 				connection.close();
-				System.out.println(connection.isClosed());
+				//System.out.println(connection.isClosed());
 				rs.close();
 				statement.close();
 
@@ -271,7 +284,7 @@ public class RubricaSQL {
 			
 		}
 		
-		return list;
+		return listC;
 	}
 
 
