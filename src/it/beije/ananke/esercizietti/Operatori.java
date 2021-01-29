@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.esercizietti;
 
 //programmino per gli operatori
 public class Operatori{
