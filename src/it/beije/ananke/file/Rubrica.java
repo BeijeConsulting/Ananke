@@ -28,14 +28,15 @@ import it.beije.ananke.Contatto;
 public class Rubrica {
 	
 	public static void main(String[] args) throws Exception {
-		String path = "C:\\Users\\Padawan04\\Desktop\\Snippets\\rubrica.xml";
+		String path = "C:\\Users\\Padawan04\\Desktop\\Snippets\\rub.csv";
+		String format = "csv";
 		Rubrica r = new Rubrica();
 		menu();
 		Scanner s = new Scanner(System.in);
 		String st = s.next();
 
-		while (!st.equalsIgnoreCase("3")) {
-			r.choice(st, path, s);
+		while (!st.equalsIgnoreCase("6")) {
+			r.choice(st, path, s, format);
 			menu();
 			st = s.next();
 		}
@@ -50,26 +51,33 @@ public class Rubrica {
 		System.out.println("-Digita 0 per vedere lo stato della tua rubrica");
 		System.out.println("-Digita 1 per aggiungere una nuova voce");
 		System.out.println("-Digita 2 per creare una nuova rubrica");
-		System.out.println("-Digita 3 per uscire");
-		System.out.println("-Digita 4 per ristampare il menù");
+		System.out.println("-Digita 3 per modificare una voce");
+		System.out.println("-Digita 4 per cancellare una voce");
+		System.out.println("-Digita 5 per cercare un contatto");
+		System.out.println("-Digita 6 per uscire");
+		System.out.println("-Digita 7 per ristampare il menù");
 		
 	}
 	
 	
 	
-	public void choice(String i, String path, Scanner s) throws Exception{
+	public void choice(String i, String path, Scanner s, String format) throws Exception{
+		ArrayList<Contatto> contatti = read(path, s, format);
 		switch(i) {
-			case "0": stampa(path, s); break;
-			case "1": aggiungiVoce(path, s); break;
-			case "2": inizializzaNuova(s, path);
-			case "3": break;
+			case "0": stampa(path, contatti); break;
+			case "1": aggiungiVoce(path, s, contatti); break;
+			case "2": inizializzaNuova(s, path); break;
+			case "3": modificaContatto(path, s, contatti); break;
 			case "4": break;
+			case "5": ricerca(path, s, contatti); break;
+			case "6": break;
+			case "7": break;
 			default: System.out.println("L'opzione selezionata non è valida.");
 		}
 	}
 	
 	
-	public void stampa(String path, Scanner s) throws Exception {
+	public void stampa(String path, ArrayList<Contatto> contatti) throws Exception {
 		//ArrayList<Contatto> contatti = letturaCsv(path);
 /*		StringBuilder sb = new StringBuilder();
 		sb.append(contatti.get(0).getName()).append(" ")
@@ -78,7 +86,7 @@ public class Rubrica {
 		  .append(contatti.get(0).getTelephone()).append(" ");
 		System.out.println(sb.toString());
 	*/	
-		ArrayList<Contatto> contatti = read(path, s);
+
 		if(contatti.size() == 0) {
 			System.out.println("Reindirizzamento al menù.");
 		}else {
@@ -89,9 +97,10 @@ public class Rubrica {
 	}
 	
 	
-	public ArrayList<Contatto> read(String path, Scanner s) throws Exception{
-		System.out.println("Formato file da leggere: ");
-		String st = s.next();
+	public ArrayList<Contatto> read(String path, Scanner s, String st) throws Exception{
+		//System.out.println("Formato file da leggere: ");
+		//String st = s.next();
+		
 		if(st.equalsIgnoreCase("xml")) {
 			return letturaXml(path);
 		}else if(st.equalsIgnoreCase("csv")) {
@@ -125,6 +134,7 @@ public class Rubrica {
 			con.setTelephone(rs[3]);
 			lista.add(con);
 		}
+		lista.remove(0);
 		
 		br.close();
 		fr.close();
@@ -183,40 +193,72 @@ public class Rubrica {
 	public void inizializzaNuova(Scanner s, String path) throws Exception {
 		ArrayList<Contatto> contatti = new ArrayList<>();
 		Contatto cont = defContatto(path, s);
-		contatti.add(cont);
-		write(path, contatti, s);
-	}
-	
-	
-	public void aggiungiVoce(String path, Scanner s) throws Exception {
-		ArrayList<Contatto> contatti = read(path, s);
-		if(contatti == null) {
-			System.out.println("...");
+		if(cont == null) {
+			System.out.println("Inizializzazione fallita.");
 		}else {
-			Contatto cont = defContatto(path, s);
 			contatti.add(cont);
 			write(path, contatti, s);
 		}
 	}
 	
+	
+	public void aggiungiVoce(String path, Scanner s, ArrayList<Contatto> contatti) throws Exception {
+		if(contatti.size() == 0) {
+			System.out.println("...");
+		}else {
+			Contatto cont = defContatto(path, s);
+			if(cont != null) {
+				contatti.add(cont);
+				write(path, contatti, s);
+			}
+		}
+	}
+	
 	public Contatto defContatto(String path, Scanner s) throws IOException, FileNotFoundException {
 		Contatto cont = new Contatto();
+		StringBuilder sb = new StringBuilder("");
 		
-		System.out.println("Digita il nome da inserire in rubrica:");
+		System.out.println("Digita il nome da inserire in rubrica:\n(Digitare 0 per lasciare il campo vuoto)");
 		String st = s.next();
-		cont.setName(st);
+		sb.append(st);
+		if(cont.getName().equals("0")) {
+			cont.setName("");
+		}else {
+			cont.setName(st);
+		}
 		
-		System.out.println("Digita il cognome da inserire in rubrica:");
-		st = s.next();		
-		cont.setSurname(st);
+		System.out.println("Digita il cognome da inserire in rubrica:\\n(Digitare 0 per lasciare il campo vuoto)");
+		st = s.next();	
+		sb.append(st);
+		if(cont.getSurname().equals("0")) {
+			cont.setSurname("");
+		}else {
+			cont.setSurname(st);
+		}
 		
-		System.out.println("Digita l'email da inserire in rubrica:");
-		st = s.next();		
-		cont.setEmail(st);
+		System.out.println("Digita l'email da inserire in rubrica:\\n(Digitare 0 per lasciare il campo vuoto)");
+		st = s.next();	
+		sb.append(st);
+		if(cont.getEmail().equals("0")) {
+			cont.setEmail("");
+		}else {
+			cont.setEmail(st);
+		}
 		
-		System.out.println("Digita il numero di telefono da inserire in rubrica:");
-		st = s.next();		
-		cont.setTelephone(st);
+		System.out.println("Digita il numero di telefono da inserire in rubrica:\\n(Digitare 0 per lasciare il campo vuoto)");
+		st = s.next();
+		sb.append(st);
+		if(cont.getTelephone().equals("0")) {
+			cont.setTelephone("");
+		}else {
+			cont.setTelephone(st);
+		}
+		
+		
+		if(sb.toString().equals("0000")) {
+			System.out.println("Il contatto inserito è vuoto, non sarà aggiunto in rubrica.");
+			cont = null;
+		}
 		
 		return cont;
 	}
@@ -237,7 +279,6 @@ public class Rubrica {
 		File newFile = new File(path);
 		FileWriter fw = new FileWriter(newFile);
 		
-		contatti.remove(0);
 		StringBuilder prima = new StringBuilder("NOME;COGNOME;EMAIL;TELEFONO\n");
 		fw.write(prima.toString());
 		
@@ -309,13 +350,123 @@ public class Rubrica {
 	}
 	
 	
-/*	public void modificaContatto(String path, Scanner s) throws Exception {
-		ArrayList<Contatto> contatti = read(path, s);
-		System.out.println("Scegliere quale voce modificare: ");
-		stampa(path, s);
-		String st = s.next();
-	
-		
+	public void modificaContatto(String path, Scanner s, ArrayList<Contatto> contatti) throws Exception {
+		if(contatti == null) {
+			System.out.println("La rubrica è vuota.");
+		}else {
+			stampa(path, contatti);
+			System.out.println("Scegliere quale voce modificare: ");
+			String st = s.next();
+			
+			try {
+				int indice = Integer.parseInt(st);
+				
+				while(indice >= contatti.size()) {
+					System.out.println("Voce non valida, provare di nuovo.");
+					st = s.next();
+					indice = Integer.parseInt(st);
+				}
+				
+				Contatto cont = defContatto(path, s);
+				contatti.set(indice, cont);
+				write(path, contatti, s);
+				
+			}catch(NumberFormatException e) {
+				System.out.println("Formato non valido. La voce non è stata modificata.");
+			}
+		}
 	}
-*/			
+	
+	
+	public ArrayList<Contatto> scansione(String path, Scanner s, ArrayList<Contatto> contatti) throws Exception{
+		ArrayList<Contatto> appoggio = new ArrayList<>();
+		
+		if(contatti.size() == 0) {
+			
+		}
+		
+		System.out.println("Scegliere in quale campo cercare:\n"
+				+ "0: NOME\n1: COGNOME\n2: EMAIL\n3: TELEFONO\n"
+				+ "(Attenzione il numero di telefono deve contenere eventuali prefissi)");
+		String str = s.next();
+		
+		try {
+			int indice = Integer.parseInt(str);
+			
+			while(indice >= 4) {
+				System.out.println("Voce non valida, provare di nuovo.");
+				str = s.next();
+				indice = Integer.parseInt(str);
+			}
+			
+			System.out.println("Inserire il valore da cercare: ");
+			str = s.next();
+			switch(indice) {
+				case 0: for(Contatto c : contatti) {
+							if(c.getName().equalsIgnoreCase(str))
+								appoggio.add(c);
+						}
+						break;
+				case 1: for(Contatto c : contatti) {
+							if(c.getSurname().equalsIgnoreCase(str))
+								appoggio.add(c);
+						}
+						break;
+				case 2: for(Contatto c : contatti) {
+							if(c.getEmail().equalsIgnoreCase(str))
+								appoggio.add(c);
+						}
+						break;
+				case 3:	for(Contatto c : contatti) {
+							if(c.getTelephone().equalsIgnoreCase(str))
+								appoggio.add(c);
+						}
+						break;
+			}
+			
+			
+		}catch(NumberFormatException e) {
+			System.out.println("Formato non valido. La ricerca verrà interrotta.");
+		}
+		
+		
+		return appoggio;
+	}
+	
+	public void ricerca(String path, Scanner s, ArrayList<Contatto> contatti) throws Exception {
+		ArrayList<Contatto> stampa = scansione(path, s, contatti);
+		for(Contatto c : stampa) {
+			System.out.println(stampa.indexOf(c) + c.toString());
+		}
+	}
+	
+	public void rimuovi(String path, Scanner s, ArrayList<Contatto> contatti) throws Exception {
+		stampa(path, contatti);
+		if(contatti.size() == 0) {
+			System.out.println("La rubrica è vuota.");
+		}else {
+			stampa(path, contatti);
+			System.out.println("Scegliere quale voce eliminare: ");
+			String st = s.next();
+			
+			try {
+				int indice = Integer.parseInt(st);
+				
+				while(indice >= contatti.size()) {
+					System.out.println("Voce non valida, provare di nuovo.");
+					st = s.next();
+					indice = Integer.parseInt(st);
+				}
+				
+				
+				write(path, contatti, s);
+				
+			}catch(NumberFormatException e) {
+				System.out.println("Formato non valido. La voce non è stata modificata.");
+			}
+		}
+	}
+	
+	
+	
 }
