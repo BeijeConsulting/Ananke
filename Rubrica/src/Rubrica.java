@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -9,10 +10,13 @@ import org.xml.sax.SAXException;
 public class Rubrica {
 
 	
-	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerException {
+	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerException, SQLException {
 	
 		ManagerCsv managerCsv = new ManagerCsv();
 		ManagerXml managerXml = new ManagerXml();
+		// JDBCManager managerJdbc = new JDBCManager();
+		
+		JDBCManager.connettiDb();
 		
 		Scanner scanner = new Scanner(System.in);
 		
@@ -33,14 +37,27 @@ public class Rubrica {
 		System.out.println("Digita per effettuare l' operazione : ");
 		System.out.println("");
 		System.out.println("-  exit - se vuoi uscire");
+		System.out.println("-   0   - torna alla scelta della rubrica");
 		System.out.println("-   1   - se vuoi inserire un contatto");
 		System.out.println("-   2   - se vuoi cercare un contatto");
 		System.out.println("-   3   - se vuoi modificare un contatto");
 		System.out.println("-   4   - se vuoi eliminare un contatto");
+		System.out.println("-   5   - se vuoi visualizzare la lista dei contatti nel file");
+		System.out.println("-   6   - per visualizzare i contatti nel database");
 		
 		
 		scelta = scanner.next();
 		
+	
+	if(scelta.equals("0")) {
+		do {
+			System.out.println("Su quale rubrica vuoi operare? ");
+			System.out.println("| xml | csv |");
+			
+			tipoRubrica = scanner.next();
+			
+		}while(!(tipoRubrica.equalsIgnoreCase("xml") || tipoRubrica.equalsIgnoreCase("csv")));
+	}
 		
 	if(scelta.equals("1")) {
 		
@@ -56,13 +73,17 @@ public class Rubrica {
 		System.out.println("inserisci il numero di telefono");
 		String telefono = scanner.next();
 		
+		Contatto tempContatto = new Contatto(nome,cognome,telefono,email);
+		
 		if (tipoRubrica.equalsIgnoreCase("csv")) {
 			
-			managerCsv.aggiungiContatto(new Contatto(nome,cognome,telefono,email));
+			managerCsv.aggiungiContatto(tempContatto);
+			JDBCManager.inserisciContattoDb(tempContatto);
 			
 		} else {
 			
-			managerXml.aggiungiContatto(new Contatto(nome, cognome, telefono, email));
+			managerXml.aggiungiContatto(tempContatto);
+			JDBCManager.inserisciContattoDb(tempContatto);
 		
 		}
 		
@@ -111,27 +132,97 @@ public class Rubrica {
 		
 		}
 		
-		System.out.println("inserisci ora il nuovo nome del contatto");
-		String nomeNuovo = scanner.next();
+		String sceltaModifica = null;
 		
-		System.out.println("inserisci ora il nuovo cognome del contatto");
-		String cognomeNuovo = scanner.next();
-		
-		System.out.println("inserisci ora il nuovo numero di telefono");
-		String telefonoNuovo = scanner.next();
-		
-		System.out.println("inserisci ora la nuova email");
-		String emailNuova = scanner.next();
-		
-		if (tipoRubrica.equalsIgnoreCase("csv")) {
+		do {
+			System.out.println("Che cosa vuoi modificare? ");
+			System.out.println("-   0   - termina modifiche");
+			System.out.println("-   1   - modifica nome");
+			System.out.println("-   2   - modifica cognome");
+			System.out.println("-   3   - modifica numero di telefono");
+			System.out.println("-   4   - modifica email");
 			
-			managerCsv.modifica(tempContatto, nomeNuovo, cognomeNuovo, telefonoNuovo, emailNuova);
+			sceltaModifica = scanner.next();
 			
-		} else {
+			if(sceltaModifica.contentEquals("1")) {
+				
+				String nomeNuovo = null;
+				
+				System.out.println("inserisci ora il nuovo nome del contatto");
+				nomeNuovo = scanner.next();
+				
+				if (tipoRubrica.equalsIgnoreCase("csv")) {
+					
+					managerCsv.modificaNome(tempContatto, nomeNuovo);
+					
+				} else {
+					
+					managerXml.modificaNome(tempContatto, nomeNuovo);
+				
+				}
+				
+				JDBCManager.modificaNomeContattoDb(tempContatto, nomeNuovo);
+				
+			}
 			
-			managerXml.modifica(tempContatto, nomeNuovo, cognomeNuovo, telefonoNuovo, emailNuova);
-		
-		}
+			if(sceltaModifica.contentEquals("2")) {
+				
+				String cognomeNuovo = null;
+				
+				System.out.println("inserisci ora il nuovo cognome del contatto");
+				cognomeNuovo = scanner.next();
+				
+				if (tipoRubrica.equalsIgnoreCase("csv")) {
+					
+					managerCsv.modificaNome(tempContatto, cognomeNuovo);
+					
+				} else {
+					
+					managerXml.modificaNome(tempContatto, cognomeNuovo);
+				
+				}
+				
+			}
+
+			if(sceltaModifica.contentEquals("3")) {
+				
+				String telefonoNuovo = null;
+				
+				System.out.println("inserisci ora il nuovo numero di telefono");
+				telefonoNuovo = scanner.next();
+				
+				if (tipoRubrica.equalsIgnoreCase("csv")) {
+					
+					managerCsv.modificaNome(tempContatto, telefonoNuovo);
+					
+				} else {
+					
+					managerXml.modificaNome(tempContatto, telefonoNuovo);
+				
+				}
+				
+			}
+			
+			if(sceltaModifica.contentEquals("3")) {
+				
+				String emailNuova = null;
+				
+				System.out.println("inserisci ora la nuova email");
+				emailNuova = scanner.next();
+				
+				if (tipoRubrica.equalsIgnoreCase("csv")) {
+					
+					managerCsv.modificaNome(tempContatto, emailNuova);
+					
+				} else {
+					
+					managerXml.modificaNome(tempContatto, emailNuova);
+				
+				}
+				
+			}
+			
+		}while(!(sceltaModifica.contentEquals("0")));
 		
 	}
 	
@@ -142,6 +233,7 @@ public class Rubrica {
 		
 		System.out.println("inserisci il cognome del contatto che vuoi eliminare");
 		String cognomeDaEliminare = scanner.next();
+		
 		
 		if (tipoRubrica.equalsIgnoreCase("csv")) {
 			
@@ -155,6 +247,32 @@ public class Rubrica {
 		
 		
 	}
+	
+	if(scelta.contentEquals("5")) {
+		
+		System.out.println("Lista dei contatti:");
+		System.out.println("");
+		
+		if (tipoRubrica.equalsIgnoreCase("csv")) {
+			
+			managerCsv.visualizzaContatti();
+			
+		} else {
+			
+			managerXml.visualizzaContatti();
+		
+		}
+		
+		
+	}
+	
+	if(scelta.contentEquals("6")) {
+		
+		System.out.println("Lista dei contatti presenti nel DB");
+		
+		JDBCManager.visualizzaContattiDb();
+		
+	}
 
 	}while(!scelta.equalsIgnoreCase("exit"));
 	
@@ -162,6 +280,8 @@ public class Rubrica {
 		System.out.println("Hai chiuso correttamente la rubrica, arrivederci");
 	
 		scanner.close();
+		
+		JDBCManager.chiudiConnessioneDb();
 
 	}
 	

@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -174,18 +175,41 @@ public class ManagerXml{
 	        
 	    }
 	 
-	 public void modifica(Contatto tempContatto, String nome, String cognome, String telefono, String email) throws IOException, ParserConfigurationException, SAXException, TransformerException {
+	 public void modificaNome(Contatto tempContatto, String nome) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 		 
 		 tempContatto.setName(nome);
-		 tempContatto.setSurname(cognome);
-		 tempContatto.setTelephone(telefono);
-		 tempContatto.setEmail(email);
 		 
 		 write();
 		 
 	 }
 	 
-	 public void elimina(String nome, String cognome) throws IOException, ParserConfigurationException, SAXException, TransformerException {
+	 public void modificaCognome(Contatto tempContatto, String cognome) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+		 
+		 tempContatto.setSurname(cognome);
+		 
+		 write();
+		 
+	 }
+	 
+	 public void modificaTelefono(Contatto tempContatto, String telefono) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+		 
+		 tempContatto.setTelephone(telefono);
+		 
+		 write();
+		 
+	 }
+	 
+	 public void modificaEmail(Contatto tempContatto, String email) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+		 
+		 tempContatto.setTelephone(email);
+		 
+		 write();
+		 
+	 }
+	 
+	 
+	 
+	 public void elimina(String nome, String cognome) throws IOException, ParserConfigurationException, SAXException, TransformerException, SQLException {
 		 
 		 	Contatto tempContatto = null;
 		 	
@@ -198,6 +222,8 @@ public class ManagerXml{
 		 	if( tempContatto != null) {
 		 		
 		 		contatti.remove(tempContatto);
+		 		
+		 		JDBCManager.eliminaContattoDb(tempContatto);
 		 		
 		 		System.out.println("Il contatto ");
 		 		System.out.println("");
@@ -219,5 +245,14 @@ public class ManagerXml{
 		 	}
 		 	
 	 }
+	 
+	 	public void visualizzaContatti() {
+		 
+			for(Contatto contatto : contatti) {
+				
+				System.out.println(contatto.stampa());
+				
+			}
+		}
 	
 }

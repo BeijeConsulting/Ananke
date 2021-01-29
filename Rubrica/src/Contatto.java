@@ -1,6 +1,8 @@
 
 public class Contatto {
 
+	private int id;
+	
 	private String name;
 	private String surname;
 	private String telephone;
@@ -48,11 +50,25 @@ public class Contatto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	@Override
 	public String toString() {
 		
 		return name + ";" + surname + ";" + email + ";" + telephone;
+		
+	}
+	
+	public String stampa() {
+		
+		return "nome: " + name + " cognome: " + surname + " telefono: " + telephone + " email: " + email;
 		
 	}
 	

@@ -5,6 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import org.xml.sax.SAXException;
+
 public class ManagerCsv {
 	
 	private ArrayList<Contatto> contatti;
@@ -121,12 +126,33 @@ public class ManagerCsv {
 	        
 	    }
 	 
-	 public void modifica(Contatto tempContatto, String nome, String cognome, String telefono, String email) throws IOException {
+	 public void modificaNome(Contatto tempContatto, String nome) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 		 
 		 tempContatto.setName(nome);
+		 
+		 salva(contatti);
+		 
+	 }
+	 
+	 public void modificaCognome(Contatto tempContatto, String cognome) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+		 
 		 tempContatto.setSurname(cognome);
+		 
+		 salva(contatti);
+		 
+	 }
+	 
+	 public void modificaTelefono(Contatto tempContatto, String telefono) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+		 
 		 tempContatto.setTelephone(telefono);
-		 tempContatto.setEmail(email);
+		 
+		 salva(contatti);
+		 
+	 }
+	 
+	 public void modificaEmail(Contatto tempContatto, String email) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+		 
+		 tempContatto.setTelephone(email);
 		 
 		 salva(contatti);
 		 
@@ -166,6 +192,15 @@ public class ManagerCsv {
 		 	}
 		 	
 	 }
+	 
+	 public void visualizzaContatti() {
+		 
+			for(Contatto contatto : contatti) {
+				
+				System.out.println(contatto.stampa());
+				
+			}
+		}
 	
 
 }
