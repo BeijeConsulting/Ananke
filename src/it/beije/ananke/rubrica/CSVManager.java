@@ -25,6 +25,7 @@ public static List<Contatti> readCSV(String path) throws IOException {
 		while(br.ready()) {
 			row.add(br.readLine());
 		}
+		row.remove(0);
 		for(String r : row) {
 			String[]rs = r.split(",");
 			rubrica.add(new Contatti(rs[0],rs[1],rs[2],rs[3]));
@@ -54,9 +55,7 @@ public static void writeCSV(List<Contatti> list)  {
 	try {
 		FileWriter fw= new FileWriter(f);
 		
-		if(!f.exists()) {
-			initCSV(s);
-		}
+		initCSV(s);
 	
 	
 	for(Contatti c: list) {
