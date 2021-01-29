@@ -88,6 +88,7 @@ public class Rubrica {
         }
 
         //prendo il primo comando che mi porta nel ciclo
+        //TODO: lo posso togliere tecnicamente se sposto l'altro in cima al do
         stampaListaComandi();
         comando = inputTastiera.nextLine();
 
