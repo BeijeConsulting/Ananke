@@ -8,17 +8,21 @@ public class Cartella {
 	private static int nCartella;
 	private int nC;
 	private int numeri[][] = new int[3][9];
-
-	public Cartella() {
+private static  int emergenza;
+	public Cartella() throws ImpossibileGenerareCartella {
 		++nCartella;
 		this.nC=nCartella;
 		generaCartella();
 		if (nCartella % 6 == 0)
 			estrazione.ripristinaCartella();
-
+		
 	}
-
-	public void generaCartella() {
+public void resetCartelle() {
+	estrazione.ripristinaCartella();
+	nCartella=0;
+	nC=0;
+}
+	public void generaCartella() throws ImpossibileGenerareCartella {
 		
 		Random r = new Random();
 		if(nC>6) {
@@ -41,54 +45,66 @@ public class Cartella {
 			}
 			}
 		}else {
+		int numero;
 		
-			
-			for (int i = 0; i < 3; i++) {
-				int estratti = 0;
-				while (estratti != 5) {
-					for (int j = 0; j < 9; j++) {
-						/*
-						if (r.nextBoolean()&&numeri[i][j]==0&&controlloColonna(j,2)==false) {
-							int z=estrazione.getNumero(j + 1);
-							while(this.controlloNumero(z)) 
-								z=estrazione.getNumero(j + 1);
-							numeri[i][j] = z;
-							estratti++;
-							if (estratti == 5)
-								break;
-							
-						}
-						
-*/
-							if (numeri[i][j]==0) {
-						
-								int z=estrazione.getNumeroSR(j + 1);
-								if(z!=-1) {					
-								numeri[i][j] = z;
-								estratti++;
-								}
-								
-								if (estratti == 5)
-									break;
-								
-								
-							
-								}
-							
-							
-						}
-					}
-
-				}
-				}
-				
-					}
-
-				
-				
-			
-			
+		for(int i=0;i<3;i++) {
+			int estr = 0;
+			emergenza=0;
+		while(estr!=5) {
+			boolean ripetizione=true;
+			do {
+			numero=estrazione.getNumeroSR();
+			int colonna;
+			if(numero==90)
+				colonna=8;
+			else
+			 colonna=numero/10;
 		
+			if(	numeri[i][colonna]==0&& (controllodoppioColonna(colonna)||nC>=5)) {
+			
+				
+						numeri[i][colonna]=numero;
+							ripetizione=false;
+							estr++;
+
+			}else
+			{
+				estrazione.aggiungiNumero(numero);
+				emergenza++;
+				if(emergenza==400)
+					throw new  ImpossibileGenerareCartella();
+			}
+			}while(ripetizione);
+			
+			
+			}
+			
+		}
+		
+	}
+
+			
+		}
+				
+				
+			public void swappynumber(int numero) {	 
+				int colonna;
+				if(numero==90)
+					colonna=8;
+				else
+				 colonna=numero/10;
+			if(numeri[0][colonna]==0) {
+				numeri[0][colonna]=numero;
+			}else {
+				if(numeri[1][colonna]==0) {
+					numeri[1][colonna]=numero;
+				}else {
+					if(numeri[2][colonna]==0)
+						numeri[2][colonna]=0;
+			}
+			}
+			
+			}
 	
 
 	public int getnCartella() {
@@ -189,7 +205,7 @@ int zeri=0;
 		return false;
 	
 }
-private  boolean controlloColonna(int indice,int c) {
+private  boolean controllodoppioColonna(int indice) {
 		
 		int conta=0;
 		if(numeri[0][indice]!=0)
@@ -199,7 +215,7 @@ private  boolean controlloColonna(int indice,int c) {
 		if(numeri[2][indice]!=0)
 			conta++;
 			
-		if(conta==c)
+		if(conta<2)
 		return true;
 		else 
 		return false;

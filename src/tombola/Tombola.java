@@ -6,11 +6,27 @@ public class Tombola {
 private List<Cartella> d ;
 public Tombola(int x) {
 	d=new ArrayList<>();
+	Cartella c=null;
 	for(int i=0;i<x;i++) {
-		Cartella c=new Cartella();
-	while(d.contains(c))
-		c=new Cartella();
-		d.add(c);
+		
+		try {
+			c = new Cartella();
+			while(c.getnCartella()>6&& d.contains(c))
+				try {
+					c=new Cartella();
+				} catch (ImpossibileGenerareCartella e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				d.add(c);
+		} catch (ImpossibileGenerareCartella e) {
+			// TODO Auto-generated catch block
+			c.resetCartelle();
+			d.clear();
+			i=-1;
+		}
+		
+	
 	}
 }
 public void stampaCartelle() {
@@ -27,7 +43,7 @@ public void stampaCartelle() {
 }
 	public static void main(String[] args) {
 		
-Tombola napoli=new Tombola(6);
+Tombola napoli=new Tombola(30);
 napoli.stampaCartelle();
 	}
 

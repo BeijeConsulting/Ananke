@@ -52,13 +52,10 @@ List<Contatto> listContatti;
         	if (cognome != null ) {
         		contatto.setCognome(cognome.item(0).getTextContent());
         	}
-          	System.out.println("Sto per leggere l'email");
         	NodeList email = c.getElementsByTagName("email");
-          	System.out.println("email letta");
-          	System.out.println(email.getLength());
+        
           	
         	if (email != null && email.getLength()>0) {
-              	System.out.println(email.getLength());
         		contatto.setEmail(email.item(0).getTextContent());
         	}
         	NodeList tel = c.getElementsByTagName("telefono");
@@ -181,7 +178,6 @@ List<Contatto> listContatti;
         	 */
         }
         
-        System.out.println(utenti.getChildNodes().getLength());
         
 		// write the content into xml file
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -196,7 +192,7 @@ List<Contatto> listContatti;
 		transformer.transform(source, result);
 		transformer.transform(source, syso);
 
-		System.out.println("File saved!");
+		System.out.println("\nFile saved!");
         
 	}
 	
