@@ -10,70 +10,19 @@ public class Rubrica {
 	public List<Contatti> r = new ArrayList<Contatti>();
 	public String path;
 	
-	public Rubrica(String path) {
-		this.path = path;
-		try {
-			if(path.substring(path.length()-4,path.length()).equals(".xml")) {
-				
-				this.r = XMLManager.readFile(path);
-			}else if(path.substring(path.length()-4,path.length()).equals(".csv")) {
-			this.r = CSVManager.readCSV(path);
-			}
-		} catch (Exception e) {
-			
-			
+	public Rubrica() {
+	
 		}
-	}
+	
 	
 
 	
-	public void writeFile(File f)  {
-		
-		try {
-			FileWriter fw= new FileWriter(f);
-			if(!f.exists()) {
-				fw.write("NOME,COGNOME,EMAIL,CELLULARE");
-				fw.write("\n");
-			}
-		
-		
-		for(Contatti c: this.r) {
-			
-			fw.write(c.toString());
-			fw.write("\n");
-			
-		}
-		fw.close();
-		}catch(IOException e) {
-			System.out.println("Errore in scrittura");
-		}
-	}
 	
-	
-	public  List<Contatti> readFile(String path) throws IOException {
-		File f = new File(path);
-		List<String> row = new ArrayList<>();
-		List<Contatti> rubrica = new ArrayList<>();
-		
-		if(!f.exists()) {
-		writeFile(f);
-		return rubrica;
-		} else {
-			BufferedReader br = new BufferedReader(new FileReader(f));
-			while(br.ready()) {
-				row.add(br.readLine());
-			}
-			for(String r : row) {
-				String[]rs = r.split(",");
-				rubrica.add(new Contatti(rs[0],rs[1],rs[2],rs[3]));
-			}
-			return rubrica;
-		}
-	}
 	
 	public boolean addContact() {
 		String n,s,e,phone;
 		Scanner sc = new Scanner(System.in);
+		
 		System.out.println("Inserisci nome: ");
 		 n =sc.nextLine();
 		System.out.println("Inserisci cognome: ");
@@ -122,7 +71,7 @@ public class Rubrica {
 		System.out.println("Mi dispiace, ma il contatto non è presente in lista");
 		} else {
 			System.out.println("Il contatto è stato eliminato");
-			writeFile(new File(this.path));
+			
 		}
 		
 		
