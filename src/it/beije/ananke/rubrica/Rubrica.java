@@ -1,9 +1,5 @@
 package it.beije.ananke.rubrica;
 
-//salvare in un file rubrica.txt
-//un elenco di contatti.
-//devo modificare il file, non sovrascrivere ogni volta che lo apro.
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,76 +15,27 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Rubrica {
 
-    private static List<Contatto> rubrica = new ArrayList<>();
+    private static List<Contact> rubrica = new ArrayList<>();
     private static final String PATH = "C:\\Users\\Padawan02\\Desktop\\esercizietti\\rubrica";
+
+    public static final String DB_USER = "root";
+    public static final String DB_PASSWORD = "Padawan02May4BeWithYou";
+    public static final String DB_URL = "jdbc:mysql://localhost:3306/ananke?serverTimezone=CET";
 
     public static void main(String[] args) {
 
         Scanner inputTastiera = new Scanner(System.in);
-        String path;
         String comando;
 
-        File directory = new File(PATH);
-        File[] files = directory.listFiles();
-        int i=0;
-
-        if(files == null) {
-            System.out.println("C'è stato un problema. Riavvia l'applicatico");
-        }
-        else{
-            if(files.length > 0) {
-                //esiste già un file dal quale leggere
-
-                System.out.println("Quale file vuoi leggere?\n");
-
-                for (File file : files) {
-                    System.out.println("[" + i + "]\t" + file.getName());
-                    i++;
-                }
-
-                //faccio scegliere il file da leggere
-                int numeroFile = Integer.parseInt(inputTastiera.nextLine().trim());
-                String nomeFile = files[numeroFile].getName();
-
-                //capisco se è un file xml o csv
-                String nome = nomeFile.split("\\.")[0];
-                String estensione = (nomeFile.split("\\."))[1];
-
-                path = PATH + "\\" + nomeFile;
-
-                if (estensione.equals("xml")) {
-                    try {
-                        leggiContattiXml(path);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    if (estensione.equals("csv"))
-                        leggiContattiCsv(path);
-                    else {
-                        System.out.println("Mi dispiace ma non riesco a leggere un file di tale estensione");
-                        return;
-                    }
-                }
-            }
-            else{
-                //non esistono file presenti nella directory
-                System.out.println("Non sono ancora presenti file nella directory." +
-                        "\nUna volta completate le operazioni potrai crearne uno\n");
-
-                //non essendoci un file da cui leggere non faccio nulla a rubrica
-                //che è gà stata inizializzata in linea
-            }
-        }
-
         //prendo il primo comando che mi porta nel ciclo
-        //TODO: lo posso togliere tecnicamente se sposto l'altro in cima al do
         stampaListaComandi();
         comando = inputTastiera.nextLine();
 
@@ -142,6 +89,543 @@ public class Rubrica {
 
         }while(!comando.equals("q"));
 
+    }
+
+    private static Connection createConnection() throws ClassNotFoundException, SQLException {
+
+        Connection connection = null;
+
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
+
+        return connection;
+
+    }
+
+    private static void insertContacts(){
+
+        Connection connection = null;
+
+        try {
+
+            connection = createConnection();
+            Scanner inputKeyword = new Scanner(System.in);
+            String command = null;
+
+            System.out.println("Come vuoi inserire i contatti?" +
+                    "\n\t[1] Importa contatti da file" +
+                    "\n\t[2] Inserisci contatti da tastiera");
+
+            command = inputKeyword.nextLine().trim();
+
+            switch (command){
+
+                case "1":
+
+                    insertFromFile(connection);
+
+                    break;
+
+                case "2":
+
+                    insertFromKeyWords(connection);
+
+                    break;
+
+                default:
+
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+    }
+
+    private static void insertFromKeyWords(Connection connection) throws SQLException {
+
+        Scanner inputKeyWord = new Scanner(System.in);
+        ArrayList<Contact> rubric = new ArrayList<>();
+        String command = null;
+
+        do {
+
+            Contact contact = new Contact();
+
+            System.out.println("\nInserisci i dati del nuovo contatto.");
+            System.out.println("\nNome: ");
+            contact.setName(inputKeyWord.nextLine().trim());
+            System.out.println("\nCognome: ");
+            contact.setSurname(inputKeyWord.nextLine().trim());
+            System.out.println("\nTelefono: ");
+            contact.setTelephone(inputKeyWord.nextLine().trim());
+            System.out.println("\nE-mail: ");
+            contact.setEmail(inputKeyWord.nextLine().trim());
+
+            if(contact.getName().length() == 0  &&
+                    contact.getSurname().length() == 0  &&
+                    contact.getTelephone().length() == 0  &&
+                    contact.getEmail().length() == 0){
+
+                System.out.println("Attenzione! Almeno un campo del contatto deve essere non vuoto");
+
+            }
+            else
+                rubric.add(contact);
+
+            System.out.println("Vuoi continuare a inserire contatti?");
+            command = inputKeyWord.nextLine().trim();
+
+        }while(!command.equals("no"));
+
+        System.out.println("Questi sono i contatti che hai aggiunto:\n");
+        stampaContatti(rubric);
+        System.out.println("\nVuoi aggiungere questi contatti al database?" +
+                "\n\tyes?" +
+                "\n\tno?");
+
+        command = inputKeyWord.nextLine().trim();
+
+        //TODO: potrei fare in modo che all'interno di questo pezzo, io possa anche eliminarne qualcuno o modificarlo
+        //quindi farlo lavorare su questo arraylist prima di inserire sul db
+
+        PreparedStatement preparedStatement = null;
+        String psInsert = "INSERT INTO contact (name, surname, telephone, email) VALUES (?, ?, ?, ?)";
+        preparedStatement = connection.prepareStatement(psInsert);
+
+        for (Contact contact: rubric) {
+
+            preparedStatement.setString(1, contact.getName());
+            preparedStatement.setString(2, contact.getSurname());
+            preparedStatement.setString(3, contact.getTelephone());
+            preparedStatement.setString(4, contact.getEmail());
+
+            preparedStatement.execute();
+
+        }
+
+    }
+
+    private static void insertFromFile(Connection connection) {
+
+        Scanner inputTastiera = new Scanner(System.in);
+        String path;
+
+        File directory = new File(PATH);
+        File[] files = directory.listFiles();
+        int i=0;
+
+        if(files == null) {
+            System.out.println("C'è stato un problema nel caricare la directory");
+        }
+        else{
+            if(files.length > 0) {
+                //esiste già un file dal quale leggere
+
+                System.out.println("Quale file vuoi leggere?\n");
+
+                for (File file : files) {
+                    System.out.println("[" + i + "]\t" + file.getName());
+                    i++;
+                }
+
+                //faccio scegliere il file da leggere
+                int numeroFile = Integer.parseInt(inputTastiera.nextLine().trim());
+                String nomeFile = files[numeroFile].getName();
+
+                //capisco se è un file xml o csv
+                String nome = nomeFile.split("\\.")[0];
+                String estensione = (nomeFile.split("\\."))[1];
+
+                path = PATH + "\\" + nomeFile;
+
+                if (estensione.equals("xml")) {
+                    try {
+                        readContactFromXml(connection, path);
+                    } catch (Exception e) {
+                        System.out.println("C'è stato un problema nella lettura del file.xml");
+                        e.printStackTrace();
+                    }
+                } else {
+                    if (estensione.equals("csv")) {
+                        try {
+                            readContactFromCsv(connection, path);
+                        } catch (SQLException throwables) {
+                            System.out.println("C'è stato un problema nella lettura del file.csv");
+                            throwables.printStackTrace();
+                        }
+                    }
+                    else {
+                        System.out.println("Mi dispiace ma non riesco a leggere un file di tale estensione");
+                        return;
+                    }
+                }
+            }
+            else{
+                //non esistono file presenti nella directory
+                System.out.println("Non sono ancora presenti file nella directory." +
+                        "\nUna volta completate le operazioni potrai crearne uno\n");
+
+                //non essendoci un file da cui leggere non faccio nulla a rubrica
+                //che è gà stata inizializzata in linea
+            }
+        }
+
+    }
+
+    //legge il file csv e tira fuori i contatti
+    private static void readContactFromCsv(Connection connection, String path) throws SQLException {
+
+        ArrayList<Contact> rubric = new ArrayList<>();
+
+        BufferedReader reader = null;
+
+        try {
+            String info;
+            reader = new BufferedReader(new FileReader(path));
+            while((info = reader.readLine()) != null){
+
+                //ho letto qualcosa di nuovo e non vuoto
+                //devo splittare la stringa e estrapolare
+                //le informazioni del contatto.
+                String[] infoContatto = info.split(";");
+                Contact contact = new Contact();
+
+                contact.setName(infoContatto[0].trim());
+                contact.setSurname(infoContatto[1].trim());
+                contact.setTelephone(infoContatto[2].trim());
+                contact.setEmail(infoContatto[3].trim());
+
+                rubric.add(contact);
+                //System.out.println(contatto.toString());
+
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Il file non era presente.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if(reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Ora aggiungo questi contatti al database");
+        stampaContatti(rubric);
+
+        PreparedStatement preparedStatement = null;
+        String psInsert = "INSERT INTO contact (name, surname, telephone, email) VALUES (?, ?, ?, ?)";
+        preparedStatement = connection.prepareStatement(psInsert);
+
+        for (Contact contact: rubric) {
+
+            preparedStatement.setString(1, contact.getName());
+            preparedStatement.setString(2, contact.getSurname());
+            preparedStatement.setString(3, contact.getTelephone());
+            preparedStatement.setString(4, contact.getEmail());
+
+            preparedStatement.execute();
+
+        }
+
+    }
+
+    private static void readContactFromXml(Connection connection, String path) throws ParserConfigurationException, IOException, SAXException, SQLException {
+
+        ArrayList<Contact> rubric = new ArrayList<>();
+
+        //servono per leggere e scrivere file xml.
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        //creo il documento virtuale
+        Document document = builder.parse(path);
+
+        Element docElement = document.getDocumentElement();
+        NodeList elementiContatto = docElement.getElementsByTagName("contatto");
+
+        for (int i = 0; i < elementiContatto.getLength(); i++) {
+
+            Contact contact = new Contact();
+            Element c = (Element) elementiContatto.item(i);
+
+            NodeList valori = c.getChildNodes();
+            //System.out.println(valori.getLength());
+            for (int j = 0; j < valori.getLength(); j++) {
+                Node n = valori.item(j);
+                if (n instanceof Element) {
+                    Element valore = (Element) n;
+                    //System.out.println(valore.getTagName() + " : " + valore.getTextContent());
+                    switch (valore.getTagName()) {
+                        case "nome":
+                            contact.setName(valore.getTextContent().trim());
+                            break;
+                        case "cognome":
+                            contact.setSurname(valore.getTextContent().trim());
+                            break;
+                        case "telefono":
+                            contact.setTelephone(valore.getTextContent().trim());
+                            break;
+                        case "email":
+                            contact.setEmail(valore.getTextContent().trim());
+                            break;
+
+                        default:
+                            System.out.println("elemento in contatto non riconosciuto");
+                            break;
+                    }
+                }
+            }
+            rubric.add(contact);
+        }
+
+        System.out.println("Ora aggiungo questi contatti al database");
+        stampaContatti(rubric);
+
+        PreparedStatement preparedStatement = null;
+        String psInsert = "INSERT INTO contact (name, surname, telephone, email) VALUES (?, ?, ?, ?)";
+        preparedStatement = connection.prepareStatement(psInsert);
+
+        for (Contact contact: rubric) {
+
+            preparedStatement.setString(1, contact.getName());
+            preparedStatement.setString(2, contact.getSurname());
+            preparedStatement.setString(3, contact.getTelephone());
+            preparedStatement.setString(4, contact.getEmail());
+
+            preparedStatement.execute();
+
+        }
+
+    }
+
+    private static void deleteContacts(Connection connection){
+
+        //allora. gli chiedo prima di cercare dei contatti con dei criteri
+        //poi chiedo conferma se vuole eliminarli tutti
+        //si ok
+        //no gli chiedo di essere più specifico e aggiungere altri campi
+        //ma magari la aggiungo dopo questa funzionalità
+
+
+    }
+
+    private static void modifyContacts(Connection connection){
+
+    }
+
+    private static void findContacts(Connection connection) throws SQLException {
+
+        Scanner inputKeyWord = new Scanner(System.in);
+        String command = null;
+        ArrayList<String> fields = new ArrayList<>();
+
+        System.out.println("Quanti campi vuoi specificare per trovare i contatti che ti interessano?" +
+                "\n\t[1] -un solo campo" +
+                "\n\t[2] -due campi solamente" +
+                "\n\t[3] -tre campi" +
+                "\n\t[4] -tutti i campi" +
+                "\nDigita solamente il numero.");
+
+        command = inputKeyWord.nextLine().trim();
+
+        //riempiamo l'arraylist che poi farò tornare che mi serve per la delete e per la modify
+        //con i campi che voglio specificare
+        for (int i = 0; i < Integer.parseInt(command); i++) {
+
+            System.out.println("Campo numero " + (i+1) + ": ");
+            String value = null;
+
+            System.out.println("Tramite quale campo vuoi cercare?" +
+                    "\n\t -n: name" +
+                    "\n\t -s: surname" +
+                    "\n\t -t: telephone" +
+                    "\n\t -e: email" +
+                    "\nScrivi il comando con - seguito dalla lettera");
+
+            value = inputKeyWord.nextLine().trim();
+
+            switch (value){
+                case "-n":
+                    value = "name";
+                    break;
+                case "-s":
+                    value = "surname";
+                    break;
+                case "-t":
+                    value = "telephone";
+                    break;
+                case "-e":
+                    value = "email";
+                    break;
+                default:
+            }
+
+            //aggiungo solo se il campo non l'ho già aggiunto
+            if (!fields.contains(value))
+                fields.add(value);
+            else {
+                System.out.println("\nHai già aggiunto questo campo per la ricerca");
+                i--;
+            }
+
+        }
+
+        //a questo punto posso costruire la query e interrogare il db
+        StringBuilder query = new StringBuilder("SELECT * FROM contact WHERE ");
+        Statement statement = null;
+        ResultSet rs = null;
+
+        statement = connection.createStatement();
+
+        for (int i = 0; i < fields.size(); i++) {
+
+            //Chiedo all'utente di inserire il valore specfico del primo campo
+            System.out.println(fields.get(i) + ":\t");
+            String value = inputKeyWord.nextLine().trim();
+
+            //TODO: controllare query
+            query.append("(").append(fields.get(i)).append(" = '").append(value).append("')");
+
+            if(i < fields.size() - 1 )
+                //ho ancora una condizione da aggiungere
+                query.append(" AND ");
+            else
+                //non ho più condizioni da aggiungere
+                query.append(";");
+
+        }
+
+
+        if (statement != null) {
+            rs = statement.executeQuery(query.toString());
+        }
+
+        if (rs != null) {
+
+            System.out.println("Ecco i contatti che cercavi:");
+
+            while (rs.next()) {
+                System.out.println("id : " + rs.getInt("id"));
+                System.out.println("cognome : " + rs.getString("surname"));
+                System.out.println("nome : " + rs.getString("name"));
+                System.out.println("email : " + rs.getString("email"));
+                System.out.println("telefono : " + rs.getString("telephone"));
+                System.out.println("-----");
+            }
+        }
+
+        if (statement != null) {
+            statement.close();
+        }
+        if (rs != null) {
+            rs.close();
+        }
+    }
+
+    private static void findContactsOneField(Connection connection) throws SQLException {
+
+        Scanner inputKeyword = new Scanner(System.in);
+        StringBuilder query = new StringBuilder("SELECT * FROM contact");
+        String command = null;
+        String field = null;
+        String value = null;
+        Statement statement = null;
+        ResultSet rs = null;
+
+        System.out.println("Per quale campo vuoi cercare?" +
+                "\n\t -n: name" +
+                "\n\t -s: surname" +
+                "\n\t -t: telephone" +
+                "\n\t -e: email" +
+                "\nScrivi il comando con - seguito dalla lettera");
+
+        command = inputKeyword.nextLine().trim();
+
+        switch (command){
+
+            case "-n":
+                field = "name";
+                break;
+
+            case "-s":
+                field = "surname";
+                break;
+
+            case "-t":
+                field = "telephone";
+                break;
+
+            case "-e":
+                field = "email";
+                break;
+
+            default:
+
+        }
+
+        statement = connection.createStatement();
+
+        System.out.println(field + ":\t");
+        value = inputKeyword.nextLine().trim();
+
+        //TODO: controllare query
+        query.append(" WHERE ('").append(field).append("' = '").append(value).append("');");
+
+        if (statement != null) {
+            rs = statement.executeQuery(query.toString());
+        }
+
+        if (rs != null) {
+
+            System.out.println("Ecco i contatti che cercavi:");
+
+            while (rs.next()) {
+                System.out.println("id : " + rs.getInt("id"));
+                System.out.println("cognome : " + rs.getString("surname"));
+                System.out.println("nome : " + rs.getString("name"));
+                System.out.println("email : " + rs.getString("email"));
+                System.out.println("telefono : " + rs.getString("telephone"));
+                System.out.println("-----");
+            }
+        }
+
+        if (statement != null) {
+            statement.close();
+        }
+        if (rs != null) {
+            rs.close();
+        }
+
+    }
+
+    private static void scriviSuFile(){
+
+        Scanner inputTastiera = new Scanner(System.in);
+        String path;
+
+        File directory = new File(PATH);
+        File[] files = directory.listFiles();
+        int i=0;
+
         System.out.println("Su quale file vuoi salvare le modifiche alla rubrica?" +
                 "\nDigita il numero corrispondente al file che vuoi, o un numero non presente per creare un nuovo file.");
 
@@ -150,8 +634,6 @@ public class Rubrica {
         String nomeFile = null;
 
         if(files != null) {
-
-            i = 0;
 
             for (File file : files) {
                 System.out.println("[" + i + "]\t" + file.getName());
@@ -196,137 +678,6 @@ public class Rubrica {
 
     }
 
-    private static void stampaListaComandi() {
-        System.out.println("\nEcco cosa puoi fare:\n" +
-                "\t- i : inserisci un nuovo contatto;\n" +
-                "\t- u : aggiorna un contatto nella rubrica;\n" +
-                "\t- d : cancella un contatto esistente;\n" +
-                "\t- f : cerca un contatto esistente;\n" +
-                "\t- p : stampa dei contatti della rubrica;\n" +
-                "\t- q : salva ed esci.\n");
-    }
-
-    //legge il file csv e tira fuori i contatti
-    private static void leggiContattiCsv(String path){
-
-        rubrica = new ArrayList<>();
-
-        BufferedReader reader = null;
-
-        try {
-            String info;
-            reader = new BufferedReader(new FileReader(path));
-            while((info = reader.readLine()) != null){
-
-                //ho letto qualcosa di nuovo e non vuoto
-                //devo splittare la stringa e estrapolare
-                //le informazioni del contatto.
-                String[] infoContatto = info.split(";");
-                Contatto contatto = new Contatto();
-
-                contatto.setNome(infoContatto[0].trim());
-                contatto.setCognome(infoContatto[1].trim());
-                contatto.setTelefono(infoContatto[2].trim());
-                contatto.setEmail(infoContatto[3].trim());
-
-                rubrica.add(contatto);
-                //System.out.println(contatto.toString());
-
-            }
-
-        } catch (FileNotFoundException e) {
-            System.out.println("Il file non era presente. Ora ne creo uno nuovo");
-
-            FileWriter writer = null;
-
-            try {
-                writer = new FileWriter(path);
-                System.out.println("Ho creato correttamente il file");
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-            finally {
-                try {
-                    if(writer != null) {
-                        writer.flush();
-                        writer.close();
-                    }
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                if(reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        stampaContatti();
-
-    }
-
-    private static void leggiContattiXml(String path) throws ParserConfigurationException, IOException, SAXException {
-
-        rubrica = new ArrayList<>();
-
-        //servono per leggere e scrivere file xml.
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-
-        //creo il documento virtuale
-        Document document = builder.parse(path);
-
-        Element docElement = document.getDocumentElement();
-        NodeList elementiContatto = docElement.getElementsByTagName("contatto");
-
-        for (int i = 0; i < elementiContatto.getLength(); i++) {
-
-            Contatto contatto = new Contatto();
-            Element c = (Element) elementiContatto.item(i);
-
-            NodeList valori = c.getChildNodes();
-            //System.out.println(valori.getLength());
-            for (int j = 0; j < valori.getLength(); j++) {
-                Node n = valori.item(j);
-                if (n instanceof Element) {
-                    Element valore = (Element) n;
-                    //System.out.println(valore.getTagName() + " : " + valore.getTextContent());
-                    switch (valore.getTagName()) {
-                        case "nome":
-                            contatto.setNome(valore.getTextContent().trim());
-                            break;
-                        case "cognome":
-                            contatto.setCognome(valore.getTextContent().trim());
-                            break;
-                        case "telefono":
-                            contatto.setTelefono(valore.getTextContent().trim());
-                            break;
-                        case "email":
-                            contatto.setEmail(valore.getTextContent().trim());
-                            break;
-
-                        default:
-                            System.out.println("elemento in contatto non riconosciuto");
-                            break;
-                    }
-                }
-            }
-            rubrica.add(contatto);
-        }
-
-        stampaContatti();
-
-    }
-
     private static void scriviSuFileCsv(String path) {
 
         FileWriter writer = null;
@@ -336,9 +687,9 @@ public class Rubrica {
             writer = new FileWriter(path);
 
             //stampo tutta la rubrica
-            for (Contatto contatto: rubrica) {
+            for (Contact contact : rubrica) {
 
-                writer.write(contatto.toString());
+                writer.write(contact.toString());
 
             }
 
@@ -381,15 +732,15 @@ public class Rubrica {
             //potrei fare anche contatto.setAttribte
 
             nome = document.createElement("nome");
-            nome.setTextContent(rubrica.get(i).getNome());
+            nome.setTextContent(rubrica.get(i).getName());
             contatto.appendChild(nome);
 
             cognome = document.createElement("cognome");
-            cognome.setTextContent(rubrica.get(i).getCognome());
+            cognome.setTextContent(rubrica.get(i).getSurname());
             contatto.appendChild(cognome);
 
             telefono = document.createElement("telefono");
-            telefono.setTextContent(rubrica.get(i).getTelefono());
+            telefono.setTextContent(rubrica.get(i).getTelephone());
             contatto.appendChild(telefono);
 
             email = document.createElement("email");
@@ -414,24 +765,44 @@ public class Rubrica {
 
     }
 
+    private static void stampaContatti(ArrayList<Contact> rubric) {
+        for (Contact contact : rubric) {
+            System.out.println("[" + (int) (rubric.indexOf(contact) + 1) + "]\t" + contact.toString());
+        }
+    }
+
+    private static void stampaListaComandi() {
+        System.out.println("\nEcco cosa puoi fare:\n" +
+                "\t- i : inserisci un nuovo contatto;\n" +
+                "\t- u : aggiorna un contatto nella rubrica;\n" +
+                "\t- d : cancella un contatto esistente;\n" +
+                "\t- f : cerca un contatto esistente;\n" +
+                "\t- p : stampa dei contatti della rubrica;\n" +
+                "\t- q : salva ed esci.\n");
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////METODI IN DISUSO////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
     private static void inserisciContatto(){
 
         Scanner inputTastiera = new Scanner(System.in);
-        Contatto contatto = new Contatto();
+        Contact contatto = new Contact();
 
         System.out.println("\nInserisci i dati del nuovo contatto.");
         System.out.println("\nNome: ");
-        contatto.setNome(inputTastiera.nextLine().trim());
+        contatto.setName(inputTastiera.nextLine().trim());
         System.out.println("\nCognome: ");
-        contatto.setCognome(inputTastiera.nextLine().trim());
+        contatto.setSurname(inputTastiera.nextLine().trim());
         System.out.println("\nTelefono: ");
-        contatto.setTelefono(inputTastiera.nextLine().trim());
+        contatto.setTelephone(inputTastiera.nextLine().trim());
         System.out.println("\nE-mail: ");
         contatto.setEmail(inputTastiera.nextLine().trim());
 
-        if(contatto.getNome().length() == 0  &&
-            contatto.getCognome().length() == 0  &&
-            contatto.getTelefono().length() == 0  &&
+        if(contatto.getName().length() == 0  &&
+            contatto.getSurname().length() == 0  &&
+            contatto.getTelephone().length() == 0  &&
             contatto.getEmail().length() == 0){
 
             System.out.println("Attenzione! Almeno un campo del contatto deve essere non vuoto");
@@ -443,7 +814,7 @@ public class Rubrica {
 
             //controllo di non avere già il contatto
             if (rubrica.size() > 0) {
-                for (Contatto contact : rubrica) {
+                for (Contact contact : rubrica) {
                     if (contact.equals(contatto)) {
                         presente = true;
                         break;
@@ -481,20 +852,20 @@ public class Rubrica {
         switch (comando){
             case "n":
                 System.out.println("Nome: ");
-                vecchioCampo = rubrica.get(index).getNome();
-                rubrica.get(index).setNome(inputTastiera.nextLine());
+                vecchioCampo = rubrica.get(index).getName();
+                rubrica.get(index).setName(inputTastiera.nextLine());
                 break;
 
             case "c":
                 System.out.println("Cognome: ");
-                vecchioCampo = rubrica.get(index).getCognome();
-                rubrica.get(index).setCognome(inputTastiera.nextLine());
+                vecchioCampo = rubrica.get(index).getSurname();
+                rubrica.get(index).setSurname(inputTastiera.nextLine());
                 break;
 
             case "t":
                 System.out.println("Telefono: ");
-                vecchioCampo = rubrica.get(index).getTelefono();
-                rubrica.get(index).setTelefono(inputTastiera.nextLine());
+                vecchioCampo = rubrica.get(index).getTelephone();
+                rubrica.get(index).setTelephone(inputTastiera.nextLine());
                 break;
 
             case "e":
@@ -508,9 +879,9 @@ public class Rubrica {
 
         }
 
-        if(rubrica.get(index).getNome().length() == 0  &&
-                rubrica.get(index).getCognome().length() == 0  &&
-                rubrica.get(index).getTelefono().length() == 0  &&
+        if(rubrica.get(index).getName().length() == 0  &&
+                rubrica.get(index).getSurname().length() == 0  &&
+                rubrica.get(index).getTelephone().length() == 0  &&
                 rubrica.get(index).getEmail().length() == 0){
 
             System.out.println("Attenzione! Almeno un campo del contatto deve essere non vuoto");
@@ -518,15 +889,15 @@ public class Rubrica {
             //e rimetto a posto il vecchio valore del campo
             switch (comando){
                 case "n":
-                    rubrica.get(index).setNome(vecchioCampo);
+                    rubrica.get(index).setName(vecchioCampo);
                     break;
 
                 case "c":
-                    rubrica.get(index).setCognome(vecchioCampo);
+                    rubrica.get(index).setSurname(vecchioCampo);
                     break;
 
                 case "t":
-                    rubrica.get(index).setTelefono(vecchioCampo);
+                    rubrica.get(index).setTelephone(vecchioCampo);
                     break;
 
                 case "e":
@@ -611,10 +982,10 @@ public class Rubrica {
         System.out.println("Nome contatto: ");
         String nome = inputTastiera.nextLine().trim();
 
-        for (Contatto contatto: rubrica) {
+        for (Contact contact : rubrica) {
 
-            if(contatto.getNome().equals(nome))
-                contattiTrovati.add(rubrica.indexOf(contatto));
+            if(contact.getName().equals(nome))
+                contattiTrovati.add(rubrica.indexOf(contact));
 
         }
 
@@ -631,10 +1002,10 @@ public class Rubrica {
         System.out.println("Cognome contatto: ");
         String cognome = inputTastiera.nextLine().trim();
 
-        for (Contatto contatto: rubrica) {
+        for (Contact contact : rubrica) {
 
-            if(contatto.getCognome().equals(cognome))
-                contattiTrovati.add(rubrica.indexOf(contatto));
+            if(contact.getSurname().equals(cognome))
+                contattiTrovati.add(rubrica.indexOf(contact));
 
         }
 
@@ -650,10 +1021,10 @@ public class Rubrica {
         System.out.println("Telefono contatto: ");
         String telefono = inputTastiera.nextLine().trim();
 
-        for (Contatto contatto: rubrica) {
+        for (Contact contact : rubrica) {
 
-            if(contatto.getTelefono().equals(telefono))
-                contattiTrovati.add(rubrica.indexOf(contatto));
+            if(contact.getTelephone().equals(telefono))
+                contattiTrovati.add(rubrica.indexOf(contact));
 
         }
 
@@ -670,16 +1041,18 @@ public class Rubrica {
         System.out.println("Email contatto: ");
         String email = inputTastiera.nextLine().trim();
 
-        for (Contatto contatto: rubrica) {
+        for (Contact contact : rubrica) {
 
-            if(contatto.getEmail().equals(email))
-                contattiTrovati.add(rubrica.indexOf(contatto));
+            if(contact.getEmail().equals(email))
+                contattiTrovati.add(rubrica.indexOf(contact));
 
         }
 
         return contattiTrovati;
     }
 
+    //tecnicamente dovrebbero poterci essere dei duplicati
+    //per nome&cognome, telefono, email
     private static int cercaContatto(){
 
         Scanner inputTastiera = new Scanner(System.in);
@@ -738,10 +1111,10 @@ public class Rubrica {
         System.out.println("Cognome contatto: ");
         String cognome = inputTastiera.nextLine().trim();
 
-        for (Contatto contatto: rubrica) {
+        for (Contact contact : rubrica) {
 
-            if(contatto.getNome().equals(nome) && contatto.getCognome().equals(cognome))
-                return rubrica.indexOf(contatto);
+            if(contact.getName().equals(nome) && contact.getSurname().equals(cognome))
+                return rubrica.indexOf(contact);
 
         }
 
@@ -756,10 +1129,10 @@ public class Rubrica {
         System.out.println("Telefono contatto: ");
         String telefono = inputTastiera.nextLine().trim();
 
-        for (Contatto contatto: rubrica) {
+        for (Contact contact : rubrica) {
 
-            if(contatto.getTelefono().equals(telefono))
-                return rubrica.indexOf(contatto);
+            if(contact.getTelephone().equals(telefono))
+                return rubrica.indexOf(contact);
 
         }
 
@@ -774,10 +1147,10 @@ public class Rubrica {
         System.out.println("Nome contatto: ");
         String email = inputTastiera.nextLine().trim();
 
-        for (Contatto contatto: rubrica) {
+        for (Contact contact : rubrica) {
 
-            if(contatto.getEmail().equals(email))
-                return rubrica.indexOf(contatto);
+            if(contact.getEmail().equals(email))
+                return rubrica.indexOf(contact);
 
         }
 
@@ -785,30 +1158,18 @@ public class Rubrica {
 
     }
 
-    private static void stampaContatti() {
-        for (Contatto contatto: rubrica) {
-            System.out.println("[" + (int) (rubrica.indexOf(contatto) + 1) + "]\t" + contatto.toString());
-        }
-    }
-
-    /**
-     *
-     * @param contatto
-     * @param chiave
-     * @return true se la chiave è una chiave duplicata
-     */
-    private static boolean chiaveDuplicata(Contatto contatto, String chiave){
+    private static boolean chiaveDuplicata(Contact contact, String chiave){
 
         switch (chiave){
 
             case "n&c":
 
-                for (Contatto contattoConfronto: rubrica) {
+                for (Contact contactConfronto : rubrica) {
 
                     //faccio il controllo per i duplicati, ma questo controllo è CASE SESITIVE
                     //per fare CASE UNSESITIVE basta usare equalsIgnoreCase()
-                    if(contatto.getNome().equals(contattoConfronto.getNome()) &&
-                            contatto.getCognome().equals(contattoConfronto.getCognome()))
+                    if(contact.getName().equals(contactConfronto.getName()) &&
+                            contact.getSurname().equals(contactConfronto.getSurname()))
                         return true;
 
                 }
@@ -817,9 +1178,9 @@ public class Rubrica {
 
             case "t":
 
-                for (Contatto contattoConfronto: rubrica) {
+                for (Contact contactConfronto : rubrica) {
 
-                    if(contatto.getTelefono().equals(contattoConfronto.getTelefono()))
+                    if(contact.getTelephone().equals(contactConfronto.getTelephone()))
                         return true;
 
                 }
@@ -828,9 +1189,9 @@ public class Rubrica {
 
             case "e":
 
-                for (Contatto contattoConfronto: rubrica) {
+                for (Contact contactConfronto : rubrica) {
 
-                    if(contatto.getEmail().equals(contattoConfronto.getEmail()))
+                    if(contact.getEmail().equals(contactConfronto.getEmail()))
                         return true;
 
                 }
