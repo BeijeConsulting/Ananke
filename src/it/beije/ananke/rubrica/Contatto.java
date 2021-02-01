@@ -55,7 +55,7 @@ public class Contatto {
 //		builder.append("]");
 		
 		StringBuilder builder = new StringBuilder("")
-			.append(name + ";").append(surname + ";").append(telephone + ";").append(email+ ";/n");
+			.append(name + ";").append(surname + ";").append(telephone + ";").append(email+ ";" + "\n");
 		
 		return builder.toString();
 	}
