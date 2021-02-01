@@ -13,8 +13,7 @@ import java.util.List;
 public class UsersInJdbcManager implements UserManager{
 
 	protected Connection conn;
-	Statement statement;
-	ResultSet resultSet;
+	
 	
 	public UsersInJdbcManager() {
 		getConnection();
@@ -36,26 +35,46 @@ public class UsersInJdbcManager implements UserManager{
 		}
 	}
 	@Override
-	public void setUser(User user) throws IOException, SQLException {
-		String query = mapObjectToQueryInsert(user);
+	public boolean setUser(User user) throws IOException, SQLException {
+		if( isUserAlreadyExist(user.getEmail()) ) {
+			return false;
+		}
+		else {
+		String query = "INSERT INTO contatti (firstName,lastName,email,phoneNumber) VALUES (?,?,?,?)";
 		try {
-			statement = conn.createStatement();
-			statement.executeUpdate(query);
+			PreparedStatement preparedStatement = conn.prepareStatement(query);
+			preparedStatement.setString(1, user.getFirstName());
+			preparedStatement.setString(2, user.getLastName());
+			preparedStatement.setString(3, user.getEmail());
+			preparedStatement.setString(4, user.getPhoneNumber());
+			if(preparedStatement.execute()) {
+				System.out.println("user added successfully");
+			}
+			preparedStatement.close();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 		
+		}
 	}
 	@Override
 	public User getUser(String email) {
-		//String query = "SELECT * FROM " + "contatti" + " WHERE email =" + email;
-		String query = "SELECT * FROM contatti WHERE email = ?";
+		User user = null;
+		String query = "SELECT * FROM contatti WHERE email =?;";
 		try {
-			
-			statement = conn.createStatement();
-			
-			resultSet = statement.executeQuery(query);
-				return mapResultSetToObject(resultSet);
+			PreparedStatement preparedStatement = conn.prepareStatement(query);
+			preparedStatement.setString(1, email);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				if(resultSet.getString("email").equals(email)) {
+					user = new User( resultSet.getString("firstName"),resultSet.getString("lastName")
+							,resultSet.getString("email"),resultSet.getString("phoneNumber") );
+					preparedStatement.close();
+					return user;
+				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -67,7 +86,7 @@ public class UsersInJdbcManager implements UserManager{
 				String query = "SELECT * FROM contatti ";
 				try {
 					Statement statement = conn.createStatement();
-					resultSet = statement.executeQuery(query);
+					ResultSet resultSet = statement.executeQuery(query);
 					while (resultSet.next()) {
 						list.add(mapResultSetToObject(resultSet)) ;
 						}
@@ -76,23 +95,15 @@ public class UsersInJdbcManager implements UserManager{
 				}
 				return list;
 	}
-
-	
 	@Override
 	public void removeUser(String email) {
 		String query = "DELETE FROM contatti WHERE email =?";
-		
 		try {
 			PreparedStatement preparedStatement = conn.prepareStatement(query);
 			preparedStatement.setString(1, email);
-			boolean row = preparedStatement.execute();
-            // rows affected
-			if(row)
-            System.out.println("user removed");
+			int row = preparedStatement.executeUpdate();
+            System.out.println(row +" rows updated");
 			preparedStatement.close();
-			
-			//Statement statement = conn.createStatement();
-			//statement.executeUpdate(query);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -120,15 +131,23 @@ public class UsersInJdbcManager implements UserManager{
 		User user = new User(firstName,lastName,email,phoneNumber);
 		return user;
 	}
-	private String mapObjectToQueryInsert(User user) {
-		String firstName = user.getFirstName();
-		String lastName = user.getLastName();
-		String email = user.getEmail();
-		String phoneNumber = user.getPhoneNumber();
-		String query = "INSERT INTO contatti " + "VALUES ('" + firstName + "', '" + lastName + "','"+email+"','"+phoneNumber+"')";
-		return query;
+	boolean isUserAlreadyExist(String email) {
+	  String query = "SELECT * FROM contatti WHERE email = ?;";
+	try {
+		PreparedStatement preparedStatement = conn.prepareStatement(query);
+		preparedStatement.setString(1, email);
+		ResultSet resultSet= preparedStatement.executeQuery();
+		while(resultSet.next()) {
+			if(resultSet.getString("email").equals(email)) {
+      		  preparedStatement.close();
+      		  return true;
+      	  }
+		}
+	} catch(SQLException e) {
+		e.printStackTrace();
 	}
-	
-	
+	return false;
+		
+	}
 
 }

@@ -17,8 +17,9 @@ public class UserInFileManager implements UserManager {
 		this.fileWriter = fileWriter;
 	}
 	@Override
-	public void setUser(User user) throws IOException {
+	public boolean setUser(User user) throws IOException {
 		this.fileWriter.write(user.toString());
+		return false;
 	}
 	
 

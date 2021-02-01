@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface UserManager {
 
-	void setUser(User user) throws IOException, SQLException;
+	boolean setUser(User user) throws IOException, SQLException;
 	void removeUser(String email);
 	void updateUser(User user);
 	User getUser(String email);
