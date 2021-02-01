@@ -12,34 +12,32 @@ public class RubricaMain {
 		File rub = new File("C:/Users/Padawan03/eclipse-workspace/files/rubrica.txt");
 		File rub2 = new File("C:/Users/Padawan03/eclipse-workspace/files/rubrica2.txt");
 		
-		Scanner input = new Scanner(System.in);
-		
-		String result=null;
+		Scanner input =  new Scanner(System.in);
+		String result="";
 		
 		System.out.println("Ciao! Seleziona una funzionalità inserendo il numero corrispondente:");
 		
-		System.out.println("[1] aggiungiContatto\n[2] modificaContatto\n[3] eliminaContatto\n[4] "
-				+ "Converti rubrica .xml in .csv\n[5] Converti rubrica .csv in .xml\n[6] esci");
+		do {
 			
-		 result = input.next();
-		 
-		while(!result.equals("6"))
-		{
-		switch(result)
-		{
-		case "1": Rubrica.aggiungiContatto(); break;
-		//case 2: Rubrica.modificaContatto();
-		case "3": Rubrica.eliminaContatto(); break;
-		//case 4: fromXmltoCsv(); break;
-		//case 5: fromCsvtoXml(); break;
-		case "6": input.close(); break;
-		default: break;
-		}
+			System.out.println("[1] Aggiungi un contatto\n[2] Modifica un contatto\n[3] elimina un contatto\n[4] "
+					+ "Importa rubrica da file xml su file csv\n[5] Importa rubrica da file csv su file xml\n[6] Cerca un contatto\n"
+					+ "[7] Esci");
 		
-		System.out.println("[1] aggiungiContatto\n[2] modificaContatto\n[3] eliminaContatto\n[4] "
-				+ "Converti rubrica .xml in .csv\n[5] Converti rubrica .csv in .xml\n[6] esci");
-		 result = input.next();
-		}
+			 result = input.next();
+			 
+			 switch(result)
+			 {
+			 case "1": Rubrica.aggiungiContatto(input); break;
+			 case "2": Rubrica.modificaContatto(input); break;
+			 case "3": Rubrica.eliminaContatto(input); break;
+			 case "4": Rubrica.fromXmlToCsv(input); break;
+			 case "5": Rubrica.fromCsvToXml(input); break;
+			 case "6": Rubrica.cercaContatto(input);break;
+			 case "7": System.out.println("Rubrica chiusa.");
+			 		   input.close(); break;
+			 }
+			 }while(!result.equals("7"));
 		
+		}	
 }
-}
+

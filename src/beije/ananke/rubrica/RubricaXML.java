@@ -33,7 +33,7 @@ public class RubricaXML {
        ArrayList<Contatto> contatti = readContactsXML(document);
        System.out.println(contatti);
      
-       writeContactXML(contatti);
+       writeContactXML(contatti,"C:/Users/Padawan03/eclipse-workspace/files/contacts.xml");
        
 	}
 	
@@ -85,7 +85,7 @@ public class RubricaXML {
 	}
 		
 	//write contacts on XML
-	static void writeContactXML(ArrayList<Contatto> list) throws Exception
+	static void writeContactXML(ArrayList<Contatto> list, String path) throws Exception
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -134,7 +134,7 @@ public class RubricaXML {
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(document);
 		
-		StreamResult result = new StreamResult(new File("C:/Users/Padawan03/eclipse-workspace/files/contacts.xml"));
+		StreamResult result = new StreamResult(new File(path));
 
 		// Output to console for testing
 		StreamResult syso = new StreamResult(System.out);

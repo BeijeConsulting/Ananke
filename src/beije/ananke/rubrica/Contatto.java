@@ -2,6 +2,15 @@ package beije.ananke.rubrica;
 
 public class Contatto {
 	
+	
+	//CONSTRUCTOR
+	public Contatto()
+	{
+		name = " ";
+		lastName = " ";
+		phone = " ";
+		email=" ";
+	}
 	//GETTERS AND SETTERS
 	
 	public String getName() {
@@ -42,15 +51,13 @@ public class Contatto {
 	@Override
 	public String toString() {
 		
-		StringBuilder builder = new StringBuilder("[ ").
-				append("Name:").append(this.getName()).
-				append(" LastName:").append(this.getLastName()).
-				append(" Phone:").append(this.getPhone()).
-				append(" Email:").append(this.getEmail()).
-				append(" ]");
+		StringBuilder builder = new StringBuilder("").
+				append("Nome: ").append(this.getName()+"\n").
+				append("Cognome: ").append(this.getLastName()+"\n").
+				append("Telefono: ").append(this.getPhone()+"\n").
+				append("Email: ").append(this.getEmail()+"\n");
 		
-		return builder.toString();
-		
+		return builder.toString();	
 	}
 
 
