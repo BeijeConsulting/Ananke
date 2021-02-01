@@ -29,13 +29,13 @@ public class RubricaTest {
                         System.out.println("Thank you and goodbye");
                         break;
                     case 1:
-                        rubrica.addContact();
+                        rubrica.addContact(scanner);
                         break;
                     case 2:
-                        rubrica.removeContact();
+                        rubrica.removeContact(scanner);
                         break;
                     case 3:
-                        rubrica.modifyContact();
+                        rubrica.modifyContact(scanner);
                         break;
                     case 4:
                         scanner.nextLine();
@@ -65,7 +65,7 @@ public class RubricaTest {
                         break;
                     case 7:
                         System.out.println("Insert number");
-                        List<Contact> contactByNumber = rubrica.searchByNumber();
+                        List<Contact> contactByNumber = rubrica.searchByNumber(scanner);
                         rubrica.printContacts(contactByNumber);
                         break;
                     case 8:

@@ -36,10 +36,10 @@ public class Rubrica {
         XMLManager.write(contacts, root);
     }
 
-    public void addContact() throws IOException, TransformerException, ParserConfigurationException {
+    public void addContact(Scanner scanner) throws IOException, TransformerException, ParserConfigurationException {
         Contact contact = null;
         while (contact == null) {
-            Scanner scanner = new Scanner(System.in);
+            scanner = new Scanner(System.in);
             String firstName;
             String lastName;
             String phoneNumber;
@@ -123,8 +123,8 @@ public class Rubrica {
         writeToXML(XMLroot, contacts);
     }
 
-    public void modifyContact() throws IOException, TransformerException, ParserConfigurationException {
-        Scanner scanner = new Scanner(System.in);
+    public void modifyContact(Scanner scanner) throws IOException, TransformerException, ParserConfigurationException {
+        scanner = new Scanner(System.in);
 
         System.out.println("Digita il nome");
         String firstName = scanner.nextLine();
@@ -240,8 +240,8 @@ public class Rubrica {
         }
     }
 
-    public void removeContact() throws IOException, TransformerException, ParserConfigurationException {
-        Scanner scanner = new Scanner(System.in);
+    public void removeContact(Scanner scanner) throws IOException, TransformerException, ParserConfigurationException {
+        scanner = new Scanner(System.in);
 
         System.out.println("Digita il nome");
         String firstName = scanner.nextLine();
@@ -256,9 +256,9 @@ public class Rubrica {
         writeToXML(XMLroot, contacts);
     }
 
-    public List<Contact> searchByNumber() {
+    public List<Contact> searchByNumber(Scanner scanner) {
         List<Contact> contactsByNumber = new ArrayList<>();
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         int i = 0;
         String number = "";
         while (true) {
