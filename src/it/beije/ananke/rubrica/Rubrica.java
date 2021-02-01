@@ -14,19 +14,18 @@ public class Rubrica {
 
     private static final String PATH = "C:\\Users\\Padawan02\\Desktop\\esercizietti\\rubrica";
 
-
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
-        Scanner inputTastiera = new Scanner(System.in);
-        String comando;
+        Scanner inputKeyword = new Scanner(System.in);
+        String command;
 
         //prendo il primo comando che mi porta nel ciclo
-        stampaListaComandi();
-        comando = inputTastiera.nextLine();
+        showCommandList();
+        command = inputKeyword.nextLine().trim();
 
         AZIONI: do{
 
-            switch (comando){
+            switch (command){
 
                 case "i":
 
@@ -46,15 +45,10 @@ public class Rubrica {
 
                     break;
 
-                case "f":
+                case "s":
 
-                    //searchContacts();
-
-                    break;
-
-                case "p":
-
-
+                    ArrayList<String> fields = fieldsForSearch();
+                    searchContacts(fields);
 
                     break;
 
@@ -69,10 +63,18 @@ public class Rubrica {
             }
 
             //prendo un nuovo comando
-            stampaListaComandi();
-            comando = inputTastiera.nextLine();
+            showCommandList();
+            command = inputKeyword.nextLine().trim();
 
-        }while(!comando.equals("q"));
+        }while(!command.equals("q"));
+
+        System.out.println("Vuoi esportare qualche contatto da databese su file?" +
+                "\n\tyes?" +
+                "\n\tno?");
+        command = inputKeyword.nextLine().trim();
+
+        if(command.equals("yes"))
+            writeOnFile();
 
     }
 
@@ -139,13 +141,15 @@ public class Rubrica {
             else
                 rubric.add(contact);
 
-            System.out.println("Vuoi continuare a inserire contatti?");
+            System.out.println("Vuoi continuare a inserire contatti?" +
+                    "\n\tyes?" +
+                    "\n\tno?");
             command = inputKeyWord.nextLine().trim();
 
         }while(!command.equals("no"));
 
         System.out.println("Questi sono i contatti che hai aggiunto:\n");
-        stampaContatti(rubric);
+        printContacts(rubric);
         System.out.println("\nVuoi aggiungere questi contatti al database?" +
                 "\n\tyes?" +
                 "\n\tno?");
@@ -212,7 +216,6 @@ public class Rubrica {
                     }
                     else {
                         System.out.println("Mi dispiace ma non riesco a leggere un file di tale estensione");
-                        return;
                     }
                 }
             }
@@ -228,13 +231,12 @@ public class Rubrica {
 
     }
 
-    //legge il file csv e tira fuori i contatti
     private static void readContactFromCsv(String path) throws SQLException, ClassNotFoundException {
 
         ArrayList<Contact> rubric = CsvFile.readFromCsv(path);
 
         System.out.println("Ora aggiungo questi contatti al database");
-        stampaContatti(rubric);
+        printContacts(rubric);
 
         DataBaseContact.openConnection();
 
@@ -249,7 +251,7 @@ public class Rubrica {
         ArrayList<Contact> rubric = XmlFile.readFromFile(path);
 
         System.out.println("Ora aggiungo questi contatti al database");
-        stampaContatti(rubric);
+        printContacts(rubric);
 
         DataBaseContact.openConnection();
 
@@ -271,7 +273,9 @@ public class Rubrica {
             fields = fieldsForSearch();
             values = searchContacts(fields);
 
-            System.out.println("Sei sicuro di voler eliminare i precedenti contatti? ");
+            System.out.println("Sei sicuro di voler eliminare i precedenti contatti?" +
+                    "\n\tyes?" +
+                    "\n\tno? ");
             command = inputKeyword.nextLine().trim();
 
             if(command.equals("no")) {
@@ -461,24 +465,42 @@ public class Rubrica {
 
         DataBaseContact.openConnection();
 
-        DataBaseContact.selectWhere(fields, values);
+        ArrayList<Contact> rubric = DataBaseContact.selectWhere(fields, values);
+
+        printContacts(rubric);
 
         DataBaseContact.closeConnection();
 
         return values;
     }
 
-    private static void writeOnFile(Connection connection) throws SQLException, ClassNotFoundException {
+    private static void writeOnFile() throws SQLException, ClassNotFoundException {
 
-        //cerco i contatti e creo un arrayList che poi passo alle altre funzioni
-        ArrayList<String> fields = fieldsForSearch();
-        ArrayList<String> values = searchContacts(fields);
+        ArrayList<Contact> rubric = new ArrayList<>();
 
-        DataBaseContact.openConnection();
+        System.out.println("Vuoi esportare tutti i contatti su un file?" +
+                "\n\tyes?" +
+                "\n\tno?");
+        String command = new Scanner(System.in).nextLine().trim();
 
-        ArrayList<Contact> rubric = DataBaseContact.selectWhere(fields,values);
+        if(command.equals("no")) {
+            //cerco i contatti e creo un arrayList che poi passo alle altre funzioni
+            ArrayList<String> fields = fieldsForSearch();
+            ArrayList<String> values = searchContacts(fields);
 
-        DataBaseContact.closeConnection();
+            DataBaseContact.openConnection();
+
+            rubric = DataBaseContact.selectWhere(fields, values);
+
+            DataBaseContact.closeConnection();
+        }
+        else{
+            DataBaseContact.openConnection();
+
+            rubric = DataBaseContact.select();
+
+            DataBaseContact.closeConnection();
+        }
 
         Scanner inputTastiera = new Scanner(System.in);
         String path;
@@ -507,7 +529,7 @@ public class Rubrica {
             if(numeroFile < files.length)
                 nomeFile = files[numeroFile].getName();
             else {
-                System.out.println("Digita il nome del file con l'estensione csv/xml.");
+                System.out.println("Digita il nome del nuovo file con l'estensione csv/xml.");
                 nomeFile = inputTastiera.nextLine();
             }
 
@@ -551,19 +573,18 @@ public class Rubrica {
 
     }
 
-    private static void stampaContatti(ArrayList<Contact> rubric) {
+    private static void printContacts(ArrayList<Contact> rubric) {
         for (Contact contact : rubric) {
             System.out.println("[" + (int) (rubric.indexOf(contact) + 1) + "]\t" + contact.toString());
         }
     }
 
-    private static void stampaListaComandi() {
+    private static void showCommandList() {
         System.out.println("\nEcco cosa puoi fare:\n" +
                 "\t- i : inserisci un nuovo contatto;\n" +
                 "\t- u : aggiorna un contatto nella rubrica;\n" +
                 "\t- d : cancella un contatto esistente;\n" +
-                "\t- f : cerca un contatto esistente;\n" +
-                "\t- p : stampa dei contatti della rubrica;\n" +
+                "\t- s : cerca e stampa contatti esistente;\n" +
                 "\t- q : salva ed esci.\n");
     }
 

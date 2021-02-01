@@ -35,10 +35,46 @@ public class DataBaseContact {
 
     }
 
+    public static ArrayList<Contact> select() throws SQLException {
+
+        ArrayList<Contact> rubric = new ArrayList<>();
+        StringBuilder query = new StringBuilder("SELECT * FROM contact");
+        Statement statement = null;
+        ResultSet rs = null;
+
+        statement = connection.createStatement();
+
+        if (statement != null) {
+            rs = statement.executeQuery(query.toString());
+        }
+
+        if (rs != null) {
+            while (rs.next()){
+
+                Contact contact =new Contact();
+                contact.setName(rs.getString("name"));
+                contact.setSurname(rs.getString("surname"));
+                contact.setTelephone(rs.getString("telephone"));
+                contact.setEmail(rs.getString("email"));
+
+                rubric.add(contact);
+            }
+        }
+
+        if (statement != null) {
+            statement.close();
+        }
+        if (rs != null) {
+            rs.close();
+        }
+
+        return rubric;
+
+    }
+
     public static ArrayList<Contact> selectWhere(ArrayList<String> fields, ArrayList<String> values) throws SQLException {
 
         ArrayList<Contact> rubric = new ArrayList<>();
-        Scanner inputKeyword = new Scanner(System.in);
         StringBuilder query = new StringBuilder("SELECT * FROM contact WHERE ");
         Statement statement = null;
         ResultSet rs = null;
@@ -82,6 +118,9 @@ public class DataBaseContact {
         if (statement != null) {
             statement.close();
         }
+        if (rs != null) {
+            rs.close();
+        }
 
         return rubric;
 
@@ -114,7 +153,6 @@ public class DataBaseContact {
 
         StringBuilder query = new StringBuilder("UPDATE contact SET ");
         Statement statement = null;
-        ResultSet rs = null;
 
         statement = connection.createStatement();
 
@@ -180,8 +218,10 @@ public class DataBaseContact {
 
         }
 
+        System.out.println(query);
+
         if (statement != null) {
-            statement.executeQuery(query.toString());
+            statement.executeUpdate(query.toString());
         }
 
         if (statement != null) {
