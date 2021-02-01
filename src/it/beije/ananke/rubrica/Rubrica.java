@@ -1,36 +1,21 @@
 package it.beije.ananke.rubrica;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Rubrica {
 
-    private static List<Contact> rubrica = new ArrayList<>();
     private static final String PATH = "C:\\Users\\Padawan02\\Desktop\\esercizietti\\rubrica";
 
-    public static final String DB_USER = "root";
-    public static final String DB_PASSWORD = "Padawan02May4BeWithYou";
-    public static final String DB_URL = "jdbc:mysql://localhost:3306/ananke?serverTimezone=CET";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
         Scanner inputTastiera = new Scanner(System.in);
         String comando;
@@ -45,31 +30,31 @@ public class Rubrica {
 
                 case "i":
 
-                    inserisciContatto();
+                    insertContacts();
 
                     break;
 
                 case "u":
 
-                    aggiornaContatto();
+                    modifyContacts();
 
                     break;
 
                 case "d":
 
-                    cancellaContatto();
+                    deleteContacts();
 
                     break;
 
                 case "f":
 
-                    cercaContatti();
+                    //searchContacts();
 
                     break;
 
                 case "p":
 
-                    stampaContatti();
+
 
                     break;
 
@@ -91,69 +76,39 @@ public class Rubrica {
 
     }
 
-    private static Connection createConnection() throws ClassNotFoundException, SQLException {
-
-        Connection connection = null;
+    private static void insertContacts() throws SQLException, ClassNotFoundException {
 
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        Scanner inputKeyword = new Scanner(System.in);
+        String command = null;
 
-
-        return connection;
-
-    }
-
-    private static void insertContacts(){
-
-        Connection connection = null;
-
-        try {
-
-            connection = createConnection();
-            Scanner inputKeyword = new Scanner(System.in);
-            String command = null;
-
-            System.out.println("Come vuoi inserire i contatti?" +
+        System.out.println("Come vuoi inserire i contatti?" +
                     "\n\t[1] Importa contatti da file" +
                     "\n\t[2] Inserisci contatti da tastiera");
 
-            command = inputKeyword.nextLine().trim();
+        command = inputKeyword.nextLine().trim();
 
-            switch (command){
+        switch (command) {
 
-                case "1":
+            case "1":
 
-                    insertFromFile(connection);
+                insertFromFile();
 
-                    break;
+                break;
 
-                case "2":
+            case "2":
 
-                    insertFromKeyWords(connection);
+                insertFromKeyWords();
 
-                    break;
+                break;
 
-                default:
+            default:
 
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
         }
 
     }
 
-    private static void insertFromKeyWords(Connection connection) throws SQLException {
+    private static void insertFromKeyWords() throws SQLException, ClassNotFoundException {
 
         Scanner inputKeyWord = new Scanner(System.in);
         ArrayList<Contact> rubric = new ArrayList<>();
@@ -195,29 +150,18 @@ public class Rubrica {
                 "\n\tyes?" +
                 "\n\tno?");
 
+        //per ora i contatti li aggiungo qualsiasi sia la sua risposta. poi magari appunto dò la possibilità
         command = inputKeyWord.nextLine().trim();
 
-        //TODO: potrei fare in modo che all'interno di questo pezzo, io possa anche eliminarne qualcuno o modificarlo
-        //quindi farlo lavorare su questo arraylist prima di inserire sul db
+        DataBaseContact.openConnection();
 
-        PreparedStatement preparedStatement = null;
-        String psInsert = "INSERT INTO contact (name, surname, telephone, email) VALUES (?, ?, ?, ?)";
-        preparedStatement = connection.prepareStatement(psInsert);
+        DataBaseContact.insert(rubric);
 
-        for (Contact contact: rubric) {
-
-            preparedStatement.setString(1, contact.getName());
-            preparedStatement.setString(2, contact.getSurname());
-            preparedStatement.setString(3, contact.getTelephone());
-            preparedStatement.setString(4, contact.getEmail());
-
-            preparedStatement.execute();
-
-        }
+        DataBaseContact.closeConnection();
 
     }
 
-    private static void insertFromFile(Connection connection) {
+    private static void insertFromFile() {
 
         Scanner inputTastiera = new Scanner(System.in);
         String path;
@@ -252,7 +196,7 @@ public class Rubrica {
 
                 if (estensione.equals("xml")) {
                     try {
-                        readContactFromXml(connection, path);
+                        readContactFromXml(path);
                     } catch (Exception e) {
                         System.out.println("C'è stato un problema nella lettura del file.xml");
                         e.printStackTrace();
@@ -260,8 +204,8 @@ public class Rubrica {
                 } else {
                     if (estensione.equals("csv")) {
                         try {
-                            readContactFromCsv(connection, path);
-                        } catch (SQLException throwables) {
+                            readContactFromCsv(path);
+                        } catch (SQLException | ClassNotFoundException throwables) {
                             System.out.println("C'è stato un problema nella lettura del file.csv");
                             throwables.printStackTrace();
                         }
@@ -285,154 +229,157 @@ public class Rubrica {
     }
 
     //legge il file csv e tira fuori i contatti
-    private static void readContactFromCsv(Connection connection, String path) throws SQLException {
+    private static void readContactFromCsv(String path) throws SQLException, ClassNotFoundException {
 
-        ArrayList<Contact> rubric = new ArrayList<>();
-
-        BufferedReader reader = null;
-
-        try {
-            String info;
-            reader = new BufferedReader(new FileReader(path));
-            while((info = reader.readLine()) != null){
-
-                //ho letto qualcosa di nuovo e non vuoto
-                //devo splittare la stringa e estrapolare
-                //le informazioni del contatto.
-                String[] infoContatto = info.split(";");
-                Contact contact = new Contact();
-
-                contact.setName(infoContatto[0].trim());
-                contact.setSurname(infoContatto[1].trim());
-                contact.setTelephone(infoContatto[2].trim());
-                contact.setEmail(infoContatto[3].trim());
-
-                rubric.add(contact);
-                //System.out.println(contatto.toString());
-
-            }
-
-        } catch (FileNotFoundException e) {
-            System.out.println("Il file non era presente.");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                if(reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        ArrayList<Contact> rubric = CsvFile.readFromCsv(path);
 
         System.out.println("Ora aggiungo questi contatti al database");
         stampaContatti(rubric);
 
-        PreparedStatement preparedStatement = null;
-        String psInsert = "INSERT INTO contact (name, surname, telephone, email) VALUES (?, ?, ?, ?)";
-        preparedStatement = connection.prepareStatement(psInsert);
+        DataBaseContact.openConnection();
 
-        for (Contact contact: rubric) {
+        DataBaseContact.insert(rubric);
 
-            preparedStatement.setString(1, contact.getName());
-            preparedStatement.setString(2, contact.getSurname());
-            preparedStatement.setString(3, contact.getTelephone());
-            preparedStatement.setString(4, contact.getEmail());
-
-            preparedStatement.execute();
-
-        }
+        DataBaseContact.closeConnection();
 
     }
 
-    private static void readContactFromXml(Connection connection, String path) throws ParserConfigurationException, IOException, SAXException, SQLException {
+    private static void readContactFromXml(String path) throws ParserConfigurationException, IOException, SAXException, SQLException, ClassNotFoundException {
 
-        ArrayList<Contact> rubric = new ArrayList<>();
-
-        //servono per leggere e scrivere file xml.
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-
-        //creo il documento virtuale
-        Document document = builder.parse(path);
-
-        Element docElement = document.getDocumentElement();
-        NodeList elementiContatto = docElement.getElementsByTagName("contatto");
-
-        for (int i = 0; i < elementiContatto.getLength(); i++) {
-
-            Contact contact = new Contact();
-            Element c = (Element) elementiContatto.item(i);
-
-            NodeList valori = c.getChildNodes();
-            //System.out.println(valori.getLength());
-            for (int j = 0; j < valori.getLength(); j++) {
-                Node n = valori.item(j);
-                if (n instanceof Element) {
-                    Element valore = (Element) n;
-                    //System.out.println(valore.getTagName() + " : " + valore.getTextContent());
-                    switch (valore.getTagName()) {
-                        case "nome":
-                            contact.setName(valore.getTextContent().trim());
-                            break;
-                        case "cognome":
-                            contact.setSurname(valore.getTextContent().trim());
-                            break;
-                        case "telefono":
-                            contact.setTelephone(valore.getTextContent().trim());
-                            break;
-                        case "email":
-                            contact.setEmail(valore.getTextContent().trim());
-                            break;
-
-                        default:
-                            System.out.println("elemento in contatto non riconosciuto");
-                            break;
-                    }
-                }
-            }
-            rubric.add(contact);
-        }
+        ArrayList<Contact> rubric = XmlFile.readFromFile(path);
 
         System.out.println("Ora aggiungo questi contatti al database");
         stampaContatti(rubric);
 
-        PreparedStatement preparedStatement = null;
-        String psInsert = "INSERT INTO contact (name, surname, telephone, email) VALUES (?, ?, ?, ?)";
-        preparedStatement = connection.prepareStatement(psInsert);
+        DataBaseContact.openConnection();
 
-        for (Contact contact: rubric) {
+        DataBaseContact.insert(rubric);
 
-            preparedStatement.setString(1, contact.getName());
-            preparedStatement.setString(2, contact.getSurname());
-            preparedStatement.setString(3, contact.getTelephone());
-            preparedStatement.setString(4, contact.getEmail());
-
-            preparedStatement.execute();
-
-        }
+        DataBaseContact.closeConnection();
 
     }
 
-    private static void deleteContacts(Connection connection){
+    private static void deleteContacts() throws SQLException, ClassNotFoundException {
 
-        //allora. gli chiedo prima di cercare dei contatti con dei criteri
-        //poi chiedo conferma se vuole eliminarli tutti
-        //si ok
-        //no gli chiedo di essere più specifico e aggiungere altri campi
-        //ma magari la aggiungo dopo questa funzionalità
+        Scanner inputKeyword = new Scanner(System.in);
+        String command = null;
+        ArrayList<String> values = null;
+        ArrayList<String> fields = null;
 
+        do {
+
+            fields = fieldsForSearch();
+            values = searchContacts(fields);
+
+            System.out.println("Sei sicuro di voler eliminare i precedenti contatti? ");
+            command = inputKeyword.nextLine().trim();
+
+            if(command.equals("no")) {
+                //l'utente vuole cambiare i field di ricerca
+                fields.clear();
+                values.clear();
+            }
+
+        } while(!command.equals("yes"));
+
+        //finisco che ho la lista di campi e la lista dei rispettivi valori
+
+        DataBaseContact.openConnection();
+
+        DataBaseContact.deleteWhere(fields, values);
+
+        DataBaseContact.closeConnection();
 
     }
 
-    private static void modifyContacts(Connection connection){
+    private static void modifyContacts() throws SQLException, ClassNotFoundException {
+
+        Scanner inputKeyword = new Scanner(System.in);
+        String command = null;
+        ArrayList<String> fields = null;
+        ArrayList<String> values = null;
+        ArrayList<String> modifyFields = new ArrayList<>();
+        ArrayList<String> modifyValues = new ArrayList<>();
+
+        do {
+
+            fields = fieldsForSearch();
+            values = searchContacts(fields);
+
+            System.out.println("Sei sicuro di voler modificare i precedenti contatti? ");
+            command = inputKeyword.nextLine().trim();
+
+            if(command.equals("no")) {
+                //l'utente vuole cambiare i field di ricerca
+                fields.clear();
+                values.clear();
+            }
+
+        } while(!command.equals("yes"));
+
+        //ho trovato dei contatti tramite certi campi
+        //ora devo chiedere all'utente quali campi e come
+        //vuole modificare
+
+        do {
+
+            String input = null;
+
+            System.out.println("Tramite quale campo vuoi cercare?" +
+                    "\n\t -n: name" +
+                    "\n\t -s: surname" +
+                    "\n\t -t: telephone" +
+                    "\n\t -e: email" +
+                    "\nScrivi il comando con - seguito dalla lettera");
+
+            input = inputKeyword.nextLine().trim();
+
+            switch (input){
+                case "-n":
+                    input = "name";
+                    break;
+                case "-s":
+                    input = "surname";
+                    break;
+                case "-t":
+                    input = "telephone";
+                    break;
+                case "-e":
+                    input = "email";
+                    break;
+                default:
+            }
+
+            //aggiungo solo se il campo non l'ho già aggiunto
+            if (!modifyFields.contains(input))
+                modifyFields.add(input);
+            else {
+                System.out.println("\nHai già aggiunto questo campo per la ricerca");
+            }
+
+            System.out.println("Inserisci la modifica del campo");
+            input = inputKeyword.nextLine().trim();
+            modifyValues.add(input);
+
+            if(fields.size() != 4) {
+                System.out.println("Vuoi modificare altri campi?");
+                command = inputKeyword.nextLine().trim();
+            }
+
+        }while(!command.equals("no"));
+
+        //finisco che ho la lista di campi da modificare e la lista dei rispettivi valori
+
+        DataBaseContact.openConnection();
+
+        DataBaseContact.updateWhere(fields,values, modifyFields, modifyValues);
+
+        DataBaseContact.closeConnection();
 
     }
 
-    private static void findContacts(Connection connection) throws SQLException {
+    //funzione per sapere tramite quali campi cercare dei determinati dati nel db
+    private static ArrayList<String> fieldsForSearch(){
 
         Scanner inputKeyWord = new Scanner(System.in);
         String command = null;
@@ -447,9 +394,15 @@ public class Rubrica {
 
         command = inputKeyWord.nextLine().trim();
 
+        int numberOfFields = Integer.parseInt(command);
+        if(numberOfFields > 4) {
+            System.out.println("Nel db sono presenti solo 4 campi");
+            numberOfFields = 4;
+        }
+
         //riempiamo l'arraylist che poi farò tornare che mi serve per la delete e per la modify
         //con i campi che voglio specificare
-        for (int i = 0; i < Integer.parseInt(command); i++) {
+        for (int i = 0; i < numberOfFields; i++) {
 
             System.out.println("Campo numero " + (i+1) + ": ");
             String value = null;
@@ -489,135 +442,43 @@ public class Rubrica {
 
         }
 
-        //a questo punto posso costruire la query e interrogare il db
-        StringBuilder query = new StringBuilder("SELECT * FROM contact WHERE ");
-        Statement statement = null;
-        ResultSet rs = null;
+        return fields;
 
-        statement = connection.createStatement();
+    }
+
+    private static ArrayList<String> searchContacts(ArrayList<String> fields) throws SQLException, ClassNotFoundException {
+
+        Scanner inputKeyWord = new Scanner(System.in);
+        ArrayList<String> values = new ArrayList<>();
 
         for (int i = 0; i < fields.size(); i++) {
 
             //Chiedo all'utente di inserire il valore specfico del primo campo
             System.out.println(fields.get(i) + ":\t");
             String value = inputKeyWord.nextLine().trim();
-
-            //TODO: controllare query
-            query.append("(").append(fields.get(i)).append(" = '").append(value).append("')");
-
-            if(i < fields.size() - 1 )
-                //ho ancora una condizione da aggiungere
-                query.append(" AND ");
-            else
-                //non ho più condizioni da aggiungere
-                query.append(";");
-
+            values.add(value);
         }
 
+        DataBaseContact.openConnection();
 
-        if (statement != null) {
-            rs = statement.executeQuery(query.toString());
-        }
+        DataBaseContact.selectWhere(fields, values);
 
-        if (rs != null) {
+        DataBaseContact.closeConnection();
 
-            System.out.println("Ecco i contatti che cercavi:");
-
-            while (rs.next()) {
-                System.out.println("id : " + rs.getInt("id"));
-                System.out.println("cognome : " + rs.getString("surname"));
-                System.out.println("nome : " + rs.getString("name"));
-                System.out.println("email : " + rs.getString("email"));
-                System.out.println("telefono : " + rs.getString("telephone"));
-                System.out.println("-----");
-            }
-        }
-
-        if (statement != null) {
-            statement.close();
-        }
-        if (rs != null) {
-            rs.close();
-        }
+        return values;
     }
 
-    private static void findContactsOneField(Connection connection) throws SQLException {
+    private static void writeOnFile(Connection connection) throws SQLException, ClassNotFoundException {
 
-        Scanner inputKeyword = new Scanner(System.in);
-        StringBuilder query = new StringBuilder("SELECT * FROM contact");
-        String command = null;
-        String field = null;
-        String value = null;
-        Statement statement = null;
-        ResultSet rs = null;
+        //cerco i contatti e creo un arrayList che poi passo alle altre funzioni
+        ArrayList<String> fields = fieldsForSearch();
+        ArrayList<String> values = searchContacts(fields);
 
-        System.out.println("Per quale campo vuoi cercare?" +
-                "\n\t -n: name" +
-                "\n\t -s: surname" +
-                "\n\t -t: telephone" +
-                "\n\t -e: email" +
-                "\nScrivi il comando con - seguito dalla lettera");
+        DataBaseContact.openConnection();
 
-        command = inputKeyword.nextLine().trim();
+        ArrayList<Contact> rubric = DataBaseContact.selectWhere(fields,values);
 
-        switch (command){
-
-            case "-n":
-                field = "name";
-                break;
-
-            case "-s":
-                field = "surname";
-                break;
-
-            case "-t":
-                field = "telephone";
-                break;
-
-            case "-e":
-                field = "email";
-                break;
-
-            default:
-
-        }
-
-        statement = connection.createStatement();
-
-        System.out.println(field + ":\t");
-        value = inputKeyword.nextLine().trim();
-
-        //TODO: controllare query
-        query.append(" WHERE ('").append(field).append("' = '").append(value).append("');");
-
-        if (statement != null) {
-            rs = statement.executeQuery(query.toString());
-        }
-
-        if (rs != null) {
-
-            System.out.println("Ecco i contatti che cercavi:");
-
-            while (rs.next()) {
-                System.out.println("id : " + rs.getInt("id"));
-                System.out.println("cognome : " + rs.getString("surname"));
-                System.out.println("nome : " + rs.getString("name"));
-                System.out.println("email : " + rs.getString("email"));
-                System.out.println("telefono : " + rs.getString("telephone"));
-                System.out.println("-----");
-            }
-        }
-
-        if (statement != null) {
-            statement.close();
-        }
-        if (rs != null) {
-            rs.close();
-        }
-
-    }
-
-    private static void scriviSuFile(){
+        DataBaseContact.closeConnection();
 
         Scanner inputTastiera = new Scanner(System.in);
         String path;
@@ -626,7 +487,7 @@ public class Rubrica {
         File[] files = directory.listFiles();
         int i=0;
 
-        System.out.println("Su quale file vuoi salvare le modifiche alla rubrica?" +
+        System.out.println("Su quale file vuoi salvare questi contatti?" +
                 "\nDigita il numero corrispondente al file che vuoi, o un numero non presente per creare un nuovo file.");
 
         //listo tutti i file presenti nella directory
@@ -666,102 +527,27 @@ public class Rubrica {
 
         if(estensione.equals("xml")) {
             try {
-                scriviSuFileXml(path);
+                writeOnFileXml(path, rubric);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         else {
             if (estensione.equals("csv"))
-                scriviSuFileCsv(path);
+                writeOnFileCsv(path, rubric);
         }
 
     }
 
-    private static void scriviSuFileCsv(String path) {
+    private static void writeOnFileCsv(String path, ArrayList<Contact> rubric) {
 
-        FileWriter writer = null;
-
-        try {
-
-            writer = new FileWriter(path);
-
-            //stampo tutta la rubrica
-            for (Contact contact : rubrica) {
-
-                writer.write(contact.toString());
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-
-                try {
-                    if(writer != null) {
-                        writer.flush();
-                        writer.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-        }
+        CsvFile.writeOnCsv(path, rubric);
 
     }
 
-    private static void scriviSuFileXml(String path) throws ParserConfigurationException, TransformerException {
+    private static void writeOnFileXml(String path, ArrayList<Contact> rubric) throws ParserConfigurationException, TransformerException {
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-
-        Document document = builder.newDocument();
-        Element listaContatti = document.createElement("rubrica");
-        document.appendChild(listaContatti);
-
-        Element contatto = null;
-        Element nome = null;
-        Element cognome = null;
-        Element telefono = null;
-        Element email = null;
-
-        for (int i = 0; i < rubrica.size(); i++) {
-
-            contatto = document.createElement("contatto");
-            //potrei fare anche contatto.setAttribte
-
-            nome = document.createElement("nome");
-            nome.setTextContent(rubrica.get(i).getName());
-            contatto.appendChild(nome);
-
-            cognome = document.createElement("cognome");
-            cognome.setTextContent(rubrica.get(i).getSurname());
-            contatto.appendChild(cognome);
-
-            telefono = document.createElement("telefono");
-            telefono.setTextContent(rubrica.get(i).getTelephone());
-            contatto.appendChild(telefono);
-
-            email = document.createElement("email");
-            email.setTextContent(rubrica.get(i).getEmail());
-            contatto.appendChild(email);
-
-            listaContatti.appendChild(contatto);
-            //lui non aggiunge i tag con le identazioni corrette
-        }
-
-        //per scriverlo, bisogna prendere quello che c'è in memoria
-        //e realizzare uno stream
-
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(document);
-
-        //lo stream può essere sì un file, ma anche il s.out, ma anche la risposta alla chiamata http
-        StreamResult result = new StreamResult(new File(path));
-
-        transformer.transform(source, result);
+        XmlFile.writeOnFile(path, rubric);
 
     }
 
@@ -784,6 +570,8 @@ public class Rubrica {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////METODI IN DISUSO////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
+
+    static private ArrayList<Contact> rubrica = new ArrayList<>();
 
     private static void inserisciContatto(){
 
