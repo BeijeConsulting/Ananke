@@ -3,6 +3,7 @@ package contatti;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,7 +36,7 @@ public class UsersInJdbcManager implements UserManager{
 		}
 	}
 	@Override
-	public void setUser(User user) throws IOException {
+	public void setUser(User user) throws IOException, SQLException {
 		String query = mapObjectToQueryInsert(user);
 		try {
 			statement = conn.createStatement();
@@ -43,14 +44,16 @@ public class UsersInJdbcManager implements UserManager{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	@Override
 	public User getUser(String email) {
 		//String query = "SELECT * FROM " + "contatti" + " WHERE email =" + email;
-		String query = "SELECT * FROM contatti WHERE email = "+ email;
+		String query = "SELECT * FROM contatti WHERE email = ?";
 		try {
 			
 			statement = conn.createStatement();
+			
 			resultSet = statement.executeQuery(query);
 				return mapResultSetToObject(resultSet);
 		} catch (SQLException e) {
@@ -77,11 +80,19 @@ public class UsersInJdbcManager implements UserManager{
 	
 	@Override
 	public void removeUser(String email) {
-		String query = "DELETE FROM contatti WHERE email =" + email;
+		String query = "DELETE FROM contatti WHERE email =?";
 		
 		try {
-			Statement statement = conn.createStatement();
-			statement.executeUpdate(query);
+			PreparedStatement preparedStatement = conn.prepareStatement(query);
+			preparedStatement.setString(1, email);
+			boolean row = preparedStatement.execute();
+            // rows affected
+			if(row)
+            System.out.println("user removed");
+			preparedStatement.close();
+			
+			//Statement statement = conn.createStatement();
+			//statement.executeUpdate(query);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}

@@ -3,12 +3,13 @@ package contatti;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 
 public class ContactsApp {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, SQLException {
 		
 		Scanner scanner = new Scanner(System.in);
 		String fileName = "/home/faheem/Users.txt";
@@ -46,7 +47,7 @@ public class ContactsApp {
 		return newUser;
 	}
 	
-	private static void chooseFromMenu(FileReader fileReader,Scanner scanner, UserManager userManager, String i) throws IOException {
+	private static void chooseFromMenu(FileReader fileReader,Scanner scanner, UserManager userManager, String i) throws IOException, SQLException {
 		User user;
 		switch (i) {
 		case "1" :
