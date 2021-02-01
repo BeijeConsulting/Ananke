@@ -1,8 +1,10 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -201,6 +203,76 @@ public class ManagerCsv {
 				
 			}
 		}
-	
+	 
+	 public ArrayList<Contatto> leggiCsv()   {
+		 
+		 ArrayList<Contatto> result=new ArrayList<>();
+		 
+		 FileReader fileReader;
+		 
+		try {
+			fileReader = new FileReader(file);
+		
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			List<String> rows = new ArrayList<String>();
+			
+			try {
+				bufferedReader.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				while (bufferedReader.ready()) {
+					rows.add(bufferedReader.readLine());
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+				try {
+					bufferedReader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				try {
+					fileReader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				for (String row : rows) {
+				String[] rs = row.split(";");
+					result.add(new Contatto(rs[0],rs[1],rs[3],rs[2]));		
+				
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+			
+			return result;
+	 }
+	 
+	 public void daCsvInDB() throws SQLException {
 
+			ArrayList<Contatto> contatti = leggiCsv();
+			
+				for(Contatto tempContatto: contatti) {
+					
+					JDBCManager.inserisciContattoDb(tempContatto);
+					
+				}
+			
+			System.out.println("I contatti presenti nella rubrica csv sono stati inseriti nel Database");
+
+	 }
+	 
+	 public void daDBinCsv() throws SQLException, IOException{
+			
+			ArrayList<Contatto> contatti = JDBCManager.listaContattiDb();
+			
+			if (contatti.size() != 0) {
+				System.out.println("I contatti presenti nel DB sono stati esportati sul file csv");
+			}
+			
+			salva(contatti);
+			
+		}
 }

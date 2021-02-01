@@ -31,11 +31,10 @@ public class ManagerXml{
 		Document document = builder.parse("/Users/davidepersico/Desktop/Beije/Ananke/rubrica.xml");
 		
 		Element docElement = document.getDocumentElement();       
-		System.out.println(docElement.getTagName());
+		// System.out.println(docElement.getTagName());
 		
 		NodeList elementiContatto = docElement.getElementsByTagName("contatto");
-		System.out.println("contatti num " + elementiContatto.getLength());
-
+		// System.out.println("contatti num " + elementiContatto.getLength());
 		
 		List<Contatto> contatti = new ArrayList<Contatto>();
 		
@@ -73,7 +72,8 @@ public class ManagerXml{
 			contatti.add(contatto);
 		}
 
-		System.out.println("contatti presenti : " + contatti.size());
+		// System.out.println("contatti presenti : " + contatti.size());
+		
 	}
 
 	public static void write() throws ParserConfigurationException, IOException, SAXException, TransformerException {
@@ -134,6 +134,53 @@ public class ManagerXml{
 
 		System.out.println("File saved!");
 
+	}
+	
+	public  void writeLista(List<Contatto> lista) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+		
+        Document document = builder.newDocument();
+        Element utenti = document.createElement("utenti");
+        document.appendChild(utenti);
+       
+        Element contatto = null;
+        Element nome = null;
+        Element cognome = null;
+        Element email = null;
+        Element tel = null;
+        for (Contatto c:lista)  {
+        	contatto = document.createElement("contatto");        	
+        	nome = document.createElement("nome");
+        	nome.setTextContent(c.getName());
+        	cognome = document.createElement("cognome");
+        	cognome.setTextContent(c.getSurname());
+        	email = document.createElement("email");
+        	email.setTextContent(c.getEmail());
+        	tel = document.createElement("telefono");
+        	tel.setTextContent(c.getTelephone());
+        	contatto.appendChild(nome);   
+        	contatto.appendChild(cognome);    
+        	contatto.appendChild(email);    
+        	contatto.appendChild(tel);    
+        	utenti.appendChild(contatto);
+        }
+        
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(document);
+		
+		StreamResult result = new StreamResult(new File("/Users/davidepersico/Desktop/Beije/Ananke/rubrica.xml"));
+
+		// Output to console for testing
+		StreamResult syso = new StreamResult(System.out);
+
+		transformer.transform(source, result);
+		transformer.transform(source, syso);
+
+		System.out.println("\nFile saved!");
+        
 	}
 	
 	public void aggiungiContatto(Contatto contatto) throws ParserConfigurationException, IOException, SAXException, TransformerException {
@@ -254,5 +301,40 @@ public class ManagerXml{
 				
 			}
 		}
-	
+	 	
+	 	public void daXMLinDB() throws SQLException, ParserConfigurationException, IOException, SAXException {
+
+	 		read();
+	 			
+	 		for(Contatto contatto: contatti) {
+	 			
+	 			JDBCManager.inserisciContattoDb(contatto);
+	 			
+	 		}
+	 				
+	 		if(contatti.size()!=0) {
+	 			System.out.println("Tutti i contatti sono stati aggiunti al Database");
+	 		}else {
+	 			System.out.println("Non è stato trovato nessun contatto da aggiungere al Database");
+	 		} 				
+	 			
+	 	}
+	 	
+	 	public void daDBinXml() throws SQLException, IOException, ParserConfigurationException, SAXException, TransformerException{
+			
+			ArrayList<Contatto> lista = JDBCManager.listaContattiDb();
+			
+			for(int i = 0; i < lista.size(); i++) {
+				Contatto tempContatto = lista.get(i);
+				aggiungiContatto(tempContatto);
+			}
+			
+			if (lista.size() != 0) {
+				System.out.println("I contatti presenti nel DB sono stati esportati sul file csv");
+			}
+			
+			writeLista(contatti);	
+			
+		}
+	 	
 }

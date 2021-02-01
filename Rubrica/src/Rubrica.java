@@ -14,7 +14,6 @@ public class Rubrica {
 	
 		ManagerCsv managerCsv = new ManagerCsv();
 		ManagerXml managerXml = new ManagerXml();
-		// JDBCManager managerJdbc = new JDBCManager();
 		
 		JDBCManager.connettiDb();
 		
@@ -25,11 +24,11 @@ public class Rubrica {
 	
 	do {
 		System.out.println("Su quale rubrica vuoi operare? ");
-		System.out.println("| xml | csv |");
+		System.out.println("| xml | csv | db |");
 		
 		tipoRubrica = scanner.next();
 		
-	}while(!(tipoRubrica.equalsIgnoreCase("xml") || tipoRubrica.equalsIgnoreCase("csv")));
+	}while(!(tipoRubrica.equalsIgnoreCase("xml") || tipoRubrica.equalsIgnoreCase("csv") || tipoRubrica.equalsIgnoreCase("db")));
 		
 	
 	do {
@@ -42,9 +41,22 @@ public class Rubrica {
 		System.out.println("-   2   - se vuoi cercare un contatto");
 		System.out.println("-   3   - se vuoi modificare un contatto");
 		System.out.println("-   4   - se vuoi eliminare un contatto");
-		System.out.println("-   5   - se vuoi visualizzare la lista dei contatti nel file");
+		
+		if(tipoRubrica.equalsIgnoreCase("xml") || tipoRubrica.equalsIgnoreCase("csv")) {
+			System.out.println("-   5   - se vuoi visualizzare la lista dei contatti nel file");
+		}
+
 		System.out.println("-   6   - per visualizzare i contatti nel database");
 		
+		if(tipoRubrica.equalsIgnoreCase("csv") || tipoRubrica.equalsIgnoreCase("db")) {
+			System.out.println("-   7   - esporta da csv a database");
+			System.out.println("-   8   - importa da database a csv");
+		}
+		
+		if(tipoRubrica.equalsIgnoreCase("xml") || tipoRubrica.equalsIgnoreCase("db")) {
+			System.out.println("-   9   - esporta da xml a database");
+			System.out.println("-   10  - importa da database a xml");
+		}
 		
 		scelta = scanner.next();
 		
@@ -52,41 +64,62 @@ public class Rubrica {
 	if(scelta.equals("0")) {
 		do {
 			System.out.println("Su quale rubrica vuoi operare? ");
-			System.out.println("| xml | csv |");
+			System.out.println("| xml | csv | db |");
 			
 			tipoRubrica = scanner.next();
 			
-		}while(!(tipoRubrica.equalsIgnoreCase("xml") || tipoRubrica.equalsIgnoreCase("csv")));
+		}while(!(tipoRubrica.equalsIgnoreCase("xml") || tipoRubrica.equalsIgnoreCase("csv") || tipoRubrica.contentEquals("db")));
 	}
 		
 	if(scelta.equals("1")) {
 		
+		String nome;
+		String cognome;
+		String email;
+		String telefono;
+		
+		boolean ok = true;
+		
+		do {
+			
+		if (!ok) {
+			System.out.println("");
+			System.out.println("Devi inserire almeno un campo valido!");
+			System.out.println("Riinserisci i valori");
+			System.out.println("");
+		}
+		
+		ok = false;
+			
 		System.out.println("inserisci il nome");
-		String nome = scanner.next();
+		System.out.println("digita un punto  .  se non vuoi inserire alcun nome");
+		nome = scanner.next();
 		
 		System.out.println("inserisci il cognome");
-		String cognome = scanner.next();
+		System.out.println("digita un punto  .  se non vuoi inserire alcun cognome");
+		cognome = scanner.next();
 		
 		System.out.println("inserisci l' email");
-		String email = scanner.next();
+		System.out.println("digita un punto  .  se non vuoi inserire alcun email");
+		email = scanner.next();
 		
 		System.out.println("inserisci il numero di telefono");
-		String telefono = scanner.next();
+		System.out.println("digita un punto  .  se non vuoi inserire alcun numero di telefono");
+		telefono = scanner.next();
+		
+		} while((nome.equalsIgnoreCase(".")) && (cognome.equalsIgnoreCase(".")) && (email.equalsIgnoreCase(".")) && (telefono.equalsIgnoreCase(".")));
 		
 		Contatto tempContatto = new Contatto(nome,cognome,telefono,email);
 		
 		if (tipoRubrica.equalsIgnoreCase("csv")) {
 			
 			managerCsv.aggiungiContatto(tempContatto);
-			JDBCManager.inserisciContattoDb(tempContatto);
 			
-		} else {
+		} else if (tipoRubrica.equalsIgnoreCase("xml")){
 			
 			managerXml.aggiungiContatto(tempContatto);
-			JDBCManager.inserisciContattoDb(tempContatto);
-		
-		}
-		
+			
+		}else JDBCManager.inserisciContattoDb(tempContatto);				
 		
 	}
 	
@@ -102,10 +135,16 @@ public class Rubrica {
 			
 			managerCsv.cerca(nomeDaCercare, cognomeDaCercare);
 			
-		} else {
+		} else if (tipoRubrica.equalsIgnoreCase("xml")){
 			
 			managerXml.cerca(nomeDaCercare, cognomeDaCercare);
 		
+		}
+		
+		else {
+			
+			JDBCManager.cercaContattoDb(nomeDaCercare, cognomeDaCercare);
+			
 		}
 		
 	}
@@ -126,10 +165,14 @@ public class Rubrica {
 			
 			tempContatto = managerCsv.cerca(nomeDaModificare, cognomeDaModificare);
 			
-		} else {
+		} else if (tipoRubrica.equalsIgnoreCase("xml")){
 			
 			tempContatto = managerXml.cerca(nomeDaModificare, cognomeDaModificare);
 		
+		}else {
+			
+			tempContatto = JDBCManager.cercaContattoDb(nomeDaModificare, cognomeDaModificare);
+			
 		}
 		
 		String sceltaModifica = null;
@@ -155,13 +198,17 @@ public class Rubrica {
 					
 					managerCsv.modificaNome(tempContatto, nomeNuovo);
 					
-				} else {
+				} else if (tipoRubrica.equalsIgnoreCase("csv")){
 					
 					managerXml.modificaNome(tempContatto, nomeNuovo);
 				
+				}else {
+					
+					JDBCManager.modificaNomeContattoDb(tempContatto, nomeNuovo);
+					
 				}
 				
-				JDBCManager.modificaNomeContattoDb(tempContatto, nomeNuovo);
+				
 				
 			}
 			
@@ -174,16 +221,21 @@ public class Rubrica {
 				
 				if (tipoRubrica.equalsIgnoreCase("csv")) {
 					
-					managerCsv.modificaNome(tempContatto, cognomeNuovo);
+					managerCsv.modificaCognome(tempContatto, cognomeNuovo);
 					
+				} else if (tipoRubrica.equalsIgnoreCase("xml")){
+					
+					managerXml.modificaCognome(tempContatto, cognomeNuovo);
+				
 				} else {
 					
-					managerXml.modificaNome(tempContatto, cognomeNuovo);
-				
+					JDBCManager.modificaCognomeContattoDb(tempContatto, cognomeNuovo);
+					
 				}
 				
 			}
 
+			/*
 			if(sceltaModifica.contentEquals("3")) {
 				
 				String telefonoNuovo = null;
@@ -202,6 +254,7 @@ public class Rubrica {
 				}
 				
 			}
+			*/
 			
 			if(sceltaModifica.contentEquals("3")) {
 				
@@ -212,12 +265,16 @@ public class Rubrica {
 				
 				if (tipoRubrica.equalsIgnoreCase("csv")) {
 					
-					managerCsv.modificaNome(tempContatto, emailNuova);
+					managerCsv.modificaEmail(tempContatto, emailNuova);
 					
+				} else if (tipoRubrica.equalsIgnoreCase("csv")){
+					
+					managerXml.modificaEmail(tempContatto, emailNuova);
+				
 				} else {
 					
-					managerXml.modificaNome(tempContatto, emailNuova);
-				
+					JDBCManager.modificaEmailContattoDb(tempContatto, emailNuova);
+					
 				}
 				
 			}
@@ -271,6 +328,30 @@ public class Rubrica {
 		System.out.println("Lista dei contatti presenti nel DB");
 		
 		JDBCManager.visualizzaContattiDb();
+		
+	}
+	
+	if(scelta.contentEquals("7")) {
+		
+		managerCsv.daCsvInDB();
+		
+	}
+	
+	if(scelta.contentEquals("8")) {
+		
+		managerCsv.daDBinCsv();
+		
+	}
+	
+	if(scelta.contentEquals("9")) {
+		
+		managerXml.daXMLinDB();
+		
+	}
+	
+	if(scelta.contentEquals("10")) {
+		
+		managerXml.daDBinXml();
 		
 	}
 

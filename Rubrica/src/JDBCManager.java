@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class JDBCManager {
 	
@@ -45,9 +46,28 @@ public class JDBCManager {
 	public static void inserisciContattoDb(Contatto contatto) throws SQLException {
 		
 		String nome = contatto.getName();
+		
+		if(nome.contentEquals(".")) {
+			nome = null;
+		}
+		
 		String cognome = contatto.getSurname();
+		
+		if(cognome.contentEquals(".")) {
+			cognome = null;
+		}
+		
 		String telefono = contatto.getTelephone();
+		
+		if(telefono.contentEquals(".")) {
+			telefono = null;
+		}
+		
 		String email = contatto.getEmail();
+		
+		if(email.contentEquals(".")) {
+			email = null;
+		}
 		
 		statement = connection.createStatement();
 		
@@ -56,6 +76,28 @@ public class JDBCManager {
 		statement.execute(insert);
 		
 		statement.close();
+		
+	}
+	
+	public static Contatto cercaContattoDb(String nome, String cognome) throws SQLException {
+		
+		statement = connection.createStatement();
+		
+		String search = "SELECT * FROM contatti WHERE name = '" + nome + "' and surname = '" + cognome + "'";
+		
+		rs = statement.executeQuery(search);
+		
+		ArrayList<Contatto> trovati = new ArrayList<>();
+		
+		while(rs.next()) {
+			trovati.add(new Contatto(rs.getString("name"),rs.getString("surname"),rs.getString("telephone"),rs.getString("email")));
+		}
+		
+		Contatto tempContatto = trovati.get(0);
+		
+		// rs.close();
+		
+		return tempContatto;
 		
 	}
 	
@@ -99,7 +141,7 @@ public class JDBCManager {
 		statement = connection.createStatement();
 		
 		// statement.executeUpdate("UPDATE contatti set name = 'Pippo' WHERE surname = 'prova'");
-		String update = "UPDATE contatti set name = '" + cognomeNuovo + "' WHERE telephone = '" + telefono + "'";
+		String update = "UPDATE contatti set surname = '" + cognomeNuovo + "' WHERE telephone = '" + telefono + "'";
 		
 		System.out.println(update);
 		statement.executeUpdate(update);
@@ -110,7 +152,17 @@ public class JDBCManager {
 		
 	}
 	
-	public static void modificaEmailContattoDb(Contatto contatto) {
+	public static void modificaEmailContattoDb(Contatto contatto,  String emailNuova) throws SQLException {
+		
+		String telefono = contatto.getTelephone();
+		
+		statement = connection.createStatement();
+		
+		// statement.executeUpdate("UPDATE contatti set name = 'Pippo' WHERE surname = 'prova'");
+		String update = "UPDATE contatti set email = '" + emailNuova + "' WHERE telephone = '" + telefono + "'";
+		
+		System.out.println(update);
+		statement.executeUpdate(update);
 		
 	}
 	
@@ -129,6 +181,25 @@ public class JDBCManager {
 			System.out.println("-----");
 		}
 		
+		connection.close();
+		
+	}
+	
+	public static ArrayList<Contatto> listaContattiDb() throws SQLException {
+		
+		statement = connection.createStatement();
+		
+		rs = statement.executeQuery("SELECT * FROM contatti");
+		
+		ArrayList<Contatto> lista = new ArrayList<>();
+		
+		while(rs.next()) {
+			lista.add(new Contatto(rs.getString("name"),rs.getString("surname"),rs.getString("telephone"),rs.getString("email")));
+		}
+		
+		   rs.close();
+		
+		return lista;
 	}
 	
 }
