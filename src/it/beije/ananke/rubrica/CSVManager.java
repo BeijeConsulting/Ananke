@@ -46,11 +46,8 @@ public static void initCSV(String path) {
 		e.printStackTrace();
 	}
 }
-public static void writeCSV(List<Contatti> list)  {
-	Scanner sc = new Scanner(System.in);
-	String s;
-	System.out.println("Inserisci il nome del file da generare");
-	s = "/Users/Gianni/Desktop/" + sc.next() + ".csv";
+public static void writeCSV(List<Contatti> list, String s)  {
+	
 	File f = new File(s);
 	try {
 		FileWriter fw= new FileWriter(f);

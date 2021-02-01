@@ -19,7 +19,10 @@ public class Rubrica {
 	
 	
 	
-	public boolean addContact() {
+	public List<Contatti> addContact() {
+		List<Contatti> l = new ArrayList<>();
+		String continua;
+		do {
 		String n,s,e,phone;
 		Scanner sc = new Scanner(System.in);
 		
@@ -38,13 +41,15 @@ public class Rubrica {
 		
 		
 		if(!(n.isEmpty() && s.isEmpty() && e.isEmpty() && phone.isEmpty())) {
-		this.r.add(new Contatti(n,s,e,phone));
-		return true;
+		l.add(new Contatti(n,s,e,phone));
+		
 		} else {
 		System.out.println("Mi dispiace, l'utente deve contenere almeno un campo.");
-		return false;
 		}
-		
+		System.out.println("Vuoi continuare ad inserire? si/no");
+		 continua = sc.next();
+		}while(!continua.equalsIgnoreCase("no"));
+		return l;
 	}
 	
 	public List<Contatti> searchContact(String campo) {

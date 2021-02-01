@@ -18,18 +18,23 @@ public class Application {
 	}
 	
 	public void importFromFile() {
+		List<Contatti> l = new ArrayList<>();
 		Scanner sc = new Scanner(System.in);
 		String s;
 		System.out.println("Inserisci il nome del file");
 		 s = "/Users/Gianni/Desktop/" + sc.next();
 		 try {
 		 if(s.substring(s.length()-3).equals("csv")) {
-			 CSVManager.readCSV(s);
+			 l = CSVManager.readCSV(s);
+			 
+			 
 		 } else if(s.substring(s.length()-3).equals("xml")) {
-			 XMLManager.readFile(s);
+			 l = XMLManager.readFile(s);
+			 
 		 } else {
 			 System.out.println("Il formato non è valido");
 		 }
+		 JDBCManager.addContacts(l);
 		 }catch(Exception e) {
 			 e.printStackTrace();
 		 }
@@ -43,9 +48,9 @@ public class Application {
 		 System.out.println(s.substring(s.length()-3, s.length()));
 		 try {
 		 if(s.substring(s.length()-3).equals("csv")) {
-			 CSVManager.writeCSV(l);
+			 CSVManager.writeCSV(l,s);
 		 } else if(s.substring(s.length()-3).equals("xml")) {
-			 XMLManager.writeXML(l);
+			 XMLManager.writeXML(l,s);
 		 } else {
 			 System.out.println("Il formato non è valido");
 		 }
@@ -61,16 +66,23 @@ public class Application {
 		String s,addmore;
 		do {
 			System.out.println("Inserisci un numero per svolgere un comando: ");
-			System.out.println("1.Visualizza Rubrica\n2.Inserisci Contatto\n3.Elimina Contatto\n4.Importa da file\n5.Esporta file\n6.Importa dal dB\n7.Chiudi");
+			System.out.println("1.Ricerca Contatti\n2.Inserisci Contatto\n3.Elimina Contatto\n4.Importa da file\n5.Esporta file\n6.Importa dal dB\n7.Chiudi");
 			 s = sc.next();
 
 			 switch(s) {
 			 case "1":
-				System.out.println(r1.toString());
+				 System.out.println("Inserisci email dei contatti da cercare: ");
+				 String e1 = sc.next();
+				try {
+					JDBCManager.containContacts(e1);
+				} catch (SQLException e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
+				}
 				 break;
 			 case "2":
 				try {
-					JDBCManager.addContacts(r1, sc);
+					JDBCManager.addContacts(r1.addContact());
 				} catch (SQLException e2) {
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
@@ -92,9 +104,9 @@ public class Application {
 			 case "6":
 				 try {
 					r1.r = JDBCManager.readDb();
-				} catch (SQLException e1) {
+				} catch (SQLException e2) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					e2.printStackTrace();
 				}
 				 break;
 			 case "7":

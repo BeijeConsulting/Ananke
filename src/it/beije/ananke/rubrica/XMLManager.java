@@ -70,11 +70,8 @@ public static List<Contatti> readFile(String path) throws IOException, SAXExcept
 		return contatti;
 	}
 
-public static void writeXML(List<Contatti> l) throws ParserConfigurationException, IOException, SAXException, TransformerException {
-	Scanner sc = new Scanner(System.in);
-	String s;
-	System.out.println("Inserisci il nome del file da generare");
-	s = "/Users/Gianni/Desktop/" + sc.next() + ".xml";
+public static void writeXML(List<Contatti> l, String s) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+	
 	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 		

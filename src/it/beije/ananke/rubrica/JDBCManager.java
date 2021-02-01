@@ -43,41 +43,44 @@ public class JDBCManager {
 	public static List<Contatti> containContacts(String campo) throws SQLException {
 		List <Contatti> l = new ArrayList<>();
 		Connection con = getConnection();
-		String query = "SELECT * FROM contatti WHERE email = " + "'" + campo + "'";
-		Statement stmt = con.createStatement();
-		ResultSet rs = stmt.executeQuery(query);
+//		String query = "SELECT * FROM contatti WHERE email = " + campo;
+//		Statement stmt = con.createStatement();
+//		ResultSet rs = stmt.executeQuery(query);
+		ResultSet rs;
+		PreparedStatement preparedStatement;
+		String psInsert = "Select * from contatti WHERE email = ?" ;
+		preparedStatement = con.prepareStatement(psInsert);
+		preparedStatement.setString(1,campo);
+		rs = preparedStatement.executeQuery();
 		
-		if(rs.first() == false) {
-			System.out.println("Nessun contatto trovato");
-			return null;
-		} else {
+		
+		
 			while(rs.next()) {
-				System.out.println("CI SONO");
+				
 				l.add(new Contatti(rs.getString("name"),rs.getString("surname"), rs.getString("email"), rs.getString("telephone")));
 			}
-			stmt.close();
+//			stmt.close();
 			rs.close();
 			con.close();
+			if(l.isEmpty()) {
+				System.out.println("Non ci sono contatti con questa email.");
+			} else {
+				for(Contatti c: l) {
+					System.out.println(c.toString());
+				}
+			}
 			return l;
-		}
+		
 	}
 	
-	public static boolean addContacts(Rubrica rubrica,Scanner sc) throws SQLException {
-		
-		String addmore;
-		
- do{
-	 rubrica.addContact();
-	 System.out.println("Vuoi aggiungere un altro contatto? si/no");
-	  addmore = sc.next();	
-		}while(!addmore.equalsIgnoreCase("no"));
+	public static boolean addContacts(List<Contatti> l) throws SQLException {
 		Connection con = getConnection();
 		PreparedStatement preparedStatement;
 		
 		String psInsert = "INSERT INTO contatti (name,surname,email,telephone) VALUES (?,?,?,?)";
 		preparedStatement = con.prepareStatement(psInsert);
 		
-		for(Contatti c : rubrica.r) {
+		for(Contatti c : l) {
 			preparedStatement.setString(1, c.getName());
 			preparedStatement.setString(2, c.getSurname());
 			preparedStatement.setString(3, c.getEmail());
@@ -92,7 +95,7 @@ public class JDBCManager {
 	public static boolean deleteContact(String campo) {
 		Connection con = getConnection();
 		PreparedStatement preparedStatement = null;
-		Statement stmt = null;
+		
 		List<Contatti> l = new ArrayList<>();
 		try {
 			l = containContacts(campo);
@@ -100,13 +103,12 @@ public class JDBCManager {
 				con.close();
 				return false;
 			} else {
-				stmt = con.createStatement();
-				stmt.execute("DELETE from contatti WHERE email = 'mirabellomusic@gmail.com'");
-//				String psInsert = "DELETE from contatti WHERE email = ?" ;
-//				preparedStatement = con.prepareStatement(psInsert);
-//				preparedStatement.setString(1,campo);
-//				preparedStatement.execute();
-				stmt.close();
+				
+				String psInsert = "DELETE from contatti WHERE email = ?" ;
+				preparedStatement = con.prepareStatement(psInsert);
+				preparedStatement.setString(1,campo);
+				preparedStatement.execute();
+				preparedStatement.close();
 				con.close();
 			}
 		} catch (SQLException e) {
@@ -115,4 +117,5 @@ public class JDBCManager {
 		}
 		return true;
 	}
+	
 }
