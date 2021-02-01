@@ -19,9 +19,12 @@ public class Main {
 		String mail;
 		
 		//R.caricaRubricaDaSCV("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.txt");
-		R.caricaRubricaDaDB();
+		//R.caricaRubricaDaDB();
+		//R.cercaContattiDB("Mario");
+		//RubricaSQL.cercaContattoSuDB("Gino");
 	//	R.visualizzaRubrica();
 		//R.leggiRubricaXML("C:\\Users\\Padawan06\\Desktop\\A\\rubrica2.xml");
+		//R.daXMLaDB("C:\\Users\\Padawan06\\Desktop\\A\\rubrica2.xml");
 		//R.getSize();
 		//RubricaSQL.provaConnessione();
 		stampaMenu();
@@ -73,14 +76,16 @@ public class Main {
 				
 				System.out.println("Inserisci Parola chiave da cercare:");
 				parolaChiave = s.next();
-				R.cercaContatti(parolaChiave);
+				RubricaSQL.cercaContattoSuDB(parolaChiave);
+				//R.cercaContatti(parolaChiave);
 				break;
 				
 			case "D":
 				
 				System.out.println("Inserisci parola chiave per il contatto da eliminare:");
 				parolaChiave = s.next();
-				R.eliminaContatto(parolaChiave);
+				RubricaSQL.eliminaContattoSuDB(parolaChiave);
+				//R.eliminaContatto(parolaChiave);
 				break;
 				
 			case "M":
@@ -90,6 +95,21 @@ public class Main {
 				R.modificaContatto(parolaChiave);
 				break;
 				
+			case "1":
+				
+				R.daCSVaDB("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.txt");
+				break;
+				
+			case "2":
+				
+				R.daXMLaDB("C:\\Users\\Padawan06\\Desktop\\A\\rubrica2.xml");
+				break;
+				
+			case "3":
+				
+				R.caricaRubricaDaDB();
+				break;
+				
 			default: 
 				
 				System.out.println("IL COMANDO SELZIONATO NON ESISTE! Riprova\n\n");
@@ -97,12 +117,15 @@ public class Main {
 			
 			}
 			
+		
 			stampaMenu();
+			//s.close();
+			//s = new Scanner(System.in);
 			comando = s.next();
 			
 		}
 		
-		R.scriviRubricaCSV();
+		//R.scriviRubricaCSV();
 		//R.scriviRubricaXML();
 		s.close();
 	}
@@ -117,6 +140,7 @@ public class Main {
 		
 	System.out.println("\n");
 	System.out.println("MENU:");
+	System.out.println("Digita un comando");
 	System.out.println("-----------------------------------------------------------");
 	System.out.println("N: Inserisci nuovo contatto");
 	System.out.println("F: Inserisci nuovo contatto e salva su file immediatamente");
@@ -125,6 +149,9 @@ public class Main {
 	System.out.println("D: Elimina un contatto da rubrica ");
 	System.out.println("M: Modifica un contatto in rubrica ");
 	System.out.println("E: Per Terminare ");
+	System.out.println("1: Per copiare da .CSV a DB");
+	System.out.println("2: Per copiare da .XML a DB");
+	System.out.println("3: Per caricare i contatti da DB");
 	System.out.println("-----------------------------------------------------------");
 	System.out.println();
 	

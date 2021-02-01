@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -167,7 +168,7 @@ public class Rubrica {
 		
 }
 	
-	public void leggiRubricaXML(String path)  throws ParserConfigurationException, IOException, SAXException {
+	public List<Contatto> leggiRubricaXML(String path)  throws ParserConfigurationException, IOException, SAXException {
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -220,15 +221,17 @@ public class Rubrica {
         }
         
         this.listC = lContatti;
-        System.out.println("contatti letti : " + listC.size());
-
+        
+        //System.out.println("contatti letti : " + listC.size());
+        return lContatti;
         
 	}
 
 		
 	public void aggiungiContatto(String nome, String cognome, String numeroTel, String mail) {
 		
-		if(nome.length() == 0 && cognome.length() == 0 && numeroTel.length() == 0 && mail.length() == 0) {
+		if(nome.trim().length() == 0 && cognome.trim().length() == 0 
+				&& numeroTel.trim().length() == 0 && mail.trim().length() == 0) {
 			 System.out.println("CONTATTO NON VALIDO, DEVI ISERIRE ALMENO UN CAMPO!");
 			 
 			 return;
@@ -269,6 +272,10 @@ public class Rubrica {
 				c.visualizzaContatto();
 			}
 		}
+	}
+	
+	public void cercaContattiDB(String parolaChiave) {
+		RubricaSQL.cercaContattoSuDB(parolaChiave);
 	}
 	
 	public void eliminaContatto(String nomeCercato) {
@@ -435,6 +442,37 @@ public class Rubrica {
 		
 	}
 	
+	public void daDBaCSV() throws IOException {
+		
+		List<Contatto> list = RubricaSQL.caricaContattiDaDB();
+		
+		File f1 = new File("C:\\Users\\Padawan06\\Desktop\\rubrica.csv");
+		FileWriter fw = new FileWriter(f1);
+		String s;
+		
+		for(Contatto c : list) {
+			s=c.getNome() + ";" + c.getCognome() + ";" + c.getNumeoroTel() + ";" + c.getMail()+ "\n";
+			fw.write(s);
+		}
+		
+		fw.flush();
+		fw.close();
+		
+	}
+	
+	public void daCSVaDB(String path) throws IOException, SQLException {
+		
+		List<Contatto> list = leggiRubricaCSV(path);
+		RubricaSQL.scriviContattiSuDB(list);
+		
+	}
+	
+	public void daXMLaDB(String path) throws IOException, SQLException, ParserConfigurationException, SAXException {
+		
+		List<Contatto> list = leggiRubricaXML(path);
+		RubricaSQL.scriviContattiSuDB(list);
+		
+	}
 	
 }
 
