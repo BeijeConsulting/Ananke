@@ -9,6 +9,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
 import it.beije.ananke.Contatto;
+import it.beije.ananke.rubrica.Contact;
 
 
 public class HDBmanager {
@@ -22,11 +23,11 @@ public class HDBmanager {
 		Session session = sessionFactory.openSession();
 		System.out.println("session is open ? " + session.isOpen());
 		
-		//SQL : "SELECT * FROM contatti"
+		//SQL : "SELECT * FROM Contact"
 		//HQL
-		String hqlSelect = "SELECT c FROM Contatto as c";
-		Query<Contatto> query = session.createQuery(hqlSelect);
-		List<Contatto> contatti = query.list();
+		String hqlSelect = "SELECT c FROM Contact as c";
+		Query<Contact> query = session.createQuery(hqlSelect);
+		List<Contact> contatti = query.list();
 		System.out.println(contatti.size());
 //		
 //		for (Contatto contatto : query.list()) {
@@ -41,7 +42,7 @@ public class HDBmanager {
 		Transaction transaction = session.beginTransaction();
 		
 		//UPDATE
-		Contatto c1 = contatti.get(contatti.size()-1);
+		Contact c1 = contatti.get(contatti.size()-1);
 		c1.setName("Pippo");
 		c1.setSurname("Vredi");
 		c1.setEmail("Pippo@beije.it");

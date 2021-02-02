@@ -36,11 +36,9 @@ public class JDBCmanager {
 //			System.out.println(insert);
 //			statement.execute(insert);
 			
-<<<<<<< HEAD
-			String psInsert = "INSERT INTO contat (name,surname) VALUES (?,?)";
-=======
+
 			String psInsert = "INSERT INTO contact (name,surname) VALUES (?,?)";
->>>>>>> refs/remotes/origin/Marinoni
+
 			preparedStatement = connection.prepareStatement(psInsert);
 			
 			for (int i=1; i <= 2; i++) {
