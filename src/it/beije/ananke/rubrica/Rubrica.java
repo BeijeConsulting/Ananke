@@ -24,6 +24,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.hibernate.Session;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -35,7 +36,8 @@ public class Rubrica {
 	final Scanner sc = new Scanner(System.in);
 	List<Contatto> contatti = new ArrayList<Contatto>();
 	DBManager dbManager = new DBManager("root","Beije09","jdbc:mysql://localhost:3306/ananke?serverTimezone=CET");
-
+	HDBManager hdbManager = new HDBManager();
+	
 	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerException {
 		Rubrica rubrica = new Rubrica();
 		rubrica.menuPrincipale();		
@@ -61,7 +63,8 @@ public class Rubrica {
 						+ "6 = Ricerca contatto\n"
 						+ "7 = Elimina contatto\n"
 						+ "8 = Modifica contatto\n"
-						+ "9 = Operazioni DB");
+						+ "9 = Operazioni DB\n"
+						+ "10 = Operazioni HDB");
 				try {
 					opzioneScelta = Integer.parseInt(sc.next());
 					controllo = true;
@@ -112,6 +115,12 @@ public class Rubrica {
 					menuDB();
 					break;
 				}
+				case 10: {
+					Session s = hdbManager.getSession();
+					menuHDB(s);
+					s.close();
+					
+				}
 			}
 			controllo = false;
 			System.out.println("Continuare? (s/n)");
@@ -120,6 +129,50 @@ public class Rubrica {
 			}
 		}
 		sc.close();
+	}
+	
+	public void menuHDB(Session session) throws IOException, ParserConfigurationException, SAXException, TransformerException {
+		boolean controllo = false;
+		int opzioneScelta = 0;
+		
+		while(!controllo) {
+			System.out.println("Seleziona l'operazione da svolgere\n"
+					+ "0 = Torna al menu principale\n"
+					+ "1 = Aggiungi contatto\n"
+					+ "2 = Ricerca contatto\n"
+					+ "3 = Elimina contatto\n"
+					+ "4 = Modifica contatto");
+	
+		try {
+			opzioneScelta = Integer.parseInt(sc.next());
+			controllo = true;
+		}catch(NumberFormatException e) {
+			System.out.println("Opzione non disponibile");
+		}
+				
+		switch(opzioneScelta) {
+			case 0:{
+				menuPrincipale();
+				break;
+			}
+			case 1: {
+				hdbManager.aggiungiContattoHDB(letturaContatto(),session);
+				break;
+			}
+			case 2: {
+				hdbManager.ricercaContattoHDB(letturaContatto(), session);
+				break;
+			}
+			case 3: {
+				
+				break;
+			}
+			case 4: {
+				break;
+			}
+			
+		}
+		}
 	}
 	
 	public void menuDB() throws IOException, ParserConfigurationException, SAXException, TransformerException {

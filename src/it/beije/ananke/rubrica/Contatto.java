@@ -8,7 +8,16 @@ public class Contatto {
 	private String cognome = "";
 	private String email = "";
 	private String telefono = "";
+	private int id;
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getNome() {
 		return nome;
 	}
