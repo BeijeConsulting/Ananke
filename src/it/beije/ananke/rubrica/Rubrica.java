@@ -72,7 +72,7 @@ public class Rubrica {
 		Iterator<Contatti> it = this.r.iterator();
 		while(it.hasNext()) {
 			Contatti c = it.next();
-			if(c.email.equals(email)) {
+			if(c.getEmail().equals(email)) {
 				i++;
 				
 			}
