@@ -2,12 +2,13 @@ package it.beije.ananke.rubrica;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CsvFile {
 
-    public static ArrayList<Contact> readFromCsv(String path){
+    public static List<Contact> readFromCsv(String path){
 
-        ArrayList<Contact> rubric = new ArrayList<>();
+    	List<Contact> rubric = new ArrayList<>();
 
         BufferedReader reader = null;
 
@@ -51,7 +52,7 @@ public class CsvFile {
         return rubric;
     }
 
-    public static boolean writeOnCsv(String path, ArrayList<Contact> rubric){
+    public static boolean writeOnCsv(String path, List<Contact> rubric){
 
         FileWriter writer = null;
 

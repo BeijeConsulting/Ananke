@@ -23,7 +23,8 @@
       <property name = "hibernate.connection.password">Padawan02May4BeWithYou</property>
       
       <!-- List of XML mapping files -->
-      <mapping resource = "Contact.hbm.xml"/>
+
+      <!--  mapping resource = "Contact.hbm.xml"/ -->
       
       <!-- property name="show_sql">true</property -->           
    </session-factory>

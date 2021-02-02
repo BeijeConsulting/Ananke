@@ -233,7 +233,7 @@ public class Rubrica {
 
     private static void readContactFromCsv(String path) throws SQLException, ClassNotFoundException {
 
-        ArrayList<Contact> rubric = CsvFile.readFromCsv(path);
+        ArrayList<Contact> rubric = (ArrayList<Contact>) CsvFile.readFromCsv(path);
 
         System.out.println("Ora aggiungo questi contatti al database");
         printContacts(rubric);
@@ -248,7 +248,7 @@ public class Rubrica {
 
     private static void readContactFromXml(String path) throws ParserConfigurationException, IOException, SAXException, SQLException, ClassNotFoundException {
 
-        ArrayList<Contact> rubric = XmlFile.readFromFile(path);
+        ArrayList<Contact> rubric = (ArrayList<Contact>) XmlFile.readFromFile(path);
 
         System.out.println("Ora aggiungo questi contatti al database");
         printContacts(rubric);

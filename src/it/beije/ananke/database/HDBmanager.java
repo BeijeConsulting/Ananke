@@ -16,11 +16,14 @@ public class HDBmanager {
 
 	public static void main(String[] args) {
 		
-		Configuration configuration = new Configuration().configure();
+//		Configuration configuration = new Configuration().configure()
+//				.addAnnotatedClass(Contatto.class);
+//
+//		SessionFactory sessionFactory = configuration.buildSessionFactory();
+//		
+//		Session session = sessionFactory.openSession();
 
-		SessionFactory sessionFactory = configuration.buildSessionFactory();
-		
-		Session session = sessionFactory.openSession();
+		Session session = HybernateSessionManager.getSession();
 		System.out.println("session is open ? " + session.isOpen());
 		
 		//SQL : "SELECT * FROM Contact"
@@ -29,18 +32,19 @@ public class HDBmanager {
 		Query<Contact> query = session.createQuery(hqlSelect);
 		List<Contact> contatti = query.list();
 		System.out.println(contatti.size());
-//		
-//		for (Contatto contatto : query.list()) {
-//			System.out.println("id : " + contatto.getId());
-//			System.out.println("name : " + contatto.getName());
-//			System.out.println("surname : " + contatto.getSurname());
-//			System.out.println("telephone : " + contatto.getTelephone());
-//			System.out.println("email : " + contatto.getEmail());
-//		}
+		
+		for (Contact contact : query.list()) {
+			System.out.println("id : " + contact.getId());
+			System.out.println("name : " + contact.getName());
+			System.out.println("surname : " + contact.getSurname());
+			System.out.println("telephone : " + contact.getTelephone());
+			System.out.println("email : " + contact.getEmail());
+		}
 		
 		//apro transazione
 		Transaction transaction = session.beginTransaction();
 		
+
 		//UPDATE
 		Contact c1 = contatti.get(contatti.size()-1);
 		c1.setName("Pippo");
@@ -50,6 +54,17 @@ public class HDBmanager {
 		System.out.println("c1 ID PRE save  :" + c1.getId());
 		session.save(c1);
 		System.out.println("c1 ID POST save :" + c1.getId());
+
+//		//UPDATE
+//		Contatto c1 = contatti.get(contatti.size()-1);
+//		c1.setName("Pippo");
+//		c1.setSurname("Vredi");
+//		c1.setEmail("Pippo@beije.it");
+//		
+//		System.out.println("c1 ID PRE save  :" + c1.getId());
+//		session.save(c1);
+//		System.out.println("c1 ID POST save :" + c1.getId());
+
 
 //		//INSERT
 //		Contatto newContatto = new Contatto();
@@ -66,7 +81,6 @@ public class HDBmanager {
 //		//transaction.rollback();
 		
 		session.close();
-		sessionFactory.close();
 	}
 
 }

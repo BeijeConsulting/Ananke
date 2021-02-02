@@ -17,10 +17,11 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class XmlFile {
 
-    public static ArrayList<Contact> readFromFile(String path) throws ParserConfigurationException, IOException, SAXException {
+    public static List<Contact> readFromFile(String path) throws ParserConfigurationException, IOException, SAXException {
 
         ArrayList<Contact> rubric = new ArrayList<>();
 
@@ -72,7 +73,7 @@ public class XmlFile {
         return rubric;
     }
 
-    public static boolean writeOnFile(String path, ArrayList<Contact> rubric) throws ParserConfigurationException, TransformerException {
+    public static boolean writeOnFile(String path, List<Contact> rubric) throws ParserConfigurationException, TransformerException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();

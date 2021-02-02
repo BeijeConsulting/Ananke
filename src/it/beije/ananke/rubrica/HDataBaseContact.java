@@ -11,14 +11,11 @@ import org.hibernate.query.Query;
 
 public class HDataBaseContact {
 	
-	private static Configuration configuration = new Configuration().configure();
-	private static SessionFactory sessionFactory = configuration.buildSessionFactory();;
-	
 	public static Session session;
 	
 	public static boolean openSession() {
 		
-		session = sessionFactory.openSession();
+		session = HybernateSessionManager.getSession();
 		
 		return session.isOpen();
 	
@@ -31,7 +28,6 @@ public class HDataBaseContact {
 		return session.isOpen();
 		
 	}
-	
 	
 	public static List<Contact> select(){
 		

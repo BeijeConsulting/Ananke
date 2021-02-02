@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
@@ -52,6 +53,12 @@ public class RubricaWHibernate {
 				    searchContacts(fields);
 				
 				    break;
+				    
+				case "p":
+					
+				    printDB();
+				
+				    break;
 				
 				case "q":
 				
@@ -74,9 +81,14 @@ public class RubricaWHibernate {
 		"\n\tno?");
 		command = inputKeyword.nextLine().trim();
 		
-		//if(command.equals("yes"))
-		//writeOnFile();
-
+		if(command.equals("yes"))
+			try {
+				writeOnFile();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 
 	}
 	
@@ -229,7 +241,7 @@ public class RubricaWHibernate {
 
 	private static void readContactFromCsv(String path) throws SQLException, ClassNotFoundException {
 
-        ArrayList<Contact> rubric = CsvFile.readFromCsv(path);
+		List<Contact> rubric = CsvFile.readFromCsv(path);
 
         System.out.println("Ora aggiungo questi contatti al database");
         printContacts(rubric);
@@ -244,7 +256,7 @@ public class RubricaWHibernate {
 
     private static void readContactFromXml(String path) throws ParserConfigurationException, IOException, SAXException, SQLException, ClassNotFoundException {
 
-        ArrayList<Contact> rubric = XmlFile.readFromFile(path);
+    	List<Contact> rubric = XmlFile.readFromFile(path);
 
         System.out.println("Ora aggiungo questi contatti al database");
         printContacts(rubric);
@@ -325,7 +337,7 @@ public class RubricaWHibernate {
 
             String input = null;
 
-            System.out.println("Tramite quale campo vuoi cercare?" +
+            System.out.println("Quali campi vuoi modificare?" +
                     "\n\t -n: name" +
                     "\n\t -s: surname" +
                     "\n\t -t: telephone" +
@@ -469,6 +481,116 @@ public class RubricaWHibernate {
 		return values;
 	}
 	 
+	private static void writeOnFile() throws SQLException, ClassNotFoundException {
+
+		List<Contact> rubric = new ArrayList<>();
+
+		System.out.println("Vuoi esportare tutti i contatti su un file?" +
+				"\n\tyes?" +
+				"\n\tno?");
+		String command = new Scanner(System.in).nextLine().trim();
+
+		if(command.equals("no")) {
+			//cerco i contatti e creo un arrayList che poi passo alle altre funzioni
+			List<String> fields = fieldsForSearch();
+			List<String> values = searchContacts(fields);
+
+			HDataBaseContact.openSession();
+
+			rubric = HDataBaseContact.selectWhere(fields, values);
+
+			HDataBaseContact.closeSession();
+			
+		}
+		else{
+			HDataBaseContact.openSession();
+
+			rubric = HDataBaseContact.select();
+
+			HDataBaseContact.closeSession();
+		}
+
+		Scanner inputTastiera = new Scanner(System.in);
+		String path;
+
+		File directory = new File(PATH);
+		File[] files = directory.listFiles();
+		int i=0;
+
+		System.out.println("Su quale file vuoi salvare questi contatti?" +
+				"\nDigita il numero corrispondente al file che vuoi, o un numero non presente per creare un nuovo file.");
+
+		//listo tutti i file presenti nella directory
+
+		String nomeFile = null;
+
+		if(files != null) {
+
+			for (File file : files) {
+				System.out.println("[" + i + "]\t" + file.getName());
+				i++;
+			}
+
+			//faccio scegliere il file su cui salvare
+			int numeroFile = Integer.parseInt(inputTastiera.nextLine());
+
+			if(numeroFile < files.length)
+				nomeFile = files[numeroFile].getName();
+			else {
+				System.out.println("Digita il nome del nuovo file con l'estensione csv/xml.");
+				nomeFile = inputTastiera.nextLine();
+			}
+
+		}
+
+		//capisco se è un file xml o csv
+
+		String nome = null;
+		String estensione = null;
+	        
+		if(nomeFile != null) {
+			nome = nomeFile.split("\\.")[0];
+			estensione = (nomeFile.split("\\."))[1];
+		}
+
+		path = PATH + "\\" + nomeFile;
+
+		if(estensione.equals("xml")) {
+			try {
+				writeOnFileXml(path, rubric);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			if (estensione.equals("csv"))
+				writeOnFileCsv(path, rubric);
+		}
+			
+	}
+
+	private static void writeOnFileCsv(String path, List<Contact> rubric) {
+
+		CsvFile.writeOnCsv(path, rubric);
+
+	}
+		
+	private static void writeOnFileXml(String path, List<Contact> rubric) throws ParserConfigurationException, TransformerException {
+	    			
+		XmlFile.writeOnFile(path, rubric);
+
+	}
+	
+	private static void printDB() {
+		
+		HDataBaseContact.openSession();
+		List<Contact> rubric = HDataBaseContact.select();
+		HDataBaseContact.closeSession();
+	       
+		printContacts(rubric);
+		
+	}
+	
 	private static void printContacts(List<Contact> rubric) {
 		for (Contact contact : rubric) {
 			System.out.println("[" + (int) (rubric.indexOf(contact) + 1) + "]\t" + contact.toString());
@@ -480,7 +602,8 @@ public class RubricaWHibernate {
                 "\t- i : inserisci un nuovo contatto;\n" +
                 "\t- u : aggiorna un contatto nella rubrica;\n" +
                 "\t- d : cancella un contatto esistente;\n" +
-                "\t- s : cerca e stampa contatti esistente;\n" +
+                "\t- s : cerca e stampa contatti esistente;\n" + 
+                "\t- p : stampa tutto il contenuto del DB;\n" +
                 "\t- q : salva ed esci.\n");
     }
 
