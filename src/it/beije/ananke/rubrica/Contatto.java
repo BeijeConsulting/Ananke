@@ -2,6 +2,7 @@ package it.beije.ananke.rubrica;
 
 public class Contatto {
 	
+	private int id;
 	private String nome;
 	private String cognome;
 	private String numeroTel;
@@ -28,8 +29,9 @@ public class Contatto {
 		System.out.println(this.getMail() + ";");
 	}
 	
-	
-	
+	public int getId() {
+		return id;
+	}
 	public String getNome() {
 		return nome;
 	}
@@ -45,6 +47,10 @@ public class Contatto {
 	public String getNumeroTel() {
 		return numeroTel;
 	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public void setNumeroTel(String numeroTel) {
 		this.numeroTel = numeroTel;
 	}

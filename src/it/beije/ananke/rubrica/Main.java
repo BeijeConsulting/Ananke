@@ -4,6 +4,9 @@ package it.beije.ananke.rubrica;
 //import java.io.FileReader;
 //import java.io.FileWriter;
 import java.util.Scanner;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 public class Main {
 	
@@ -18,21 +21,24 @@ public class Main {
 		String numeroTel;
 		String mail;
 		
+		//Session ses =SessionManager.apriSessione();
 		//R.caricaRubricaDaSCV("C:\\Users\\Padawan06\\Desktop\\A\\rubrica.txt");
 		//R.caricaRubricaDaDB();
 		//R.cercaContattiDB("Mario");
 		//RubricaSQL.cercaContattoSuDB("Gino");
-	//	R.visualizzaRubrica();
+		//R.visualizzaRubrica();
 		//R.leggiRubricaXML("C:\\Users\\Padawan06\\Desktop\\A\\rubrica2.xml");
 		//R.daXMLaDB("C:\\Users\\Padawan06\\Desktop\\A\\rubrica2.xml");
 		//R.getSize();
 		//RubricaSQL.provaConnessione();
+		//RubricaHQL.cercaContatti("Mario");
+		//RubricaHQL.inserisciContatto("Rossi","Rossi","3437866","rossi.r@gmail.com");
 		stampaMenu();
 		String comando = s.next();
 		
 		while (!comando.equalsIgnoreCase("E")) {
 			
-			//stampaMenu();
+			
 			switch(comando) {
 				
 			case "N":
@@ -62,7 +68,6 @@ public class Main {
 				System.out.println("Inserisci Email:");
 				mail = s.next();
 				
-				//c = new Contatto(nome, cognome, numeroTel, mail);
 				R.aggiungiContatto(nome, cognome, numeroTel, mail);
 				
 				break;
@@ -148,10 +153,10 @@ public class Main {
 	System.out.println("V: Visualizza intera Rubrica");
 	System.out.println("D: Elimina un contatto da rubrica ");
 	System.out.println("M: Modifica un contatto in rubrica ");
-	System.out.println("E: Per Terminare ");
 	System.out.println("1: Per copiare da .CSV a DB");
 	System.out.println("2: Per copiare da .XML a DB");
 	System.out.println("3: Per caricare i contatti da DB");
+	System.out.println("E: Per Terminare ");
 	System.out.println("-----------------------------------------------------------");
 	System.out.println();
 	

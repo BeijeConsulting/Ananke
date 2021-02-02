@@ -249,6 +249,12 @@ public class Rubrica {
 
 	
 	public void visualizzaRubrica() {
+		
+		if(listC == null) {
+			System.out.println("NESSUNA RUBRICA CARICATA; CARICALA DAL DB!");
+			return;
+		}
+		
 		System.out.println("-----------------Rubrica-----------------");
 		
 		for(Contatto c : this.listC) {

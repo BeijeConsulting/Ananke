@@ -133,7 +133,7 @@ public class RubricaSQL {
 				while (rs.next()) {
 					
 					Contatto c = new Contatto();
-					listID.add(rs.getInt("id"));
+					c.setId(Integer.parseInt(rs.getString("id")));
 					c.setNome( rs.getString("name"));
 					c.setCognome(rs.getString("surname"));
 					c.setMail(rs.getString("email"));
@@ -151,7 +151,7 @@ public class RubricaSQL {
 				
 				if(list.size() == 1) {
 					
-					statement.executeQuery("DELETE FROM contatti WHERE id = " + listID.get(0));
+					statement.executeQuery("DELETE FROM contatti WHERE id =" + list.get(0).getId());
 					
 				}else{
 					
@@ -192,7 +192,7 @@ public class RubricaSQL {
 					
 					System.out.println("Inserisci nuovo nome:");
 					cmd = s.next();
-					statement.executeQuery("UPDATE contatti SET name = '" + cmd  + "' WHERE id = " + idDaModificare);
+					statement.executeQuery("UPDATE contatti SET name = '" + cmd  + "' WHERE id =" + idDaModificare);
 					
 					break;
 					
@@ -200,7 +200,7 @@ public class RubricaSQL {
 					
 					System.out.println("Inserisci nuovo cognome:");
 					cmd = s.next();
-					statement.executeQuery("UPDATE contatti SET surname = '" + cmd  + "' WHERE id = " + idDaModificare);
+					statement.executeQuery("UPDATE contatti SET surname = '" + cmd  + "' WHERE id =" + idDaModificare);
 					
 					
 					break;
@@ -209,7 +209,7 @@ public class RubricaSQL {
 					
 					System.out.println("Inserisci nuovo numero di telefono:");
 					cmd = s.next();
-					statement.executeQuery("UPDATE contatti SET telephone = '" + cmd  + "' WHERE id = " + idDaModificare);
+					statement.executeQuery("UPDATE contatti SET telephone = '" + cmd  + "' WHERE id =" + idDaModificare);
 					
 					break;
 				
@@ -217,13 +217,13 @@ public class RubricaSQL {
 					
 					System.out.println("Inserisci nuova email:");
 					cmd = s.next();
-					statement.executeQuery("UPDATE contatti SET email = '" + cmd  + "' WHERE id = " + idDaModificare);
+					statement.executeQuery("UPDATE contatti SET email = '" + cmd  + "' WHERE id =" + idDaModificare);
 					
 					break;
 				
 				}
 				
-				statement.executeQuery("DELETE FROM contatti WHERE id = " + idDaModificare);
+				
 				}
 
 			}catch(SQLException sqlEx) {
@@ -257,7 +257,7 @@ public class RubricaSQL {
 	public static void eliminaContattoSuDB(String parolaChiave) {
 		
 
-		List<Integer> listID = new ArrayList<>();
+		//List<Integer> listID = new ArrayList<>();
 		List<Contatto> list = new ArrayList<>();
 		Statement statement = null;
 		Connection connection = null;
@@ -285,7 +285,7 @@ public class RubricaSQL {
 			while (rs.next()) {
 				
 				Contatto c = new Contatto();
-				listID.add(Integer.parseInt(rs.getString("id")));
+				c.setId(Integer.parseInt(rs.getString("id")));
 				c.setNome(rs.getString("name"));
 				c.setCognome(rs.getString("surname"));
 				c.setMail(rs.getString("email"));
@@ -295,8 +295,8 @@ public class RubricaSQL {
 			}
 			
 			if(list.size() == 1) {
-				System.out.println(listID.get(0).intValue());
-				statement.execute("DELETE FROM contatti WHERE id = " + listID.get(0).intValue());
+				//System.out.println(listID.get(0).intValue());
+				statement.execute("DELETE FROM contatti WHERE id = " + list.get(0).getId());
 				
 			}else {
 				
@@ -320,9 +320,9 @@ public class RubricaSQL {
 			
 			
 			int comando = Integer.parseInt(s.next());
-			idDaEliminare = listID.get(comando - 1);
+			idDaEliminare = list.get(comando - 1).getId();
 			
-			statement.executeQuery("DELETE FROM contatti WHERE id = " + idDaEliminare);
+			statement.executeUpdate("DELETE FROM contatti WHERE id =" + idDaEliminare);
 		
 			}
 			
