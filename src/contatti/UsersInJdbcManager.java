@@ -64,6 +64,7 @@ public class UsersInJdbcManager implements UserManager{
 		User user = null;
 		String query = "SELECT * FROM contatti WHERE email =?;";
 		try {
+			
 			PreparedStatement preparedStatement = conn.prepareStatement(query);
 			preparedStatement.setString(1, email);
 			ResultSet resultSet = preparedStatement.executeQuery();
