@@ -1,3 +1,4 @@
+package fileManager;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,9 +13,14 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
+import database.JDBCManager;
+import entità.Contatto;
+
 public class ManagerCsv {
 	
 	private ArrayList<Contatto> contatti;
+	
+	JDBCManager managerJDBC = new JDBCManager();
 	
 	File file;
 	
@@ -22,10 +28,12 @@ public class ManagerCsv {
 		
 		file = new File("/Users/davidepersico/Desktop/Beije/Ananke/rubrica.csv");
 		
+		/*
 		System.out.println("file : " + file.getAbsolutePath());
 		System.out.println("file exists ? " + file.exists());
 		System.out.println("is a dir ?" + file.isDirectory());
 		System.out.println("");
+		*/
 		
 		contatti = new ArrayList<>();
 		
@@ -256,7 +264,7 @@ public class ManagerCsv {
 			
 				for(Contatto tempContatto: contatti) {
 					
-					JDBCManager.inserisciContattoDb(tempContatto);
+					managerJDBC.inserisciContattoDb(tempContatto);
 					
 				}
 			
@@ -266,7 +274,7 @@ public class ManagerCsv {
 	 
 	 public void daDBinCsv() throws SQLException, IOException{
 			
-			ArrayList<Contatto> contatti = JDBCManager.listaContattiDb();
+			ArrayList<Contatto> contatti = managerJDBC.listaContattiDb();
 			
 			if (contatti.size() != 0) {
 				System.out.println("I contatti presenti nel DB sono stati esportati sul file csv");

@@ -7,20 +7,20 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
-import database.JDBCManager;
+import database.HDBManager;
 import entità.Contatto;
 import fileManager.ManagerCsv;
 import fileManager.ManagerXml;
 
-public class Rubrica {
+public class RubricaHDB {
 	
 	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerException, SQLException {
-	
+		
 		ManagerCsv managerCsv = new ManagerCsv();
 		ManagerXml managerXml = new ManagerXml();
-		JDBCManager managerJDBC = new JDBCManager();
+		HDBManager managerHDB = new HDBManager();
 		
-		managerJDBC.connettiDb();
+		managerHDB.connettiDb();
 		
 		Scanner scanner = new Scanner(System.in);
 		
@@ -28,6 +28,7 @@ public class Rubrica {
 		String tipoRubrica = "";
 	
 	do {
+		System.out.println("");
 		System.out.println("Su quale rubrica vuoi operare? ");
 		System.out.println("| xml | csv | db |");
 		
@@ -124,7 +125,7 @@ public class Rubrica {
 			
 			managerXml.aggiungiContatto(tempContatto);
 			
-		}else managerJDBC.inserisciContattoDb(tempContatto);				
+		}else managerHDB.inserisciContattoDb(tempContatto);;				
 		
 	}
 	
@@ -148,7 +149,7 @@ public class Rubrica {
 		
 		else {
 			
-			managerJDBC.cercaContattoDb(nomeDaCercare, cognomeDaCercare);
+			managerHDB.cercaContattoDb(nomeDaCercare, cognomeDaCercare);
 			
 		}
 		
@@ -176,7 +177,7 @@ public class Rubrica {
 		
 		}else {
 			
-			tempContatto = managerJDBC.cercaContattoDb(nomeDaModificare, cognomeDaModificare);
+			tempContatto = managerHDB.cercaContattoDb(nomeDaModificare, cognomeDaModificare);
 			
 		}
 		
@@ -209,7 +210,7 @@ public class Rubrica {
 				
 				}else {
 					
-					managerJDBC.modificaNomeContattoDb(tempContatto, nomeNuovo);
+					managerHDB.modificaNomeContattoDb(tempContatto, nomeNuovo);
 					
 				}
 				
@@ -234,13 +235,13 @@ public class Rubrica {
 				
 				} else {
 					
-					managerJDBC.modificaCognomeContattoDb(tempContatto, cognomeNuovo);
+					managerHDB.modificaCognomeContattoDb(tempContatto, cognomeNuovo);
 					
 				}
 				
 			}
 
-			/*
+			
 			if(sceltaModifica.contentEquals("3")) {
 				
 				String telefonoNuovo = null;
@@ -250,16 +251,19 @@ public class Rubrica {
 				
 				if (tipoRubrica.equalsIgnoreCase("csv")) {
 					
-					managerCsv.modificaNome(tempContatto, telefonoNuovo);
+					managerCsv.modificaTelefono(tempContatto, telefonoNuovo);
 					
+				} else if (tipoRubrica.equalsIgnoreCase("xml")){
+					
+					managerXml.modificaTelefono(tempContatto, telefonoNuovo);
+				
 				} else {
 					
-					managerXml.modificaNome(tempContatto, telefonoNuovo);
-				
+					managerHDB.modificaTelefonoContattoDb(tempContatto, telefonoNuovo);
+					
 				}
 				
 			}
-			*/
 			
 			if(sceltaModifica.contentEquals("3")) {
 				
@@ -272,13 +276,13 @@ public class Rubrica {
 					
 					managerCsv.modificaEmail(tempContatto, emailNuova);
 					
-				} else if (tipoRubrica.equalsIgnoreCase("csv")){
+				} else if (tipoRubrica.equalsIgnoreCase("xml")){
 					
 					managerXml.modificaEmail(tempContatto, emailNuova);
 				
 				} else {
 					
-					managerJDBC.modificaEmailContattoDb(tempContatto, emailNuova);
+					managerHDB.modificaEmailContattoDb(tempContatto, emailNuova);
 					
 				}
 				
@@ -301,11 +305,11 @@ public class Rubrica {
 			
 			managerCsv.elimina(nomeDaEliminare, cognomeDaEliminare);
 			
-		} else {
+		} else if (tipoRubrica.equalsIgnoreCase("xml")){
 			
 			managerXml.elimina(nomeDaEliminare, cognomeDaEliminare);
 		
-		}
+		} else managerHDB.eliminaContattoDb(nomeDaEliminare, cognomeDaEliminare);
 		
 		
 	}
@@ -332,7 +336,7 @@ public class Rubrica {
 		
 		System.out.println("Lista dei contatti presenti nel DB");
 		
-		managerJDBC.visualizzaContattiDb();
+		managerHDB.visualizzaContattiDb();
 		
 	}
 	
@@ -367,7 +371,7 @@ public class Rubrica {
 	
 		scanner.close();
 		
-		managerJDBC.chiudiConnessioneDb();
+		// managerHDB.chiudiConnessioneDb();
 
 	}
 	

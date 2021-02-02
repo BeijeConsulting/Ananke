@@ -1,3 +1,5 @@
+package database;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -6,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import entità.Contatto;
+
 public class JDBCManager {
 	
 	public static final String DB_USER = "hbstudent";
@@ -13,12 +17,12 @@ public class JDBCManager {
 	public static final String DB_URL = "jdbc:mysql://localhost:3306/ananke?serverTimezone=CET";
 	
 	
-	static Connection connection = null;
-	static Statement statement = null;
-	static PreparedStatement preparedStatement = null;
-	static ResultSet rs = null;
+	Connection connection = null;
+	Statement statement = null;
+	PreparedStatement preparedStatement = null;
+	ResultSet rs = null;
 
-	static void connettiDb() {
+	public void connettiDb() {
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -31,7 +35,7 @@ public class JDBCManager {
 	
 	}
 	
-	public static void chiudiConnessioneDb() {
+	public void chiudiConnessioneDb() {
 		
 		try {
 			connection.close();
@@ -43,7 +47,7 @@ public class JDBCManager {
 		
 	}
 	
-	public static void inserisciContattoDb(Contatto contatto) throws SQLException {
+	public void inserisciContattoDb(Contatto contatto) throws SQLException {
 		
 		String nome = contatto.getName();
 		
@@ -79,7 +83,7 @@ public class JDBCManager {
 		
 	}
 	
-	public static Contatto cercaContattoDb(String nome, String cognome) throws SQLException {
+	public Contatto cercaContattoDb(String nome, String cognome) throws SQLException {
 		
 		statement = connection.createStatement();
 		
@@ -101,7 +105,7 @@ public class JDBCManager {
 		
 	}
 	
-	public static void eliminaContattoDb(Contatto contatto) throws SQLException {
+	public void eliminaContattoDb(Contatto contatto) throws SQLException {
 		
 		String nome = contatto.getName();
 		String cognome = contatto.getSurname();
@@ -119,7 +123,7 @@ public class JDBCManager {
 		
 	}
 	
-	public static void modificaNomeContattoDb(Contatto contatto, String nomeNuovo) throws SQLException {
+	public void modificaNomeContattoDb(Contatto contatto, String nomeNuovo) throws SQLException {
 		
 		String telefono = contatto.getTelephone();
 		
@@ -134,7 +138,7 @@ public class JDBCManager {
 		
 	}
 	
-	public static void modificaCognomeContattoDb(Contatto contatto, String cognomeNuovo) throws SQLException {
+	public void modificaCognomeContattoDb(Contatto contatto, String cognomeNuovo) throws SQLException {
 		
 		String telefono = contatto.getTelephone();
 		
@@ -148,11 +152,11 @@ public class JDBCManager {
 		
 	}
 	
-	public static void modificaTelefonoContattoDb(Contatto contatto) {
+	public void modificaTelefonoContattoDb(Contatto contatto) {
 		
 	}
 	
-	public static void modificaEmailContattoDb(Contatto contatto,  String emailNuova) throws SQLException {
+	public void modificaEmailContattoDb(Contatto contatto,  String emailNuova) throws SQLException {
 		
 		String telefono = contatto.getTelephone();
 		
@@ -166,7 +170,7 @@ public class JDBCManager {
 		
 	}
 	
-	public static void visualizzaContattiDb() throws SQLException {
+	public void visualizzaContattiDb() throws SQLException {
 		
 		statement = connection.createStatement();
 		
@@ -185,7 +189,7 @@ public class JDBCManager {
 		
 	}
 	
-	public static ArrayList<Contatto> listaContattiDb() throws SQLException {
+	public ArrayList<Contatto> listaContattiDb() throws SQLException {
 		
 		statement = connection.createStatement();
 		

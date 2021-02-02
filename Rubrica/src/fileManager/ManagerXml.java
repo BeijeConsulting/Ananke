@@ -1,3 +1,4 @@
+package fileManager;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,9 +20,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import database.JDBCManager;
+import entità.Contatto;
+
 public class ManagerXml{
 	
 	static List<Contatto> contatti = new ArrayList<Contatto>();
+	
+	JDBCManager managerJDBC = new JDBCManager();
 
 	public static void read() throws ParserConfigurationException, IOException, SAXException{
 		
@@ -270,7 +276,7 @@ public class ManagerXml{
 		 		
 		 		contatti.remove(tempContatto);
 		 		
-		 		JDBCManager.eliminaContattoDb(tempContatto);
+		 		managerJDBC.eliminaContattoDb(tempContatto);
 		 		
 		 		System.out.println("Il contatto ");
 		 		System.out.println("");
@@ -308,7 +314,7 @@ public class ManagerXml{
 	 			
 	 		for(Contatto contatto: contatti) {
 	 			
-	 			JDBCManager.inserisciContattoDb(contatto);
+	 			managerJDBC.inserisciContattoDb(contatto);
 	 			
 	 		}
 	 				
@@ -322,7 +328,7 @@ public class ManagerXml{
 	 	
 	 	public void daDBinXml() throws SQLException, IOException, ParserConfigurationException, SAXException, TransformerException{
 			
-			ArrayList<Contatto> lista = JDBCManager.listaContattiDb();
+			ArrayList<Contatto> lista = managerJDBC.listaContattiDb();
 			
 			for(int i = 0; i < lista.size(); i++) {
 				Contatto tempContatto = lista.get(i);
