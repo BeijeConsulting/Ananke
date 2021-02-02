@@ -23,7 +23,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import it.beije.ananke.Contatto;
+import it.beije.ananke.file.Contatto;
 
 public class Rubrica {
 	
@@ -192,7 +192,7 @@ public class Rubrica {
 	
 	public void inizializzaNuova(Scanner s, String path) throws Exception {
 		ArrayList<Contatto> contatti = new ArrayList<>();
-		Contatto cont = defContatto(path, s);
+		Contatto cont = defContatto(s);
 		if(cont == null) {
 			System.out.println("Inizializzazione fallita.");
 		}else {
@@ -206,7 +206,7 @@ public class Rubrica {
 		if(contatti.size() == 0) {
 			System.out.println("...");
 		}else {
-			Contatto cont = defContatto(path, s);
+			Contatto cont = defContatto(s);
 			if(cont != null) {
 				contatti.add(cont);
 				write(path, contatti, s);
@@ -214,11 +214,11 @@ public class Rubrica {
 		}
 	}
 	
-	public Contatto defContatto(String path, Scanner s) throws IOException, FileNotFoundException {
+	public Contatto defContatto(Scanner s) throws IOException {
 		Contatto cont = new Contatto();
 		StringBuilder sb = new StringBuilder("");
 		
-		System.out.println("Digita il nome da inserire in rubrica:\n(Digitare 0 per lasciare il campo vuoto)");
+		System.out.println("Digita il nome da inserire in rubrica: \n(Digitare 0 per lasciare il campo vuoto)");
 		String st = s.next();
 		sb.append(st);
 		if(cont.getName().equals("0")) {
@@ -227,7 +227,7 @@ public class Rubrica {
 			cont.setName(st);
 		}
 		
-		System.out.println("Digita il cognome da inserire in rubrica:\\n(Digitare 0 per lasciare il campo vuoto)");
+		System.out.println("Digita il cognome da inserire in rubrica: \n(Digitare 0 per lasciare il campo vuoto)");
 		st = s.next();	
 		sb.append(st);
 		if(cont.getSurname().equals("0")) {
@@ -236,7 +236,7 @@ public class Rubrica {
 			cont.setSurname(st);
 		}
 		
-		System.out.println("Digita l'email da inserire in rubrica:\\n(Digitare 0 per lasciare il campo vuoto)");
+		System.out.println("Digita l'email da inserire in rubrica: \n(Digitare 0 per lasciare il campo vuoto)");
 		st = s.next();	
 		sb.append(st);
 		if(cont.getEmail().equals("0")) {
@@ -245,7 +245,7 @@ public class Rubrica {
 			cont.setEmail(st);
 		}
 		
-		System.out.println("Digita il numero di telefono da inserire in rubrica:\\n(Digitare 0 per lasciare il campo vuoto)");
+		System.out.println("Digita il numero di telefono da inserire in rubrica: \n(Digitare 0 per lasciare il campo vuoto)");
 		st = s.next();
 		sb.append(st);
 		if(cont.getTelephone().equals("0")) {
@@ -367,7 +367,7 @@ public class Rubrica {
 					indice = Integer.parseInt(st);
 				}
 				
-				Contatto cont = defContatto(path, s);
+				Contatto cont = defContatto(s);
 				contatti.set(indice, cont);
 				write(path, contatti, s);
 				
