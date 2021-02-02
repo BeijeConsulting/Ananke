@@ -15,7 +15,8 @@ public class HDBmanager {
 
 	public static void main(String[] args) {
 		
-		Configuration configuration = new Configuration().configure();
+		Configuration configuration = new Configuration().configure()
+				.addAnnotatedClass(Contatto.class);
 
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
 		
@@ -28,18 +29,19 @@ public class HDBmanager {
 		Query<Contatto> query = session.createQuery(hqlSelect);
 		List<Contatto> contatti = query.list();
 		System.out.println(contatti.size());
-//		
-//		for (Contatto contatto : query.list()) {
-//			System.out.println("id : " + contatto.getId());
-//			System.out.println("name : " + contatto.getName());
-//			System.out.println("surname : " + contatto.getSurname());
-//			System.out.println("telephone : " + contatto.getTelephone());
-//			System.out.println("email : " + contatto.getEmail());
-//		}
+		
+		for (Contatto contatto : query.list()) {
+			System.out.println("id : " + contatto.getId());
+			System.out.println("name : " + contatto.getNome());
+			System.out.println("surname : " + contatto.getCognome());
+			System.out.println("telephone : " + contatto.getNumeroTel());
+			System.out.println("email : " + contatto.getMail());
+		}
 		
 		//apro transazione
 		Transaction transaction = session.beginTransaction();
 		
+
 		//UPDATE
 		Contatto c1 = contatti.get(contatti.size()-1);
 		c1.setNome("Pippo");
@@ -49,6 +51,7 @@ public class HDBmanager {
 	
 		session.save(c1);
 	
+
 
 //		//INSERT
 //		Contatto newContatto = new Contatto();
