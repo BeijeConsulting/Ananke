@@ -1,16 +1,31 @@
 package contatti;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
-//@Entity
-//@Table(name="contatti")
+@Entity
+@Table(name="contatti")
 public class User {
 	
+	@Id
+	@Column(name="id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	
+	@Column(name="firstName")
 	private String firstName;
+	
+	@Column(name="lastName")
 	private String lastName;
+	
+	@Column(name="email")
 	private String email;
+	
+	@Column(name="phoneNumber")
 	private String phoneNumber;
 	
 	public User(String firstName, String lastName, String email, String phoneNumber) {
@@ -72,6 +87,12 @@ public class User {
 		sb.append(" ]").append('\n');
 		
 		return sb.toString();
+	}
+	public void displayUser() {
+		System.out.println("firstName : "+ this.firstName);
+		   System.out.println("lastName : "+ this.lastName);
+		   System.out.println("email : "+ this.email);
+		   System.out.println("phoneNumber : "+ this.phoneNumber);
 	}
 
 	

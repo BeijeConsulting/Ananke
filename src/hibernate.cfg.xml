@@ -23,8 +23,8 @@
       
       <property name = "hibernate.connection.password"></property>
       
-      <!-- List of XML mapping files -->
-      <mapping resource = "User.hbm.xml"/>
+      <!-- List of XML mapping files uncomment it when u don't use Annotations-->   
+   <!--   <mapping resource = "User.hbm.xml"/>  -->
       
    </session-factory>
 </hibernate-configuration>

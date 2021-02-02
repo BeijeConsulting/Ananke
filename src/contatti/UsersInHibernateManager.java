@@ -19,26 +19,41 @@ public class UsersInHibernateManager implements UserManager {
 		sessionFactory.close();
 	}
 	private Session getSession() {
-		Configuration configuration = new Configuration().configure();
+		//Configuration configuration = new Configuration().configure();  for classic hybernate
+		Configuration configuration = new Configuration().configure() //for annotated hybernation
+				.addAnnotatedClass(User.class);
 		this.sessionFactory = configuration.buildSessionFactory();
 		Session session = this.sessionFactory.openSession();
 		return session;
 	} 
 	@Override
 	public boolean setUser(User newUser) throws IOException, SQLException {
+		for(User user : getAllUsers()) {
+			if(user.getEmail().equals(newUser.getEmail())) {
+				return false;
+			}
+		}
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		session.save(newUser);
 		transaction.commit();
+		session.close();
 		return true;
 	}
 
 	@Override
 	public void removeUser(String email) {
 		User user = getUser(email);
+		if(user!=null) {
 		Session session = getSession();
 		session.delete(user);
+		System.out.println("Removed contact successfully!");
 		session.close();
+		}
+		else
+		{
+			System.out.println("Removing Contact Unsuccessful!");
+		}
 	}
 
 	@Override
