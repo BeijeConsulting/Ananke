@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.capitoli123;
 
 import java.util.*;
 
@@ -44,9 +44,9 @@ public class ArrayListTest {
 		List<String> list4 = new ArrayList<String> (list3);
 		System.out.println(list4);
 		System.out.println(list4.equals(list3) + "\n"
-				+ list3.remove(2) + " è l'elemento eliminato\n"
-				+ list4.set(1, "maledizione") + " è l'elemento sostituito, però "
-				+ list4.get(1) + " è l'elemento che ho messo in lista");
+				+ list3.remove(2) + " ï¿½ l'elemento eliminato\n"
+				+ list4.set(1, "maledizione") + " ï¿½ l'elemento sostituito, perï¿½ "
+				+ list4.get(1) + " ï¿½ l'elemento che ho messo in lista");
 		
 
 
@@ -64,7 +64,7 @@ public class ArrayListTest {
 			
 		}
 		
-		System.out.println(list5.get(0) + " è un elemento inizializzato");
+		System.out.println(list5.get(0) + " ï¿½ un elemento inizializzato");
 //		int j = list5.get(0);
 //		System.out.println(j);
 		int i = 0;
@@ -72,7 +72,7 @@ public class ArrayListTest {
 			i = list5.get(0);
 		} catch (NullPointerException e) {
 			i = 0;
-			System.out.println(e.getMessage() + " i è stato inizializzato a 0");
+			System.out.println(e.getMessage() + " i ï¿½ stato inizializzato a 0");
 		} finally {
 			System.out.println(i);
 		}

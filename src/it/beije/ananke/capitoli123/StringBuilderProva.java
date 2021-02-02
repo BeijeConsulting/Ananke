@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.capitoli123;
 
 public class StringBuilderProva {
 	public static void main (String[] args) {
@@ -22,7 +22,7 @@ public class StringBuilderProva {
 //		System.out.println(sb.charAt(15));
 //		System.out.println(sb.charAt(0));
 		sb.append("Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura, che la diritta"
-				+ "via era smarrita. ahi quanto a dir qual era è cosa dura, esta selva selvaggia e aspra"
+				+ "via era smarrita. ahi quanto a dir qual era ï¿½ cosa dura, esta selva selvaggia e aspra"
 				+ "e forte, che nel pensier rinova la paura");
 		System.out.println(sb.charAt(205));
 		System.out.println(sb.length());

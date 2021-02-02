@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.capitoli123;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 public class MyStringTest {
 	
 	public static void main(String[] args) {
-		String s = "Ciao";
+		String s = "ciao";
 		
 		String s2 = MyString.append(s, "Cavallo");
 		System.out.println(s2);
