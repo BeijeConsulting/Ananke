@@ -1,5 +1,10 @@
 package contatti;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+//@Entity
+//@Table(name="contatti")
 public class User {
 	
 	private int id;
@@ -8,13 +13,13 @@ public class User {
 	private String email;
 	private String phoneNumber;
 	
-	public User(int id,String firstName, String lastName, String email, String phoneNumber) {
+	public User(String firstName, String lastName, String email, String phoneNumber) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.id=id;
+		
 	}
 	public User() {
 		
