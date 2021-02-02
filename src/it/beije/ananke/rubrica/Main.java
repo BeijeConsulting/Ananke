@@ -33,8 +33,10 @@ public class Main {
 		//RubricaSQL.provaConnessione();
 		//RubricaHQL.cercaContatti("Mario");
 		//RubricaHQL.inserisciContatto("Rossi","Rossi","3437866","rossi.r@gmail.com");
+		RubricaHQL.visualizzaDB();
+		RubricaHQL.eliminaContattoDB("Rossi");
 		stampaMenu();
-		String comando = s.next();
+		String comando = "";
 		
 		while (!comando.equalsIgnoreCase("E")) {
 			
@@ -122,11 +124,13 @@ public class Main {
 			
 			}
 			
-		
+			
+			 
 			stampaMenu();
+			comando = s.next();
 			//s.close();
 			//s = new Scanner(System.in);
-			comando = s.next();
+			
 			
 		}
 		

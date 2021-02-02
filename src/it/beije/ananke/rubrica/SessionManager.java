@@ -12,7 +12,7 @@ public class SessionManager {
 	
 	public static Session apriSessione() {
 		
-		configuration = new Configuration().configure();
+		configuration = new Configuration().configure().addAnnotatedClass(Contatto.class);
 		sessionFactory = configuration.buildSessionFactory();
 		session = sessionFactory.openSession();
 		
