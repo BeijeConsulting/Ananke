@@ -12,15 +12,8 @@ public class Contatti {
 	public String email;
 	public String telephone;
 	
-	public Contatti() {
-		
-	}
-	public Contatti(String name, String surname, String email, String telephone) {
-		this.name= name;
-		this.surname = surname;
-		this.email = email;
-		this.telephone = telephone;
-	}
+	
+
 	
 	
 	public int getId() {
@@ -64,12 +57,12 @@ public class Contatti {
 		return telephone;
 	}
 
-	public void setCell(String cell) {
-		this.telephone = cell;
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
 	}
 
 	public boolean searchProperties(String s) {
-		if(this.telephone == s || this.email == s || this.name == s || this.surname == s ) {
+		if(this.telephone.equals(s) || this.email.equalsIgnoreCase(s) || this.name.equalsIgnoreCase(s) || this.surname.equalsIgnoreCase(s) ) {
 			return true;
 		} else {
 			return false;

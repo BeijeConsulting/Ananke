@@ -41,7 +41,12 @@ public class Rubrica {
 		
 		
 		if(!(n.isEmpty() && s.isEmpty() && e.isEmpty() && phone.isEmpty())) {
-		l.add(new Contatti(n,s,e,phone));
+			Contatti c = new Contatti();
+			c.setName(n);
+			c.setSurname(s);
+			c.setEmail(e);
+			c.setTelephone(phone);
+		l.add(c);
 		
 		} else {
 		System.out.println("Mi dispiace, l'utente deve contenere almeno un campo.");

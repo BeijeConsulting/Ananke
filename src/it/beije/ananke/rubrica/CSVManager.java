@@ -28,7 +28,13 @@ public static List<Contatti> readCSV(String path) throws IOException {
 		row.remove(0);
 		for(String r : row) {
 			String[]rs = r.split(",");
-			rubrica.add(new Contatti(rs[0],rs[1],rs[2],rs[3]));
+			Contatti c = new Contatti();
+			c.setName(rs[0]);
+			c.setSurname(rs[1]);
+			c.setEmail(rs[2]);
+			c.setTelephone(rs[3]);
+			rubrica.add(c);
+			
 		}
 		return rubrica;
 	}

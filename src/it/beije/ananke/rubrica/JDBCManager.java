@@ -34,7 +34,12 @@ public class JDBCManager {
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
 		while(rs.next()) {
-			l.add(new Contatti(rs.getString("name"),rs.getString("surname"), rs.getString("email"), rs.getString("telephone")));
+			Contatti c = new Contatti();
+			c.setName(rs.getString("name"));
+			c.setSurname(rs.getString("surname"));
+			c.setEmail(rs.getString("email"));
+			c.setTelephone(rs.getString("telephone"));
+			l.add(c);
 		}
 		con.close();
 		return l;
@@ -56,8 +61,13 @@ public class JDBCManager {
 		
 		
 			while(rs.next()) {
+				Contatti c = new Contatti();
+				c.setName(rs.getString("name"));
+				c.setSurname(rs.getString("surname"));
+				c.setEmail(rs.getString("email"));
+				c.setTelephone(rs.getString("telephone"));
+				l.add(c);
 				
-				l.add(new Contatti(rs.getString("name"),rs.getString("surname"), rs.getString("email"), rs.getString("telephone")));
 			}
 //			stmt.close();
 			rs.close();

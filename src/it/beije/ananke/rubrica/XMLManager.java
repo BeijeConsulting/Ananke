@@ -52,7 +52,7 @@ public static List<Contatti> readFile(String path) throws IOException, SAXExcept
 						contatto.setSurname(valore.getTextContent());
 						break;
 					case "telephone":
-						contatto.setCell(valore.getTextContent());
+						contatto.setTelephone(valore.getTextContent());
 						break;
 					case "email":
 						contatto.setEmail(valore.getTextContent());

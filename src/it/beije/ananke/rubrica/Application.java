@@ -63,7 +63,7 @@ public class Application {
 	public void menu() {
 		Scanner sc = new Scanner(System.in);
 		Rubrica r1 = new Rubrica();
-		HDBManager.readDB();
+		
 		String s,addmore;
 		do {
 			System.out.println("Inserisci un numero per svolgere un comando: ");
@@ -74,25 +74,18 @@ public class Application {
 			 case "1":
 				 System.out.println("Inserisci email dei contatti da cercare: ");
 				 String e1 = sc.next();
-				try {
-					JDBCManager.containContacts(e1);
-				} catch (SQLException e3) {
-					// TODO Auto-generated catch block
-					e3.printStackTrace();
-				}
+			
+					HDBManager.containContacts(e1);
+			
 				 break;
 			 case "2":
-				try {
-					JDBCManager.addContacts(r1.addContact());
-				} catch (SQLException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
+				HDBManager.addContact(r1.addContact());
+				
 				 break;
 			 case "3":
 				 System.out.println("Inserisci email del contatto da eliminare: ");
 				 String e = sc.next();
-				 JDBCManager.deleteContact(e);
+				 HDBManager.deleteContacts(e);
 				 break;
 			 case "4":
 				
@@ -127,5 +120,6 @@ public class Application {
 	
 	public static void main(String[] args) {
 		Application app = new Application();
+		HDBManager.getSf().close();
 	}
 }
