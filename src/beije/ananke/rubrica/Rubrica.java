@@ -16,7 +16,7 @@ public class Rubrica {
 	
 	
 	//READ CONTACTS FROM FILE
-	 static ArrayList<Contatto> readContacts(File file) throws IOException
+	public static ArrayList<Contatto> readContacts(File file) throws IOException
 	{
 		ArrayList<Contatto> cont = new ArrayList<>();
 	    BufferedReader br = new BufferedReader(new FileReader(file));
@@ -39,7 +39,7 @@ public class Rubrica {
 	
 	
 	//WRITE CONTACTS ON FILE csv
-	static  void writeContacts(File file, ArrayList<Contatto> list) throws IOException
+	public static  void writeContacts(File file, ArrayList<Contatto> list) throws IOException
 	{
 		FileWriter fw = new FileWriter(file);
 		
@@ -486,7 +486,7 @@ public class Rubrica {
 	}
 	
 	 //Printing a file
-	 static void printFile(File f) throws IOException
+	 public static void printFile(File f) throws IOException
 	{
 			FileReader reader = new FileReader(f);
 			BufferedReader br = new BufferedReader(reader);

@@ -1,5 +1,14 @@
 package beije.ananke.rubrica;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "contatti")
 public class Contatto {
 	
 	
@@ -12,6 +21,15 @@ public class Contatto {
 		email=" ";
 	}
 	//GETTERS AND SETTERS
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	public String getName() {
 		return name;
@@ -62,5 +80,22 @@ public class Contatto {
 
 
 	//ISTANCE FIELDS
-	private String name,lastName,phone,email;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
+	private int id;
+	
+	@Column(name="name")
+	private String name;
+	
+	@Column(name="surname")
+	private String lastName;
+	
+	@Column(name="telephone")
+	private String phone;
+	
+	@Column(name="email")
+	private String email;
+	
 }

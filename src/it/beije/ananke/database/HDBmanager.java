@@ -16,11 +16,10 @@ public class HDBmanager {
 	public static void main(String[] args) {
 		
 		Configuration configuration = new Configuration().configure();
-
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
 		
 		Session session = sessionFactory.openSession();
-		System.out.println("session is open ? " + session.isOpen());
+		//System.out.println("session is open ? " + session.isOpen());
 		
 		//SQL : "SELECT * FROM contatti"
 		//HQL

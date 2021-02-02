@@ -27,8 +27,6 @@ public class JDBCmanager {
 			
 			statement = connection.createStatement();
 			
-			String name = "Franco";
-			String surname = "Bianchi";
 			
 //			statement.execute("INSERT INTO contatti VALUES (null, 'prova','prova','prova','prova')");
 			
@@ -39,13 +37,13 @@ public class JDBCmanager {
 			String psInsert = "INSERT INTO contatti (name,surname) VALUES (?,?)";
 			preparedStatement = connection.prepareStatement(psInsert);
 			
-			for (int i=1; i <= 2; i++) {
-				preparedStatement.setString(1, name+i);
-				preparedStatement.setString(2, surname+i);
-				
-				preparedStatement.execute();
-			}
-			
+//			for (int i=1; i <= 2; i++) {
+//				preparedStatement.setString(1, name+i);
+//				preparedStatement.setString(2, surname+i);
+//				
+//				preparedStatement.execute();
+//			}
+//			
 //			statement.executeUpdate("UPDATE contatti set name = 'Pippo' WHERE surname = 'prova'");
 			
 			rs = statement.executeQuery("SELECT * FROM contatti");

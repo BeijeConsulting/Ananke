@@ -38,7 +38,7 @@ public class RubricaXML {
 	}
 	
 	//read contacts from XML
-	static ArrayList<Contatto> readContactsXML(Document doc)
+	public static ArrayList<Contatto> readContactsXML(Document doc)
 	{
 		 Element docElement = doc.getDocumentElement();       
 	     //System.out.println(docElement.getTagName());
@@ -85,7 +85,7 @@ public class RubricaXML {
 	}
 		
 	//write contacts on XML
-	static void writeContactXML(ArrayList<Contatto> list, String path) throws Exception
+	public static void writeContactXML(ArrayList<Contatto> list, String path) throws Exception
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
