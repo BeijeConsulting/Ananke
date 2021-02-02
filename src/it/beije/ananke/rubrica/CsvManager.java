@@ -152,9 +152,10 @@ public class CsvManager {
 		contatti.remove(contatti.get(ind));
 		System.out.println("Il contatto selezionato è stato rimosso");
 		System.out.println("Ora che hai effettuato l' eliminazione, vuoi salvare i dati aggiunti?");
-		for(int i=0;i<contatti.size();i++) {
-			System.out.println(i +") "+ contatti.get(i).toString());
-		}
+		System.out.println("------------------------------------------");
+//		for(int i=0;i<contatti.size();i++) {
+//			System.out.println(i +") "+ contatti.get(i).toString());
+//		}
 		String	parola = scanner.nextLine();
 		if(parola.equalsIgnoreCase("si")){
 			aggiornaRubrica();
@@ -175,7 +176,6 @@ public class CsvManager {
 					break;
 				}
 			}
-			System.out.println("Nessun contatto con questa email in rubrica");
 		}
 		else if (ricerca.equalsIgnoreCase("telefono")){
 			System.out.println("Inserisci il recapito telefonico");
@@ -191,6 +191,7 @@ public class CsvManager {
 		else {
 			System.out.println("DEVI PER FORZA RICERCAREPER EMAIL O TELEFONO.");
 		}
+		System.out.println("------------------------------------------");
 	}
 	public void esportaDaCsvInXml() {
 		XmlManager xm = new XmlManager("/Users/Padawan08/Desktop/esportatoDaCsv.xml");

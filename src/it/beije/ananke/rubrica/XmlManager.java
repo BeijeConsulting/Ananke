@@ -106,6 +106,7 @@ public class XmlManager {
 					}
 				}
 			}
+			System.out.println("------------------------------------------");
 			contattiXml.add(contatto);
 		}
 
@@ -136,6 +137,7 @@ public class XmlManager {
 			}
 			System.out.println("Vuoi proseguire? IN CASO CONTRARIO DIGITA 'NO' ");
 			parola = scanner.nextLine();
+			System.out.println("------------------------------------------");
 		}
 		System.out.println("Ora che sei uscito dall' inserimento, vuoi salvare i dati aggiunti?");
 		parola = scanner.nextLine();
@@ -272,6 +274,7 @@ public class XmlManager {
 			} catch (ParserConfigurationException | IOException | SAXException | TransformerException e) {
 				e.printStackTrace();
 			}
+			System.out.println("------------------------------------------");
 		}
 	}
 
@@ -312,6 +315,7 @@ public class XmlManager {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("------------------------------------------");
 	}
 
 	public void ricercaContattoXml(){
@@ -329,6 +333,7 @@ public class XmlManager {
 					break;
 				}
 			}
+			System.out.println("------------------------------------------");
 			//System.out.println("Nessun contatto con questa email in rubrica");
 		}
 		else if (ricerca.equalsIgnoreCase("telefono")){
@@ -340,7 +345,9 @@ public class XmlManager {
 					break;
 				}
 			}
+			System.out.println("------------------------------------------");
 		}
+		
 		else {
 			System.out.println("DEVI PER FORZA RICERCARE PER EMAIL O TELEFONO.");
 		}
