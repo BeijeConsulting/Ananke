@@ -1,4 +1,4 @@
-package it.beije.ananke.capitolo5.astrazione;
+package it.beije.ananke.altro.capitolo5.astrazione;
 
 import java.util.*;
 

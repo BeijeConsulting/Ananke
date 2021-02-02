@@ -1,4 +1,4 @@
-package it.beije.ananke.capitolo5.astrazione;
+package it.beije.ananke.altro.capitolo5.astrazione;
 
 public class TwoInOne extends Notebook implements Touchscreen{
     private String CPU;
