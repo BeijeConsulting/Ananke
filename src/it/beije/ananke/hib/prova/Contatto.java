@@ -1,13 +1,26 @@
 package it.beije.ananke.hib.prova;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="rubrica")
 public class Contatto {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id")
 	private int id;
 	private String name;
 	private String surname;
 	private String telephone;
 	private String email;
 	
-	public Contatto() {
-		
+	public Contatto() {	
 	}
 	
 	public Contatto(String name, String surname, String telephone, String email) {

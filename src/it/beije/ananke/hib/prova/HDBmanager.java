@@ -14,7 +14,8 @@ import org.hibernate.sql.Update;
 
 public class HDBmanager {
 	static Scanner scanner = new Scanner(System.in);
-	static Configuration configuration = new Configuration().configure();
+	static Configuration configuration = new Configuration().configure()
+			.addAnnotatedClass(Contatto.class);
 
 	public static void main(String[] args) {
 
