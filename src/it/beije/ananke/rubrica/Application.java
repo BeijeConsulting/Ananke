@@ -43,6 +43,7 @@ public class Application {
 	public void exportFile(List<Contatti> l) {
 		Scanner sc = new Scanner(System.in);
 		String s;
+		
 		System.out.println("Inserisci il nome del file");
 		 s = "/Users/Gianni/Desktop/" + sc.next().trim();
 		 System.out.println(s.substring(s.length()-3, s.length()));
@@ -62,7 +63,7 @@ public class Application {
 	public void menu() {
 		Scanner sc = new Scanner(System.in);
 		Rubrica r1 = new Rubrica();
-		
+		HDBManager.readDB();
 		String s,addmore;
 		do {
 			System.out.println("Inserisci un numero per svolgere un comando: ");

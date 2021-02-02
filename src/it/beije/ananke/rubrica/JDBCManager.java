@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class JDBCManager {
 	public static final String DB_USER = "root";
-	public static final String DB_Password = "salop";
+	public static final String DB_Password = "Beije10";
 	public static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/ananke?serverTimezone=CET";
 	
 	private static Connection getConnection() {
@@ -84,7 +84,7 @@ public class JDBCManager {
 			preparedStatement.setString(1, c.getName());
 			preparedStatement.setString(2, c.getSurname());
 			preparedStatement.setString(3, c.getEmail());
-			preparedStatement.setString(4, c.getCell());
+			preparedStatement.setString(4, c.getTelephone());
 			preparedStatement.execute();
 		}
 		preparedStatement.close();

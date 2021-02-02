@@ -92,7 +92,7 @@ public class Rubrica {
 	for(Contatti c : this.r) {
 		sb.append("Contatto: " + Integer.toString(i++) + "\n");
 		
-		sb.append("Name: " + c.getName()).append(" Surname: " + c.getSurname()).append(" Email: " + c.getEmail()).append(" Telephone: " + c.getCell());
+		sb.append("Name: " + c.getName()).append(" Surname: " + c.getSurname()).append(" Email: " + c.getEmail()).append(" Telephone: " + c.getTelephone());
 	sb.append("\n");
 	}
 	

@@ -6,21 +6,30 @@ import java.util.*;
 
 public class Contatti {
 	
+	public int id;
 	public String name;
 	public String surname;
 	public String email;
-	public String cell;
+	public String telephone;
 	
 	public Contatti() {
 		
 	}
-	public Contatti(String name, String surname, String email, String cell) {
+	public Contatti(String name, String surname, String email, String telephone) {
 		this.name= name;
 		this.surname = surname;
 		this.email = email;
-		this.cell = cell;
+		this.telephone = telephone;
 	}
 	
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	public String getName() {
 		return name;
@@ -51,16 +60,16 @@ public class Contatti {
 		this.email = email;
 	}
 
-	public String getCell() {
-		return cell;
+	public String getTelephone() {
+		return telephone;
 	}
 
 	public void setCell(String cell) {
-		this.cell = cell;
+		this.telephone = cell;
 	}
 
 	public boolean searchProperties(String s) {
-		if(this.cell == s || this.email == s || this.name == s || this.surname == s ) {
+		if(this.telephone == s || this.email == s || this.name == s || this.surname == s ) {
 			return true;
 		} else {
 			return false;
@@ -73,7 +82,7 @@ public class Contatti {
 		sb.append(this.getName()).append(",");
 		sb.append(this.getSurname()).append(",");
 		sb.append(this.getEmail()).append(",");
-		sb.append(this.getCell());
+		sb.append(this.getTelephone());
 		
 		return sb.toString();
 	}

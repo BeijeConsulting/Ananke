@@ -103,7 +103,7 @@ public static void writeXML(List<Contatti> l, String s) throws ParserConfigurati
         	contatto.appendChild(email);
         	
         	telephone = document.createElement("telephone");
-        	telephone.setTextContent(c.getCell());
+        	telephone.setTextContent(c.getTelephone());
         	contatto.appendChild(telephone);
         	rubrica.appendChild(contatto);
         	}
