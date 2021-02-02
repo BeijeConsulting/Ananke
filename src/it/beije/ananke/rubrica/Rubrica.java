@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -31,11 +32,17 @@ import org.xml.sax.SAXException;
 
 public class Rubrica {
 		
+	final Scanner sc = new Scanner(System.in);
 	List<Contatto> contatti = new ArrayList<Contatto>();
+	DBManager dbManager = new DBManager("root","Beije09","jdbc:mysql://localhost:3306/ananke?serverTimezone=CET");
 
 	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerException {
 		Rubrica rubrica = new Rubrica();
-		Scanner sc = new Scanner(System.in);
+		rubrica.menuPrincipale();		
+		
+	}
+	
+	public void menuPrincipale() throws IOException, ParserConfigurationException, SAXException, TransformerException {
 
 		boolean controllo = false;
 		int opzioneScelta = 0;
@@ -53,7 +60,8 @@ public class Rubrica {
 						+ "5 = Esporta la lista dei contatti in un file xml\n"
 						+ "6 = Ricerca contatto\n"
 						+ "7 = Elimina contatto\n"
-						+ "8 = Modifica contatto\n");
+						+ "8 = Modifica contatto\n"
+						+ "9 = Operazioni DB");
 				try {
 					opzioneScelta = Integer.parseInt(sc.next());
 					controllo = true;
@@ -61,7 +69,7 @@ public class Rubrica {
 					System.out.println("Opzione non disponibile");
 				}
 			}
-			if(opzioneScelta != 0 && opzioneScelta != 6 && opzioneScelta !=7 && opzioneScelta != 8) {
+			if(opzioneScelta >1 && opzioneScelta < 6) {
 				System.out.println("Inserire il path del file");
 				filePath = sc.next();
 			}
@@ -69,89 +77,179 @@ public class Rubrica {
 			switch(opzioneScelta) {
 				case 0: System.exit(0);
 				case 1: {
-					rubrica.aggiungiContatto(filePath);
+					aggiungiContatto(filePath);
 					break;
 				}
 				case 2: {
-					rubrica.importaCsv(filePath);
+					importaCsv(filePath);
 					break;
 				}
 				case 3: {
-					rubrica.esportaCsv(filePath);
+					esportaCsv(filePath);
 					break;
 				}
 				case 4: {
-					rubrica.importaXml(filePath);
+					importaXml(filePath);
 					break;
 				}
 				case 5: {
-					rubrica.esportaXml(filePath);
+					esportaXml(filePath);
 					break;
 				}
 				case 6: {
-					rubrica.ricercaContatto();
+					ricercaContatto();
 					break;
 				}
 				case 7: {
-					rubrica.eliminaContatto();
+					eliminaContatto();
 					break;
 				}
 				case 8: {
-					rubrica.modificaContatto();
+					modificaContatto();
+					break;
+				}
+				case 9: {
+					menuDB();
 					break;
 				}
 			}
 			controllo = false;
 			System.out.println("Continuare? (s/n)");
-			if(sc.next().equalsIgnoreCase("s")) {			
-			}else {
+			if(sc.next().equalsIgnoreCase("n")) {			
 				stop = true;
 			}
 		}
 		sc.close();
 	}
 	
-	public void stampaContatti() {
+	public void menuDB() throws IOException, ParserConfigurationException, SAXException, TransformerException {
+		boolean controllo = false;
+		int opzioneScelta = 0;
+		
+		while(!controllo) {
+			System.out.println("Seleziona l'operazione da svolgere\n"
+					+ "0 = Torna al menu principale\n"
+					+ "1 = Aggiungi contatto\n"
+					+ "2 = Ricerca contatto\n"
+					+ "3 = Elimina contatto\n"
+					+ "4 = Modifica contatto");
+		
+		
+		try {
+			opzioneScelta = Integer.parseInt(sc.next());
+			controllo = true;
+		}catch(NumberFormatException e) {
+			System.out.println("Opzione non disponibile");
+		}
+		
+		
+		switch(opzioneScelta) {
+			case 0:{
+				menuPrincipale();
+				break;
+			}
+			case 1: {
+				dbManager.aggiungiContattoDB(letturaContatto());
+				break;
+			}
+			case 2: {
+				dbManager.ricercaContattoDB(letturaContatto());
+				break;
+			}
+			case 3: {
+				dbManager.eliminaContattoDB(letturaEmail());
+				break;
+			}
+			case 4: {
+				break;
+			}
+			
+		}
+		}
+	}
+	
+	public void stampaContatti(List<Contatto> contatti) {
 		for(Contatto contatto : contatti) {
 			System.out.println(contatto.toString());
 		}
 	}
 	
+	public Contatto letturaContatto() {
+		Contatto contatto = new Contatto();
+		boolean stop = false;	
+		boolean controllo = false;
+		int opzioneScelta = 0;
+		
+		do {
+			while(!controllo) {
+				controllo = false;
+				System.out.println("1 = Inserisci il nome\n"
+						+ "2 = Inserisci il cognome\n"
+						+ "3 = Inserisci l'email\n"
+						+ "4 = Inserisci il telefono\n"
+						+ "5 = Procedi");		
+				
+				try {
+					opzioneScelta = Integer.parseInt(sc.next());
+					controllo = true;
+				}catch(NumberFormatException e) {
+					System.out.println("Opzione non disponibile");
+				}
+			}
+			controllo = false;
+			
+			switch(opzioneScelta) {
+				case 1: {
+					System.out.println("Inserire il nome");
+					contatto.setNome(sc.next()); 
+					break;
+				}
+				case 2:{
+					System.out.println("Inserire il cognome");
+					contatto.setCognome(sc.next());
+					break;
+				}
+				case 3:{
+					System.out.println("Inserire l'email");
+					contatto.setEmail(sc.next()); 
+					break;
+				}
+				case 4:{
+					System.out.println("Inserire il telefono");
+					contatto.setTelefono(sc.next());
+					break;
+				}
+				case 5:{
+					stop = true;
+					break;
+				}
+			}
+			
+		
+			if(contatto.getNome().equals("") && contatto.getCognome().equals("") &&
+					contatto.getEmail().equals("") && contatto.getTelefono().equals("")) {
+					System.out.println("E' necessario riempire almeno un campo");
+					stop = false;
+			}
+		}while(!stop);
+		return contatto;
+	}
+	
 	public void aggiungiContatto(String filePath) throws IOException {
 		
 		Contatto contatto = new Contatto();
-		boolean stop = false;	
-		Scanner sc = new Scanner(System.in);
-		
-		while (!stop) {
-		
-			System.out.println("Inserire il nome");
-			contatto.setNome(sc.next()); 
+					
+		System.out.println("Aggiungi contatto");
+		contatto = letturaContatto();
+		Files.write(Paths.get(filePath), contatto.toString().getBytes(),
+								StandardOpenOption.APPEND);
+					
+						//dbManager.aggiungiContattoDB(contatto);				
 			
-			System.out.println("Inserire il cognome");
-			contatto.setCognome(sc.next());
-			
-			System.out.println("Inserire il email");
-			contatto.setEmail(sc.next()); 
-			
-			System.out.println("Inserire il telefono");
-			contatto.setTelefono(sc.next());
-			
-			//fw.append(contatto.toString());
-			Files.write(Paths.get(filePath), contatto.toString().getBytes(),
-					StandardOpenOption.APPEND);
-			
-			System.out.println("Continuare? (s/n)");
-			if(sc.next().equalsIgnoreCase("s")) {
-				Files.write(Paths.get(filePath), "\n".getBytes(),
-						StandardOpenOption.APPEND);			
-			}else {
-				stop = true;
-			}
-			
+		System.out.println("Continuare? (s/n)");
+		if(sc.next().equalsIgnoreCase("s")) {
+			Files.write(Paths.get(filePath), "\n".getBytes(),StandardOpenOption.APPEND);		
 		}
-		//fw.close();
-		sc.close();
 	}
 	
 	public void importaCsv(String filePath) throws IOException {
@@ -173,7 +271,7 @@ public class Rubrica {
 			contatti.add(contatto);
 		}
 		
-		stampaContatti();
+		stampaContatti(contatti);
 	}
 	
 	public void esportaCsv(String filePath) throws IOException {
@@ -184,7 +282,6 @@ public class Rubrica {
 		for(Contatto contatto : contatti) {
 			fw.write(contatto.toString() + "\n");
 		}
-		
 		fw.close();
 	}
 	
@@ -288,68 +385,20 @@ public class Rubrica {
         
 	}
 	
-	public List<Contatto> ricercaContatto() {
-		
-		Scanner sc = new Scanner(System.in);
-		List<Contatto> contattiTrovati = new ArrayList<Contatto>();
-
-		String risposta = "";
-		String nome = "";
-		String cognome = "";
+	public String letturaEmail() {
 		String email = "";
-		String telefono = "";
-		int opzioneScelta = 0;
-		boolean controllo = false;
-		boolean stop = false;
+		System.out.println("Ricerca contatto");
+		System.out.println("Inserisci l'email");
+		email = sc.next();
+		return email;
+	}
+	
+	public List<Contatto> ricercaContatto() {
+		List<Contatto> contattiTrovati = new ArrayList<Contatto>();
 		Contatto contattoCercato = new Contatto();
 		
 		System.out.println("Ricerca contatto");
-		
-		while(!stop) {
-			while(!controllo) {
-				System.out.println("1 = Inserisci il nome\n"
-						+ "2 = Inserisci il cognome\n"
-						+ "3 = Inserisci l' email\n"
-						+ "4 = Inserisci il telefono\n"
-						+ "5 = Procedi");
-				
-				try {
-					opzioneScelta = Integer.parseInt(sc.next());
-					controllo = true;
-				}catch(NumberFormatException e) {
-					System.out.println("Opzione non disponibile");
-				}
-			}
-			
-			controllo = false;
-			
-			switch(opzioneScelta) {
-				case 1:{
-					System.out.println("Inserire il nome");
-					contattoCercato.setNome(sc.next());
-					break;
-				}
-				case 2:{
-					System.out.println("Inserire il cognome");
-					contattoCercato.setCognome(sc.next());
-					break;
-				}
-				case 3:{
-					System.out.println("Inserire il l'email");
-					contattoCercato.setEmail(sc.next());
-					break;
-				}
-				case 4:{
-					System.out.println("Inserire il telefono");
-					contattoCercato.setTelefono(sc.next());
-					break;
-				}
-				case 5:{
-					stop = true;
-					break;
-				}
-			}		
-		}
+		contattoCercato = letturaContatto();
 		
 		for(Contatto contatto : contatti) {
 			if(contatto.equals(contattoCercato)) {
@@ -360,31 +409,29 @@ public class Rubrica {
 		if(contattiTrovati.isEmpty()) {
 			System.out.println("Nessun contatto trovato");
 		}else {
-			stampaContatti();
+			stampaContatti(contattiTrovati);
 		}
 		return contattiTrovati;
 	}
 	
 	public void eliminaContatto() {
 		List<Contatto> contattiTrovati = new ArrayList<Contatto>();
-		Scanner sc = new Scanner(System.in);
 		contattiTrovati = ricercaContatto();
 		System.out.println("Eliminare i contatti? (s/n)");
 		if(sc.next().equalsIgnoreCase("s")) {
 			contatti.removeAll(contattiTrovati);
 		}
-		stampaContatti();
+		stampaContatti(contatti);
 	}
 	
+	
 	public void modificaContatto() {
-		String nome = "";
-		String cognome = "";
-		String email = "";
-		String telefono = "";
-		boolean controllo = false;
-		int opzioneScelta = 0;
+		String nome = null;
+		String cognome = null;
+		String email = null;
+		String telefono = null;
 		List<Contatto> contattiTrovati = new ArrayList<Contatto>();
-		Scanner sc = new Scanner(System.in);
+		Contatto contattoModificato = null;
 		
 		contattiTrovati = ricercaContatto();
 		
@@ -392,57 +439,34 @@ public class Rubrica {
 			System.out.println("Modificare i contatti? (s/n)");
 		
 		if(sc.next().equalsIgnoreCase("s")) {
-			while(!controllo) {
-				System.out.println("1 = Modifica nome\n"
-						+ "2 = Modifica cognome\n"
-						+ "3 = Modifica email\n"
-						+ "4 = Modifica telefono\n");
-				
-				try {
-					opzioneScelta = Integer.parseInt(sc.next());
-					controllo = true;
-				}catch(NumberFormatException e) {
-					System.out.println("Opzione non disponibile");
-				}
-			}
+			contattoModificato = letturaContatto();
+			nome = contattoModificato.getNome();
+			cognome = contattoModificato.getCognome();
+			email = contattoModificato.getEmail();
+			telefono = contattoModificato.getTelefono();
 			
-			switch(opzioneScelta) {
-				case 1: {
-					System.out.println("Inserire il nome");
-					nome = sc.next();
-					for(Contatto contatto : contattiTrovati) {
-						contatto.setNome(nome);
-					}
-					break;
-				}
-				case 2:{
-					System.out.println("Inserire il cognome");
-					cognome = sc.next();
-					for(Contatto contatto : contattiTrovati) {
-						contatto.setCognome(cognome);
-					}
-					break;
-				}
-				case 3:{
-					System.out.println("Inserire l'email");
-					email = sc.next();
-					for(Contatto contatto : contattiTrovati) {
-						contatto.setEmail(email);
-					}
-					break;
-				}
-				case 4:{
-					System.out.println("Inserire il telefono");
-					telefono = sc.next();
-					for(Contatto contatto : contattiTrovati) {
-						contatto.setTelefono(telefono);
-					}
-					break;
+			if(!nome.equals("")) {
+				for(Contatto contatto : contattiTrovati) {
+					contatto.setNome(nome);
 				}
 			}
+			if(cognome.equals("")) {
+				for(Contatto contatto : contattiTrovati) {
+					contatto.setCognome(cognome);
+				}
+			}
+			if(email.equals("")) {
+				for(Contatto contatto : contattiTrovati) {
+					contatto.setEmail(email);
+				}
+			}
+			if(telefono.equals("")) {
+				for(Contatto contatto : contattiTrovati) {
+					contatto.setTelefono(telefono);
+				}
+			}	
 		}
-		stampaContatti();
+		stampaContatti(contatti);
 	}
-	
 	}
 }

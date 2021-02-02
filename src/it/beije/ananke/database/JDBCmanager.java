@@ -72,8 +72,6 @@ public class JDBCmanager {
 			} catch (SQLException sqlEx) {
 				sqlEx.printStackTrace();
 			}
-		}
-		
+		}	
 	}
-
 }
