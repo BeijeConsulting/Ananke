@@ -70,7 +70,7 @@ public class UsersInJdbcManager implements UserManager{
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
 				if(resultSet.getString("email").equals(email)) {
-					user = new User(resultSet.getInt("id"), resultSet.getString("firstName"),resultSet.getString("lastName")
+					user = new User(resultSet.getString("firstName"),resultSet.getString("lastName")
 							,resultSet.getString("email"),resultSet.getString("phoneNumber") );
 					preparedStatement.close();
 					return user;
@@ -130,7 +130,7 @@ public class UsersInJdbcManager implements UserManager{
 		lastName = resultSet.getString("lastName");
 		email = resultSet.getString("email");
 		phoneNumber = resultSet.getString("phoneNumber");
-		User user = new User(id,firstName,lastName,email,phoneNumber);
+		User user = new User(firstName,lastName,email,phoneNumber);
 		return user;
 	}
 	boolean isUserAlreadyExist(String email) {
