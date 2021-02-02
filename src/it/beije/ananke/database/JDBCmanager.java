@@ -11,7 +11,7 @@ import java.sql.Statement;
 public class JDBCmanager {
 	
 	public static final String DB_USER = "root";
-	public static final String DB_PASSWORD = "beije";
+	public static final String DB_PASSWORD = "Padawan02May4BeWithYou";
 	public static final String DB_URL = "jdbc:mysql://localhost:3306/ananke?serverTimezone=CET";
 
 	public static void main(String[] args) {
@@ -36,7 +36,7 @@ public class JDBCmanager {
 //			System.out.println(insert);
 //			statement.execute(insert);
 			
-			String psInsert = "INSERT INTO contatti (name,surname) VALUES (?,?)";
+			String psInsert = "INSERT INTO contat (name,surname) VALUES (?,?)";
 			preparedStatement = connection.prepareStatement(psInsert);
 			
 			for (int i=1; i <= 2; i++) {
@@ -48,7 +48,7 @@ public class JDBCmanager {
 			
 //			statement.executeUpdate("UPDATE contatti set name = 'Pippo' WHERE surname = 'prova'");
 			
-			rs = statement.executeQuery("SELECT * FROM contatti");
+			rs = statement.executeQuery("SELECT * FROM contact");
 			
 			while (rs.next()) {
 				System.out.println("id : " + rs.getInt("id"));
