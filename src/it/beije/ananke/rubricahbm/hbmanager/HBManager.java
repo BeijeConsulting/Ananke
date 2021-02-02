@@ -1,11 +1,12 @@
 package it.beije.ananke.rubricahbm.hbmanager;
 
-import it.beije.ananke.Contatto;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+
+import it.beije.ananke.rubricahbm.Contact;
 
 import java.util.List;
 
@@ -21,18 +22,18 @@ public class HBManager {
 
         //SQL : "SELECT * FROM contatti"
         //HQL
-        String hqlSelect = "SELECT c FROM Contatto as c";
-        Query<Contatto> query = session.createQuery(hqlSelect);
-        List<Contatto> contatti = query.list();
+        String hqlSelect = "SELECT c FROM Contact as c";
+        Query<Contact> query = session.createQuery(hqlSelect);
+        List<Contact> contatti = query.list();
         System.out.println(contatti.size());
-//
-//		for (Contatto contatto : query.list()) {
-//			System.out.println("id : " + contatto.getId());
-//			System.out.println("name : " + contatto.getName());
-//			System.out.println("surname : " + contatto.getSurname());
-//			System.out.println("telephone : " + contatto.getTelephone());
-//			System.out.println("email : " + contatto.getEmail());
-//		}
+
+		for (Contact contatto : query.list()) {
+			System.out.println("id : " + contatto.getId());
+			System.out.println("name : " + contatto.getFirstName());
+			System.out.println("surname : " + contatto.getLastName());
+			System.out.println("telephone : " + contatto.getPhoneNumber());
+			System.out.println("email : " + contatto.getEmail());
+		}
 
         //apro transazione
 //        Transaction transaction = session.beginTransaction();
