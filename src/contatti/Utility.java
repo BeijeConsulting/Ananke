@@ -99,11 +99,7 @@ public class Utility {
 	}
 	public static void printUsers(List<User> list) {
 		for (User user : list) {
-			System.out.println("id : " + user.getId());
-			System.out.println("firstName : " + user.getFirstName());
-			System.out.println("lastName : " + user.getLastName());
-			System.out.println("email : " + user.getEmail());
-			System.out.println("phoneNumber : " + user.getPhoneNumber());
+			user.displayUser();
 		}
 	}
 }
