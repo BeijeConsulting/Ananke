@@ -10,7 +10,7 @@ public class HibernateSessionManager {
 	private HibernateSessionManager() {}
 	
 	private static SessionFactory sessionFactory;
-	
+
 	public static Session getSession() {
 		
 		if (sessionFactory == null) {
@@ -24,3 +24,5 @@ public class HibernateSessionManager {
 	}
 
 }
+
+

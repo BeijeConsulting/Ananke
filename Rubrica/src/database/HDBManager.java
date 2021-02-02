@@ -13,17 +13,26 @@ import entità.Contatto;
 
 public class HDBManager {
 		
+		/*
 		Configuration configuration = new Configuration().configure()
 				.addAnnotatedClass(Contatto.class);
 
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
 		
 		Session session;
+		*/
+	
+		static Session session;
 		
 		
 		public void connettiDb() {
 		
+			/*
 			session = sessionFactory.openSession();
+			System.out.println("session is open ? " + session.isOpen());
+			*/
+			
+			session = HibernateSessionManager.getSession();
 			System.out.println("session is open ? " + session.isOpen());
 		
 		}		
