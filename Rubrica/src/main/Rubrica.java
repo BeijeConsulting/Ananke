@@ -1,3 +1,4 @@
+package main;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -7,20 +8,20 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
-import database.HDBManager;
+import database.JDBCManager;
 import entità.Contatto;
 import fileManager.ManagerCsv;
 import fileManager.ManagerXml;
 
-public class RubricaHDB {
+public class Rubrica {
 	
 	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerException, SQLException {
-		
+	
 		ManagerCsv managerCsv = new ManagerCsv();
 		ManagerXml managerXml = new ManagerXml();
-		HDBManager managerHDB = new HDBManager();
+		JDBCManager managerJDBC = new JDBCManager();
 		
-		managerHDB.connettiDb();
+		managerJDBC.connettiDb();
 		
 		Scanner scanner = new Scanner(System.in);
 		
@@ -28,7 +29,6 @@ public class RubricaHDB {
 		String tipoRubrica = "";
 	
 	do {
-		System.out.println("");
 		System.out.println("Su quale rubrica vuoi operare? ");
 		System.out.println("| xml | csv | db |");
 		
@@ -125,7 +125,7 @@ public class RubricaHDB {
 			
 			managerXml.aggiungiContatto(tempContatto);
 			
-		}else managerHDB.inserisciContattoDb(tempContatto);;				
+		}else managerJDBC.inserisciContattoDb(tempContatto);				
 		
 	}
 	
@@ -149,7 +149,7 @@ public class RubricaHDB {
 		
 		else {
 			
-			managerHDB.cercaContattoDb(nomeDaCercare, cognomeDaCercare);
+			managerJDBC.cercaContattoDb(nomeDaCercare, cognomeDaCercare);
 			
 		}
 		
@@ -177,7 +177,7 @@ public class RubricaHDB {
 		
 		}else {
 			
-			tempContatto = managerHDB.cercaContattoDb(nomeDaModificare, cognomeDaModificare);
+			tempContatto = managerJDBC.cercaContattoDb(nomeDaModificare, cognomeDaModificare);
 			
 		}
 		
@@ -210,7 +210,7 @@ public class RubricaHDB {
 				
 				}else {
 					
-					managerHDB.modificaNomeContattoDb(tempContatto, nomeNuovo);
+					managerJDBC.modificaNomeContattoDb(tempContatto, nomeNuovo);
 					
 				}
 				
@@ -235,13 +235,13 @@ public class RubricaHDB {
 				
 				} else {
 					
-					managerHDB.modificaCognomeContattoDb(tempContatto, cognomeNuovo);
+					managerJDBC.modificaCognomeContattoDb(tempContatto, cognomeNuovo);
 					
 				}
 				
 			}
 
-			
+			/*
 			if(sceltaModifica.contentEquals("3")) {
 				
 				String telefonoNuovo = null;
@@ -251,19 +251,16 @@ public class RubricaHDB {
 				
 				if (tipoRubrica.equalsIgnoreCase("csv")) {
 					
-					managerCsv.modificaTelefono(tempContatto, telefonoNuovo);
+					managerCsv.modificaNome(tempContatto, telefonoNuovo);
 					
-				} else if (tipoRubrica.equalsIgnoreCase("xml")){
-					
-					managerXml.modificaTelefono(tempContatto, telefonoNuovo);
-				
 				} else {
 					
-					managerHDB.modificaTelefonoContattoDb(tempContatto, telefonoNuovo);
-					
+					managerXml.modificaNome(tempContatto, telefonoNuovo);
+				
 				}
 				
 			}
+			*/
 			
 			if(sceltaModifica.contentEquals("3")) {
 				
@@ -276,13 +273,13 @@ public class RubricaHDB {
 					
 					managerCsv.modificaEmail(tempContatto, emailNuova);
 					
-				} else if (tipoRubrica.equalsIgnoreCase("xml")){
+				} else if (tipoRubrica.equalsIgnoreCase("csv")){
 					
 					managerXml.modificaEmail(tempContatto, emailNuova);
 				
 				} else {
 					
-					managerHDB.modificaEmailContattoDb(tempContatto, emailNuova);
+					managerJDBC.modificaEmailContattoDb(tempContatto, emailNuova);
 					
 				}
 				
@@ -305,11 +302,11 @@ public class RubricaHDB {
 			
 			managerCsv.elimina(nomeDaEliminare, cognomeDaEliminare);
 			
-		} else if (tipoRubrica.equalsIgnoreCase("xml")){
+		} else {
 			
 			managerXml.elimina(nomeDaEliminare, cognomeDaEliminare);
 		
-		} else managerHDB.eliminaContattoDb(nomeDaEliminare, cognomeDaEliminare);
+		}
 		
 		
 	}
@@ -336,7 +333,7 @@ public class RubricaHDB {
 		
 		System.out.println("Lista dei contatti presenti nel DB");
 		
-		managerHDB.visualizzaContattiDb();
+		managerJDBC.visualizzaContattiDb();
 		
 	}
 	
@@ -371,7 +368,7 @@ public class RubricaHDB {
 	
 		scanner.close();
 		
-		// managerHDB.chiudiConnessioneDb();
+		managerJDBC.chiudiConnessioneDb();
 
 	}
 	
