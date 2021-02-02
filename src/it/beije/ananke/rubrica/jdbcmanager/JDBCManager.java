@@ -11,9 +11,9 @@ public class JDBCManager {
 
     public static final String DB_USER = "root";
     public static final String DB_PASSWORD = "skull.island";
-    public static final String DB_URL = "jdbc:mysql://localhost:3306/primo_schema?serverTimezone=CET";
+    public static final String DB_URL = "jdbc:mysql://localhost:3306/ananke?serverTimezone=CET";
 
-    public static void insert(String firstName, String lastName, String phoneNumber, String email) {
+    public static void insert(Contact contact) {
         Connection connection = null;
 
         try {
@@ -24,11 +24,22 @@ public class JDBCManager {
             String sql = "INSERT INTO contatti (first_name, last_name, phone_number, email) VALUES (?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, firstName);
-            preparedStatement.setString(2, lastName);
-            preparedStatement.setString(3, phoneNumber);
-            preparedStatement.setString(4, email);
+            preparedStatement.setString(1, contact.getFirstName());
+            preparedStatement.setString(2, contact.getLastName());
+            preparedStatement.setString(3, contact.getPhoneNumber());
+            preparedStatement.setString(4, contact.getEmail());
             preparedStatement.execute();
+
+            String idSql = "SELECT * FROM contatti WHERE " +
+                    "first_name = '" + contact.getFirstName() +
+                    "', last_name = '" + contact.getLastName() +
+                    "', phone_number = '" + contact.getPhoneNumber() +
+                    "', email = '" + contact.getEmail() + "';";
+            System.out.println(idSql);
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(idSql);
+            contact.setId(rs.getInt(1));
+
 
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -41,53 +52,53 @@ public class JDBCManager {
         }
     }
 
-    //sviluppare
-    public static void delete(Scanner scanner) {
-        List<Contact> contacts = selectByField(scanner);
+    public static void delete(Contact contact) {
         Connection connection = null;
-        if (!contacts.isEmpty()) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            String sql = "DELETE FROM contatti where id = " + contact.getId();
+            Statement statement = connection.createStatement();
+            statement.execute(sql);
+            System.out.println("Contact deleted");
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-
-                while(true) {
-                    System.out.println("Select ID");
-                    String id = Integer.valueOf(scanner.nextInt()).toString();
-                    String testsql = "SELECT * FROM contatti WHERE id = " + id + ";";
-                    System.out.println(testsql);
-                    Statement statement = connection.createStatement();
-                    ResultSet rs = statement.executeQuery(testsql);
-                    List<Integer> id_s = new ArrayList<>();
-                    while(rs.next()) {
-                        id_s.add(rs.getInt(1));
-                    }
-
-                    //blocco di codice da rivedere
-                    for(Integer i : id_s) {
-                        if (id.equals(id_s.get(i))) {
-                            String sql = "DELETE FROM contatti where id = " + id;
-                            statement = connection.createStatement();
-                            statement.execute(sql);
-                            break;
-                        }
-                    }
-                }
-
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    connection.close();
-                } catch (SQLException SQLEx) {
-                    SQLEx.printStackTrace();
-                }
+                connection.close();
+            } catch (SQLException SQLEx) {
+                SQLEx.printStackTrace();
             }
-        } else {
-            System.out.println("No match found");
         }
     }
 
-    public static void selectAll() {
+    public static void update(Contact contact) {
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            String sql = "UPDATE contatti SET "+
+                    "first_name = '" + contact.getFirstName() +
+                    "', last_name = '" + contact.getLastName() +
+                    "', phone_number = '" + contact.getPhoneNumber() +
+                    "', last_name = '" + contact.getEmail() + "'"
+                    + " where id = " + contact.getId();
+            Statement statement = connection.createStatement();
+            statement.execute(sql);
+            System.out.println("Contact updated");
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException SQLEx) {
+                SQLEx.printStackTrace();
+            }
+        }
+    }
+
+    public static List<Contact> selectAll() {
+        List<Contact> contacts = new ArrayList<>();
         Connection connection = null;
 
         try {
@@ -105,6 +116,13 @@ public class JDBCManager {
                 System.out.println("Tel: " + rs.getString(4));
                 System.out.println("Email: " + rs.getString(5));
                 System.out.println("--------------------------");
+                Contact contact = new Contact();
+                contact.setId(rs.getInt(1));
+                contact.setFirstName(rs.getString(2));
+                contact.setLastName(rs.getString(3));
+                contact.setPhoneNumber(rs.getString(4));
+                contact.setEmail(rs.getString(5));
+                contacts.add(contact);
             }
 
         } catch (ClassNotFoundException | SQLException e) {
@@ -116,9 +134,10 @@ public class JDBCManager {
                 SQLEx.printStackTrace();
             }
         }
+        return contacts;
     }
 
-    public static List<Contact> selectByField(Scanner scanner) {
+    public static List<Contact> selectByField(String field, String search) {
         Connection connection = null;
         List<Contact> contacts = new ArrayList<>();
 
@@ -126,34 +145,16 @@ public class JDBCManager {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
-            printSelectionMenu();
-            System.out.println("Specify the field where to search");
-            String field = null;
-            String test = scanner.nextLine();
-            switch (test) {
-                case "1":
-                    field = "first_name";
-                    System.out.println("Specify first name");
-                    break;
-                case "2":
-                    field = "last_name";
-                    System.out.println("Specify last name");
-                    break;
-                case "3":
-                    field = "phone_number";
-                    System.out.println("Specify phone number");
-                    break;
-                case "4":
-                    field = "email";
-                    System.out.println("Specify email");
-                    break;
-//                default:
-//                aggiungere la clausola default
+//            select * from contatti where (substring(first_name, 1, 7) = 'stefano');
+            String sql;
+            if(!field.equalsIgnoreCase("id")) {
+                sql = "SELECT * FROM contatti WHERE " +
+                        "substring(" + field + ", 1 , " + search.length() + ") = '" + search + "';";
+                System.out.println(sql);
+            } else {
+                sql = "SELECT * FROM contatti WHERE id = " + Integer.parseInt(search);
+                System.out.println(sql);
             }
-
-            String search = scanner.nextLine();
-            String sql = "SELECT * FROM contatti WHERE " + field + " = '" + search + "';";
-            System.out.println(sql);
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
 
@@ -164,7 +165,13 @@ public class JDBCManager {
                 System.out.println("Tel: " + rs.getString(4));
                 System.out.println("Email: " + rs.getString(5));
                 System.out.println("--------------------------");
-                Contact contact = new Contact(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+                Contact contact = new Contact();
+                contact.setId(rs.getInt(1));
+                contact.setFirstName(rs.getString(2));
+                contact.setLastName(rs.getString(3));
+                contact.setPhoneNumber(rs.getString(4));
+                contact.setEmail(rs.getString(5));
+                System.out.println(contact);
                 contacts.add(contact);
             }
 

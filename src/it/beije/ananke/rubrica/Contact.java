@@ -5,16 +5,10 @@ public class Contact {
     private String lastName;
     private String phoneNumber;
     private String email;
+    private int id;
 
     public Contact() {
 
-    }
-
-    public Contact(String firstName, String lastName, String phoneNumber, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
     }
 
     public String getFirstName() {
@@ -51,7 +45,8 @@ public class Contact {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(getFirstName()).append("\t")
+        sb.append(getId()).append("\t")
+                .append(getFirstName()).append("\t")
                 .append(getLastName()).append("\t")
                 .append(getPhoneNumber()).append("\t")
                 .append(getEmail());
@@ -62,9 +57,19 @@ public class Contact {
         if (c.getFirstName().equalsIgnoreCase(firstName) &&
                 c.getLastName().equalsIgnoreCase(lastName) &&
                 c.getPhoneNumber().equalsIgnoreCase(phoneNumber) &&
-                c.getEmail().equalsIgnoreCase(email)) {
+                c.getEmail().equalsIgnoreCase(email) &&
+                c.getId() == id) {
             return true;
         }
         return false;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 }

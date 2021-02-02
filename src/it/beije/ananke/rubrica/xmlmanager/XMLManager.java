@@ -90,7 +90,7 @@ public class XMLManager {
 
         for (int i = 0; i < contacts.size(); i++) {
             utente = document.createElement("contact");
-            utente.setAttribute("id", Integer.toString(i));
+            utente.setAttribute("id", Integer.valueOf(contacts.get(i).getId()).toString());
 
             firstName = document.createElement("firstName");
             firstName.setTextContent(contacts.get(i).getFirstName());

@@ -1,17 +1,33 @@
 package it.beije.ananke.rubrica.jdbcmanager;
 
+import it.beije.ananke.rubrica.Rubrica;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class JDBCTest {
     public static void main(String[] args) {
 //        JDBCManager.insert("Mario", "Alisei", "336335332", "marioalix@gmail.com");
         Scanner scanner = new Scanner(System.in);
-        JDBCManager.selectAll();
+//        JDBCManager.selectAll();
 
-//        JDBCManager.selectByField(scanner);
+//        JDBCManager.selectByField("first_name", "ste");
 
-        JDBCManager.delete(scanner);
+//        JDBCManager.delete(scanner);
+//        JDBCManager.insert("Gianni", "Caccino", "3385865695", "g.cacci@gmail.com");
 
+        Rubrica rubrica = new Rubrica();
+//        try {
+//            rubrica.exportToDB(scanner);
+//        } catch (IOException e) {
+//
+//        } catch (ParserConfigurationException e) {
+//
+//        }   catch (SAXException e) {
+//
+//        }
         scanner.close();
     }
 }

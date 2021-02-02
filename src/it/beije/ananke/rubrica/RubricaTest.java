@@ -14,7 +14,7 @@ public class RubricaTest {
         String root = "C:\\Users\\Padawan01\\IdeaProjects\\git\\Ananke\\src\\it\\beije\\ananke\\rubrica\\rubrica_";
         try {
             List<Contact> contacts = rubrica.readFromCSV(root);
-            rubrica.writeToXML(root, contacts);
+            rubrica.exportAsXML(root, contacts);
 
             rubrica.printContacts(contacts);
 
@@ -43,19 +43,19 @@ public class RubricaTest {
                         String nome = scanner.nextLine();
                         System.out.println("Inserisci cognome");
                         String cognome = scanner.nextLine();
-                        if (!rubrica.getContactByName(nome).isEmpty()) {
-                            System.out.println(rubrica.getContact(nome, cognome));
-                        } else {
-                            System.out.println("Contact not found");
-                        }
+//                        if (!rubrica.getContactByName(nome).isEmpty()) {
+//                            System.out.println(rubrica.getContact(nome, cognome));
+//                        } else {
+//                            System.out.println("Contact not found");
+//                        }
                         break;
-                    case 5:
-                        scanner.nextLine();
-                        System.out.println("Insert first name");
-                        String firstName = scanner.nextLine();
-                        List<Contact> contactByName = rubrica.getContactByName(firstName);
-                        rubrica.printContacts(contactByName);
-                        break;
+//                    case 5:
+//                        scanner.nextLine();
+//                        System.out.println("Insert first name");
+//                        String firstName = scanner.nextLine();
+//                        List<Contact> contactByName = rubrica.getContactByName(firstName);
+//                        rubrica.printContacts(contactByName);
+//                        break;
                     case 6:
                         scanner.nextLine();
                         System.out.println("Insert last name");
@@ -63,11 +63,11 @@ public class RubricaTest {
                         List<Contact> contactByLastName = rubrica.getContactByLastName(lastName);
                         rubrica.printContacts(contactByLastName);
                         break;
-                    case 7:
-                        System.out.println("Insert number");
-                        List<Contact> contactByNumber = rubrica.searchByNumber(scanner);
-                        rubrica.printContacts(contactByNumber);
-                        break;
+//                    case 7:
+//                        System.out.println("Insert number");
+//                        List<Contact> contactByNumber = rubrica.searchByNumber(scanner);
+//                        rubrica.printContacts(contactByNumber);
+//                        break;
                     case 8:
                         rubrica.orderByName();
                         break;

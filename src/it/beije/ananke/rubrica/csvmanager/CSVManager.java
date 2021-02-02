@@ -17,7 +17,11 @@ public class CSVManager {
             while (br.ready()) {
                 str = br.readLine();
                 data = str.split(";");
-                Contact contact = new Contact(data[0], data[1], data[2], data[3]);
+                Contact contact = new Contact();
+                contact.setFirstName(data[0]);
+                contact.setLastName(data[1]);
+                contact.setPhoneNumber(data[2]);
+                contact.setEmail(data[3]);
                 contact.toString();
                 contacts.add(contact);
             }
