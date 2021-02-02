@@ -1,6 +1,6 @@
-package it.beije.ananke.rubrica.xmlmanager;
+package it.beije.ananke.rubricajdbc.xmlmanager;
 
-import it.beije.ananke.rubrica.Contact;
+import it.beije.ananke.rubricajdbc.Contact;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -90,7 +90,7 @@ public class XMLManager {
 
         for (int i = 0; i < contacts.size(); i++) {
             utente = document.createElement("contact");
-            utente.setAttribute("id", Integer.valueOf(contacts.get(i).getId()).toString());
+            utente.setAttribute("id", Integer.valueOf(contacts.get(i).getId()+1).toString());
 
             firstName = document.createElement("firstName");
             firstName.setTextContent(contacts.get(i).getFirstName());

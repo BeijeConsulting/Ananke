@@ -1,4 +1,4 @@
-package it.beije.ananke.rubrica;
+package it.beije.ananke.rubricajdbc;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;

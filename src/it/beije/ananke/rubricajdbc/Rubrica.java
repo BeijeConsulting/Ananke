@@ -1,16 +1,13 @@
-package it.beije.ananke.rubrica;
+package it.beije.ananke.rubricajdbc;
 
-import it.beije.ananke.rubrica.csvmanager.CSVManager;
-import it.beije.ananke.rubrica.jdbcmanager.JDBCManager;
-import it.beije.ananke.rubrica.xmlmanager.XMLManager;
+import it.beije.ananke.rubricajdbc.csvmanager.CSVManager;
+import it.beije.ananke.rubricajdbc.jdbcmanager.JDBCManager;
+import it.beije.ananke.rubricajdbc.xmlmanager.XMLManager;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import java.io.*;
-import java.sql.SQLOutput;
-import java.sql.Statement;
 import java.util.*;
 
 public class Rubrica {

@@ -1,6 +1,6 @@
-package it.beije.ananke.rubrica.csvmanager;
+package it.beije.ananke.rubricajdbc.csvmanager;
 
-import it.beije.ananke.rubrica.Contact;
+import it.beije.ananke.rubricajdbc.Contact;
 
 import java.io.*;
 import java.util.ArrayList;

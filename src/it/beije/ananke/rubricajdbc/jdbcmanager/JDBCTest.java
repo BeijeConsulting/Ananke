@@ -1,10 +1,7 @@
-package it.beije.ananke.rubrica.jdbcmanager;
+package it.beije.ananke.rubricajdbc.jdbcmanager;
 
-import it.beije.ananke.rubrica.Rubrica;
-import org.xml.sax.SAXException;
+import it.beije.ananke.rubricajdbc.Rubrica;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class JDBCTest {

@@ -1,11 +1,10 @@
-package it.beije.ananke.rubrica.jdbcmanager;
+package it.beije.ananke.rubricajdbc.jdbcmanager;
 
-import it.beije.ananke.rubrica.Contact;
+import it.beije.ananke.rubricajdbc.Contact;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class JDBCManager {
 

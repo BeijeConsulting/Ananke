@@ -1,4 +1,4 @@
-package it.beije.ananke.rubrica;
+package it.beije.ananke.rubricajdbc;
 
 public class Contact {
     private String firstName;
