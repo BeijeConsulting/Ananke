@@ -60,9 +60,9 @@ public class DataManager {
 				case "0": stampa(connection, statement, rs); break;
 				case "1": aggiungiVoce(connection, statement, s); break;
 				case "2":  break;
-				case "3":  break;
+				case "3": eliminaVoce(connection, statement, rs, s); break;
 				case "4": ricerca(connection, statement, rs, s); break;
-				case "5":  break;
+				case "5": break;
 				case "6": break;
 				default: System.out.println("L'opzione selezionata non è valida.");
 			}
@@ -101,7 +101,7 @@ public class DataManager {
 			rs = statement.executeQuery("SELECT * FROM rubrica");
 			lettura(rs);
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		} finally {
 			try {
 				rs.close();
@@ -158,7 +158,13 @@ public class DataManager {
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
-			
+			try {
+				statement.close();
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		
