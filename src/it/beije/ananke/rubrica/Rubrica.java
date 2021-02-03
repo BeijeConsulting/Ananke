@@ -44,6 +44,11 @@ public class Rubrica {
 		
 	}
 	
+	public String leggiFilePath() {
+		System.out.println("Inserire il path del file");
+		return sc.next();
+	}
+	
 	public void menuPrincipale() throws IOException, ParserConfigurationException, SAXException, TransformerException {
 
 		boolean controllo = false;
@@ -168,6 +173,11 @@ public class Rubrica {
 				break;
 			}
 			case 4: {
+				List<Contatto> contattiTrovati = 
+						hdbManager.ricercaContattoHDB(letturaContatto(), session);
+				System.out.println("Modifica contatti");
+				Contatto contattoModificato = letturaContatto();
+				hdbManager.modificaContattoHDB(contattiTrovati, contattoModificato, session);
 				break;
 			}
 			
@@ -185,7 +195,11 @@ public class Rubrica {
 					+ "1 = Aggiungi contatto\n"
 					+ "2 = Ricerca contatto\n"
 					+ "3 = Elimina contatto\n"
-					+ "4 = Modifica contatto");
+					+ "4 = Modifica contatto\n"
+					+ "5 = Importa la lista dei contatti da csv\n"
+					+ "6 = Esporta la lista dei contatti in un file csv\n"
+					+ "7 = Importa la lista dei contatti da un file xml\n"
+					+ "8 = Esporta la lista dei contatti in un file xml\n");
 		
 		
 		try {
@@ -214,6 +228,19 @@ public class Rubrica {
 				break;
 			}
 			case 4: {
+				break;
+			}
+			case 5: {
+				dbManager.importaCsvDB(importaCsv(leggiFilePath()));
+				break;
+			}
+			case 6: {
+				break;
+			}
+			case 7: {
+				break;
+			}
+			case 8: {
 				break;
 			}
 			
@@ -305,7 +332,7 @@ public class Rubrica {
 		}
 	}
 	
-	public void importaCsv(String filePath) throws IOException {
+	public List<Contatto> importaCsv(String filePath) throws IOException {
 		
 		File file = new File(filePath);
 		
@@ -324,7 +351,10 @@ public class Rubrica {
 			contatti.add(contatto);
 		}
 		
+		br.close();
+		fr.close();
 		stampaContatti(contatti);
+		return contatti;
 	}
 	
 	public void esportaCsv(String filePath) throws IOException {

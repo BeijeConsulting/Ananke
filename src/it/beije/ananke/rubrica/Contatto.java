@@ -1,13 +1,34 @@
 package it.beije.ananke.rubrica;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 // C://Users//Padawan09//Desktop//rubrica.xml
 // C://Users//Padawan09//Desktop//rubrica.txt
 
+@Entity
+@Table(name="contatti")
 public class Contatto {
+	
+	@Column(name="name")
 	private String nome = "";
+	
+	@Column(name="surname")
 	private String cognome = "";
+	
+	@Column(name="email")
 	private String email = "";
+	
+	@Column(name="telephone")
 	private String telefono = "";
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id")
 	private int id;
 	
 	public int getId() {

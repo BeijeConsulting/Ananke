@@ -11,7 +11,8 @@ import org.hibernate.query.Query;
 public class HDBManager {
 	
 	public Session getSession() {
-		Configuration configuration = new Configuration().configure();
+		Configuration configuration = new Configuration().configure()
+				.addAnnotatedClass(Contatto.class);
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		return session;
@@ -31,74 +32,69 @@ public class HDBManager {
 		System.out.println("Contatto aggiunto");
 			
 	}
-	
-	public void modificaContattoDB() {
-		
-	}
 
-	public void ricercaContattoHDB(Contatto contatto, Session session) {
-		String ricerca = "SELECT c FROM Contatto as c WHERE "
-				+ "(c.nome = :param1 OR :param2) AND "
-				+ "(c.cognome = :param3 OR :param4) AND "
-				+ "(c.email = :param5 OR :param6) AND "
-				+ "(c.telefono = :param7 OR :param8)";
+	public List<Contatto> ricercaContattoHDB(Contatto contatto, Session session) {
 		
+		System.out.println("Ricerca contatti");
+		
+		String ricerca = "SELECT c FROM Contatto as c WHERE ";
+		
+		if(!contatto.getNome().trim().equals("")) {
+			ricerca += "nome ='" + contatto.getNome() + "'"; 
+		}
+		
+		if(!contatto.getCognome().trim().equals("")) {
+			ricerca += " AND cognome ='" + contatto.getCognome() + "'";
+		}
+		
+		if(!contatto.getEmail().trim().equals("")) {
+			ricerca += " AND email ='" + contatto.getEmail() + "'";
+		}
+				
+		if(!contatto.getTelefono().trim().equals("")) {
+			ricerca += " AND telefono ='" + contatto.getTelefono() + "'";
+		}
+				
 		Query<Contatto> query = session.createQuery(ricerca);
-		query.setParameter("param1", contatto.getNome());
-		
-		if(contatto.getNome().equals("")) {
-			query.setParameter("param2",true);
-		}else {
-			query.setParameter("param2",false);
-		}
-		
-		query.setParameter("param3", contatto.getCognome());
-		
-		if(contatto.getCognome().equals("")) {
-			query.setParameter("param4",true);
-		}else {
-			query.setParameter("param4",false);
-		}
-		
-		query.setParameter("param5", contatto.getEmail());
-		
-		if(contatto.getEmail().equals("")) {
-			query.setParameter("param6",true);
-		}else {
-			query.setParameter("param6",false);
-		}
-		
-		query.setParameter("param7", contatto.getTelefono());
-		
-		if(contatto.getTelefono().equals("")) {
-			query.setParameter("param8",true);
-		}else {
-			query.setParameter("param8",false);
-		}
 		
 		List<Contatto> contatti = query.list();
-		
+				
 		for(Contatto c : contatti) {
-			c.toString();
+			System.out.println(c.toString());
 		}
-
+		
+		return contatti;
 	}
 	
-	public void eliminaContattoDB(String email) {
-//		//ricercaContattoDB(email);
-//		Connection connection = getConnection();
-//		PreparedStatement preparedStatement = null;
-//		String ricerca = "DELETE FROM contatti WHERE email=?";
-//
-//		try {
-//			preparedStatement = connection.prepareStatement(ricerca);	
-//			preparedStatement.setString(1, email);
-//			preparedStatement.execute();
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}		
-	}
-	public void modificaContattoDB(Contatto contattoModificato) {
+	public void modificaContattoHDB(List<Contatto> contatti,Contatto contattoModificato, Session session) {
+		Transaction transaction = session.beginTransaction();
 		
+		for(Contatto contatto: contatti) {
+			if(!contattoModificato.getNome().equals("")) {
+				contatto.setNome(contattoModificato.getNome());
+			}
+			if(!contattoModificato.getCognome().equals("")) {
+				contatto.setCognome(contattoModificato.getCognome());
+			}
+			if(!contattoModificato.getEmail().equals("")) {
+				contatto.setEmail(contattoModificato.getEmail());
+			}
+			if(!contattoModificato.getTelefono().equals("")) {
+				contatto.setTelefono(contattoModificato.getTelefono());
+			}
+			session.save(contatto);
+		}	
+		transaction.commit();
+		
+		System.out.println("Contatti modificati");
+	}
+	
+	public void eliminaContattoHDB(List<Contatto> contatti, Session session) {
+		Transaction transaction = session.beginTransaction();
+		for(Contatto contatto : contatti) {
+			session.delete(contatto);
+		}
+		transaction.commit();
+		System.out.println("Contatti eliminati");
 	}
 }

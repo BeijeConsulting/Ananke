@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
+import java.util.List;
 
 public class DBManager {
 	private String DB_USER;
@@ -39,37 +41,15 @@ public class DBManager {
 	
 	public void aggiungiContattoDB(Contatto contatto) {
 		Connection connection = getConnection();
-		PreparedStatement preparedStatement = null;
-		String insertContatto = "INSERT INTO contatti (name,surname,email,telephone) "
-				+ "VALUES (?,?,?,?)";
+		String insertContatto = "INSERT INTO contatti(name,surname,email,telephone) VALUES ('" 
+		+ contatto.getNome() + "','" + contatto.getCognome() + "','" + contatto.getEmail() + "','" 
+		+ contatto.getTelefono() + "')";
 		try {
-			preparedStatement = connection.prepareStatement(insertContatto);
-			if(contatto.getNome().equals("")) {
-				preparedStatement.setNull(1,Types.NULL);
-			}else {
-				preparedStatement.setString(1, contatto.getNome());
-			}
-			if(contatto.getCognome().equals("")) {
-				preparedStatement.setNull(2,Types.NULL);
-			}else {
-				preparedStatement.setString(2, contatto.getCognome());
-			}
-			if(contatto.getEmail().equals("")) {
-				preparedStatement.setNull(3,Types.NULL);
-			}else {
-				preparedStatement.setString(3, contatto.getEmail());
-			}
-			if(contatto.getTelefono().equals("")) {
-				preparedStatement.setNull(4,Types.NULL);
-			}else {
-				preparedStatement.setString(4, contatto.getTelefono());
-			}
-			preparedStatement.execute();
-		
+			Statement s = connection.createStatement();
+			s.execute(insertContatto);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
+		}	
 		closeConnection(connection);
 	}
 	
@@ -160,5 +140,11 @@ public class DBManager {
 	}
 	public void modificaContattoDB(Contatto contattoModificato) {
 		
+	}
+	
+	public void importaCsvDB(List<Contatto> contatti) {
+		for(Contatto contatto : contatti) {
+			aggiungiContattoDB(contatto);
+		}
 	}
 }
