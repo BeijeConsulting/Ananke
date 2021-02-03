@@ -18,14 +18,13 @@ public class RubricaJPA {
 	public Rubrica r = new Rubrica();
 	
 	public static void main(String[] args) throws IOException {
-		HibManager hib = new HibManager();
-		
+		RubricaJPA rub = new RubricaJPA();
 		DataManager.menu();
 		Scanner s = new Scanner(System.in);
 		String st = s.next();
 
 		while (!st.equalsIgnoreCase("5")) {
-			hib.choice(st, s);
+			rub.choice(st, s);
 			DataManager.menu();
 			st = s.next();
 		}

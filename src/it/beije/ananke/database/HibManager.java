@@ -21,13 +21,13 @@ public class HibManager {
 	public static void main(String[] args) throws IOException {
 		HibManager hib = new HibManager();
 		
-		menu();
+		DataManager.menu();
 		Scanner s = new Scanner(System.in);
 		String st = s.next();
 
 		while (!st.equalsIgnoreCase("5")) {
 			hib.choice(st, s);
-			menu();
+			DataManager.menu();
 			st = s.next();
 		}
 		
@@ -35,18 +35,6 @@ public class HibManager {
 		System.out.println("Arrivederci!");
 		s.close();
 	
-	}
-	
-	
-	public static void menu() {
-		System.out.println("Benvenuto nella tua rubrica! Cosa vuoi fare?");
-		System.out.println("-Digita 0 per vedere lo stato della tua rubrica");
-		System.out.println("-Digita 1 per aggiungere una nuova voce");
-		System.out.println("-Digita 2 per modificare una voce");
-		System.out.println("-Digita 3 per cancellare una voce");
-		System.out.println("-Digita 4 per cercare un contatto");
-		System.out.println("-Digita 5 per uscire");
-		System.out.println("-Digita 6 per ristampare il menù");
 	}
 	
 	
