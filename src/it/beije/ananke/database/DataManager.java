@@ -57,9 +57,9 @@ public class DataManager {
 			connection = DriverManager.getConnection(Config.getDbUrl(), Config.getDbUser(), Config.getDbPwrd());
 			
 			switch(i) {
-				case "0": stampa(connection, statement, rs); break;
+				case "0": lettura(connection, statement, rs); break;
 				case "1": aggiungiVoce(connection, statement, s); break;
-				case "2":  break;
+				case "2": modificaEntry(connection, statement, rs, s); break;
 				case "3": eliminaVoce(connection, statement, rs, s); break;
 				case "4": ricerca(connection, statement, rs, s); break;
 				case "5": break;
@@ -83,7 +83,7 @@ public class DataManager {
 		
 	}
 	
-	public void lettura(ResultSet rs) throws SQLException {
+	public void stampa(ResultSet rs) throws SQLException {
 		while (rs.next()) {
 			System.out.println("id : " + rs.getInt("id"));
 			System.out.println("nome : " + rs.getString("name"));
@@ -95,11 +95,11 @@ public class DataManager {
 	}
 	
 	
-	public void stampa(Connection connection, Statement statement, ResultSet rs) {
+	public void lettura(Connection connection, Statement statement, ResultSet rs) {
 		try {
 			statement = connection.createStatement();
 			rs = statement.executeQuery("SELECT * FROM rubrica");
-			lettura(rs);
+			stampa(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -135,14 +135,68 @@ public class DataManager {
 		}
 	}
 	
-	
-	public void modificaEntry(Connection connection) {
+	//sistemare, problemi con rs.next()
+	public void modificaEntry(Connection connection, Statement statement, ResultSet rs, Scanner s) {
 		System.out.println("Si stanno apportando modifiche alla tabella.");
-	/*	try {
-			
-		}catch{
-			
-		}*/
+		try {
+			rs = scan(connection, statement, rs, s);
+			if(rs != null) {
+				stampa(rs);
+				ArrayList<Integer> modif = new ArrayList<>();
+				while(rs.next()) {
+					int i = rs.getInt("id");
+					modif.add(i);
+					System.out.println("nuova aggiunta " + i);
+				}
+				
+				System.out.println("Scegliere il campo da modificare: \n"
+						+ "1: NOME\n2: COGNOME\n3: EMAIL\n4: TELEFONO\n");
+				
+				String str = s.next();
+				int index = Integer.parseInt(str);
+				
+				while(index >= 5 || index <= 0) {
+					System.out.println("Voce non valida, provare di nuovo.");
+					str = s.next();
+					index = Integer.parseInt(str);
+				}
+				
+				String update = "";
+				switch(index) {
+					case 1: update = "name"; break;
+					case 2: update = "surname"; break;
+					case 3: update = "email"; break;
+					case 4: update = "telephone"; break;
+				}
+				
+				
+				System.out.println("Inserire il nuovo valore: ");
+				str = s.next();
+				
+				statement = connection.createStatement();
+				for(Integer i : modif) {
+					System.out.println("Id: " + i);
+					statement.execute("UPDATE rubrica SET " + update + " = " + "'" 
+							+ str + "' WHERE id = " + i);
+				}
+				
+			}else {
+				System.out.println("Non ci sono voci che corrispondono ai criteri di ricerca nel database.");
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}catch(NumberFormatException e) {
+			e.printStackTrace();
+			System.out.println("Il valore inserito non è un numero. Le modifiche non saranno salvate.");
+		}finally {
+			try {
+				statement.close();
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	
@@ -160,6 +214,8 @@ public class DataManager {
 				for(Integer i : elim) {
 					statement.execute("DELETE FROM rubrica WHERE id = " + i);
 				}
+			}else {
+				System.out.println("Non ci sono voci che corrispondono ai criteri di ricerca nel database.");
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -187,7 +243,7 @@ public class DataManager {
 			if(rs == null) {
 				System.out.println("Non ci sono voci che corrispondono ai criteri di ricerca nel database.");
 			}else {
-				lettura(rs);
+				stampa(rs);
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -206,6 +262,7 @@ public class DataManager {
 	
 	//non usare da sola, se un altro metodo la chiama RICORDARSI di chiudere rs e statement in un finally
 	public ResultSet scan(Connection connection, Statement statement, ResultSet rs, Scanner s) {
+		rs = null;
 		System.out.println("Scegliere in quale campo cercare:\n"
 				+ "0: ID\n 1: NOME\n2: COGNOME\n3: EMAIL\n4: TELEFONO\n"
 				+ "(Attenzione il numero di telefono deve contenere eventuali prefissi)");

@@ -23,11 +23,11 @@ public class ContattoMio {
 	@Column(name="surname")
 	private String surname = "";
 	
-	@Column(name="telephone")
-	private String telephone = "";
-	
 	@Column(name="email")
 	private String email = "";
+	
+	@Column(name="telephone")
+	private String telephone = "";
 	
 	
 	public int getId() {
@@ -85,8 +85,8 @@ public class ContattoMio {
 		StringBuilder builder = new StringBuilder("Contatto n° " + id)
 				.append("\nname : ").append(name + " ")
 				.append("\nsurname : ").append(surname + " ")
-				.append("\ntelephone : ").append(telephone + " ")
-				.append("\nemail : ").append(email);
+				.append("\nemail : ").append(email + " ")
+				.append("\ntelephone : ").append(telephone);
 		
 		return builder.toString();
 	}

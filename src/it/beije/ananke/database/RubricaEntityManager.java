@@ -13,7 +13,7 @@ public class RubricaEntityManager {
 	
 	public static EntityManager getEntityManager() {
 		if (entityManagerFactory == null || !entityManagerFactory.isOpen()) {
-			entityManagerFactory = Persistence.createEntityManagerFactory("Rubrica");
+			entityManagerFactory = Persistence.createEntityManagerFactory("rubrica");
 		}
 		
 		return entityManagerFactory.createEntityManager();
