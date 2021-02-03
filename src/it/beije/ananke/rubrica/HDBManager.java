@@ -15,7 +15,7 @@ public class HDBManager {
 	private static SessionFactory sf;
 	
 	public static void getSessionFactory() {
-		Configuration cfg = new Configuration().configure();
+		Configuration cfg = new Configuration().configure().addAnnotatedClass(Contatti.class);
 		 sf = cfg.buildSessionFactory();
 		
 	 
