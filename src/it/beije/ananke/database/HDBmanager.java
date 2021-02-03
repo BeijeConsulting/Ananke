@@ -15,12 +15,14 @@ public class HDBmanager {
 
 	public static void main(String[] args) {
 		
-		Configuration configuration = new Configuration().configure()
-				.addAnnotatedClass(Contatto.class);
+//		Configuration configuration = new Configuration().configure()
+//				.addAnnotatedClass(Contatto.class);
+//
+//		SessionFactory sessionFactory = configuration.buildSessionFactory();
+//		
+//		Session session = sessionFactory.openSession();
 
-		SessionFactory sessionFactory = configuration.buildSessionFactory();
-		
-		Session session = sessionFactory.openSession();
+		Session session = HybernateSessionManager.getSession();
 		System.out.println("session is open ? " + session.isOpen());
 		
 		//SQL : "SELECT * FROM contatti"
@@ -66,7 +68,6 @@ public class HDBmanager {
 //		//transaction.rollback();
 		
 		session.close();
-		sessionFactory.close();
 	}
 
 }
