@@ -9,6 +9,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
 import it.beije.ananke.Contatto;
+import it.beije.ananke.rubricahbm.hbmanager.HybernateSessionManager;
 
 
 public class HDBmanager {

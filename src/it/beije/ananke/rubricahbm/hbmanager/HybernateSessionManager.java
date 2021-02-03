@@ -1,10 +1,11 @@
-package it.beije.ananke.database;
+package it.beije.ananke.rubricahbm.hbmanager;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import it.beije.ananke.Contatto;
+import it.beije.ananke.rubricahbm.Contact;
 
 public class HybernateSessionManager {
 	
@@ -16,7 +17,7 @@ public class HybernateSessionManager {
 		
 		if (sessionFactory == null) {
 			Configuration configuration = new Configuration().configure()
-					.addAnnotatedClass(Contatto.class);
+					.addAnnotatedClass(Contact.class);
 
 			sessionFactory = configuration.buildSessionFactory();
 		}
