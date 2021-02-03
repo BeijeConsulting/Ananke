@@ -396,6 +396,7 @@ public class RubricaWHibernate {
         String command = null;
         List<String> fields = new ArrayList<>();
 
+        System.out.println("==================================\n");
         System.out.println("Quanti campi vuoi specificare per trovare i contatti che ti interessano?" +
                 "\n\t[1] -un solo campo" +
                 "\n\t[2] -due campi solamente" +
@@ -404,6 +405,7 @@ public class RubricaWHibernate {
                 "\nDigita solamente il numero.");
 
         command = inputKeyWord.nextLine().trim();
+        System.out.println("==================================\n");
 
         int numberOfFields = Integer.parseInt(command);
         if(numberOfFields > 4) {
@@ -418,15 +420,18 @@ public class RubricaWHibernate {
             System.out.println("Campo numero " + (i+1) + ": ");
             String value = null;
 
+            System.out.println("==================================\n");
             System.out.println("Tramite quale campo vuoi cercare?" +
                     "\n\t -n: name" +
                     "\n\t -s: surname" +
                     "\n\t -t: telephone" +
                     "\n\t -e: email" +
                     "\nScrivi il comando con - seguito dalla lettera");
+           
 
             value = inputKeyWord.nextLine().trim();
-
+            System.out.println("==================================\n");
+            
             switch (value){
                 case "-n":
                     value = "name";
@@ -486,11 +491,10 @@ public class RubricaWHibernate {
 		List<Contact> rubric = new ArrayList<>();
 
 		System.out.println("Vuoi esportare tutti i contatti su un file?" +
-				"\n\tyes?" +
-				"\n\tno?");
+				"\n\ty/n?");
 		String command = new Scanner(System.in).nextLine().trim();
 
-		if(command.equals("no")) {
+		if(command.equals("n")) {
 			//cerco i contatti e creo un arrayList che poi passo alle altre funzioni
 			List<String> fields = fieldsForSearch();
 			List<String> values = searchContacts(fields);
@@ -517,8 +521,10 @@ public class RubricaWHibernate {
 		File[] files = directory.listFiles();
 		int i=0;
 
+		System.out.println("==================================\n");
 		System.out.println("Su quale file vuoi salvare questi contatti?" +
-				"\nDigita il numero corrispondente al file che vuoi, o un numero non presente per creare un nuovo file.");
+				"\nDigita il numero corrispondente al file che vuoi,\no un numero non presente per creare un nuovo file.");
+		
 
 		//listo tutti i file presenti nella directory
 
@@ -533,12 +539,13 @@ public class RubricaWHibernate {
 
 			//faccio scegliere il file su cui salvare
 			int numeroFile = Integer.parseInt(inputTastiera.nextLine());
-
+			System.out.println("==================================\n");
 			if(numeroFile < files.length)
 				nomeFile = files[numeroFile].getName();
 			else {
 				System.out.println("Digita il nome del nuovo file con l'estensione csv/xml.");
 				nomeFile = inputTastiera.nextLine();
+				System.out.println("==================================\n");
 			}
 
 		}
@@ -592,12 +599,15 @@ public class RubricaWHibernate {
 	}
 	
 	private static void printContacts(List<Contact> rubric) {
+		System.out.println("==================================\n");
 		for (Contact contact : rubric) {
-			System.out.println("[" + (int) (rubric.indexOf(contact) + 1) + "]\t" + contact.toString());
+			System.out.println("[" + contact.getId() + "]\t" + contact.toString());
 		}
+		System.out.println("==================================\n");
 	}
 
 	private static void showCommandList() {
+		System.out.println("==================================\n");
         System.out.println("\nEcco cosa puoi fare:\n" +
                 "\t- i : inserisci un nuovo contatto;\n" +
                 "\t- u : aggiorna un contatto nella rubrica;\n" +
@@ -605,7 +615,7 @@ public class RubricaWHibernate {
                 "\t- s : cerca e stampa contatti esistente;\n" + 
                 "\t- p : stampa tutto il contenuto del DB;\n" +
                 "\t- q : salva ed esci.\n");
+        System.out.println("==================================\n");
     }
-
 
 }

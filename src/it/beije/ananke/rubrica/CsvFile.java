@@ -23,10 +23,45 @@ public class CsvFile {
                 String[] infoContatto = info.split(";");
                 Contact contact = new Contact();
 
-                contact.setName(infoContatto[0].trim());
-                contact.setSurname(infoContatto[1].trim());
-                contact.setTelephone(infoContatto[2].trim());
-                contact.setEmail(infoContatto[3].trim());
+                //TODO:POSSONO ESSERE NULL. OCIO!! DA CAMBIARE
+                if(infoContatto.length == 4) {
+	                contact.setName(infoContatto[0].trim());
+	                contact.setSurname(infoContatto[1].trim());
+	                contact.setTelephone(infoContatto[2].trim());
+	                contact.setEmail(infoContatto[3].trim());
+                }
+                else {
+                	//non ho tutte le informazioni. devo capire chi va dove.
+                	//mi basta fare lo split, tenendo il ;
+                	//in qusto modo dovrei avere comunque 4 elementi e capire chi è pieno e chi no
+                	infoContatto = info.split("(?<=;)");
+                	
+                	if(infoContatto[0].trim().equals(";")) {
+                		contact.setName("");
+                	}
+                	else {
+                		contact.setName(infoContatto[0].trim());
+                	}
+                	if(infoContatto[1].trim().equals(";")) {
+                		contact.setSurname("");
+                	}
+                	else {
+                		contact.setSurname(infoContatto[1].trim());
+                	}
+                	if(infoContatto[2].trim().equals(";")) {
+                		contact.setTelephone("");
+                	}
+                	else {
+                		contact.setTelephone(infoContatto[2].trim());
+                	}
+                	if(infoContatto[3].trim().equals(";")) {
+                		contact.setEmail("");
+                	}
+                	else {
+                		contact.setEmail(infoContatto[3].trim());
+                	}
+                	
+                }
 
                 rubric.add(contact);
                 //System.out.println(contatto.toString());
