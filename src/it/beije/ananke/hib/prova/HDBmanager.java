@@ -10,34 +10,30 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.hibernate.sql.Update;
-
+import it.beije.ananke.hib.prova.Contatto;
 
 public class HDBmanager {
 	static Scanner scanner = new Scanner(System.in);
-	static Configuration configuration = new Configuration().configure()
-			.addAnnotatedClass(Contatto.class);
+	//	static Configuration configuration = new Configuration().configure()
+	//			.addAnnotatedClass(Contatto.class);
 
 	public static void main(String[] args) {
 
-
-		SessionFactory sessionFactory = configuration.buildSessionFactory();
-		Session session = sessionFactory.openSession();
+		Session session = HybernateSessionManager.getSession();
 		System.out.println("session is open ? " + session.isOpen());
 		String hqlSelect = "SELECT c FROM Contatto as c";
 		Query<Contatto> query = session.createQuery(hqlSelect);
 		List<Contatto> contatti = query.list();
-		System.out.println(contatti.size());
+		System.out.println("Il numero di contatti è " + contatti.size());
 		//lettura();
 		//inserimento();
 		update(contatti);
-
-
+		//delete(contatti);
+		//ricerca();
 	}
 
-
 	public static void lettura(){
-		SessionFactory sessionFactory = configuration.buildSessionFactory();
-		Session session = sessionFactory.openSession();
+		Session session = HybernateSessionManager.getSession();
 		String hqlSelect = "SELECT c FROM Contatto as c";
 		Query<Contatto> query = session.createQuery(hqlSelect);
 		List<Contatto> contatti = query.list();
@@ -52,11 +48,29 @@ public class HDBmanager {
 		}
 	}
 
+	public static void ricerca() {
+		Session session = HybernateSessionManager.getSession();
+		System.out.println("Inserisci la mail del contatto da ricercare");
+		String m = scanner.nextLine();									
+		String hqlSelect = "SELECT c FROM Contatto as c where email = '" + m +"' ";
+		Query<Contatto> query = session.createQuery(hqlSelect);
+		List<Contatto> contatti = query.list();
+
+		for (Contatto contatto : query.list()) {
+			if(contatto.getEmail().equalsIgnoreCase(m)) {
+				System.out.println("ELEMENTO TROVATO: ");
+				System.out.println("id : " + contatto.getId());
+				System.out.println("name : " + contatto.getName());
+				System.out.println("surname : " + contatto.getSurname());
+				System.out.println("telephone : " + contatto.getTelephone());
+				System.out.println("email : " + contatto.getEmail());
+			}
+		}
+	}
+
 	public static void inserimento() {
 
-		SessionFactory sessionFactory = configuration.buildSessionFactory();
-		Session session = sessionFactory.openSession();
-		Transaction transaction = session.beginTransaction();
+		Session session = HybernateSessionManager.getSession();
 
 		System.out.println("------------------------------------------");
 		System.out.println("Inserisci il nome dell' utente");
@@ -67,6 +81,8 @@ public class HDBmanager {
 		String telephone = scanner.nextLine();
 		System.out.println("Inserisci l' indirizzo email dell' utente");
 		String email = scanner.nextLine();	
+
+		Transaction transaction = session.beginTransaction();
 		Contatto newContatto = new Contatto();
 		newContatto.setName(name);
 		newContatto.setSurname(surname);
@@ -79,21 +95,58 @@ public class HDBmanager {
 
 	}
 	public static void update(List<Contatto> contatti) {
-		SessionFactory sessionFactory = configuration.buildSessionFactory();
-		Session session = sessionFactory.openSession();
+		Session session = HybernateSessionManager.getSession();
 		Transaction transaction = session.beginTransaction();
+		Contatto c1;
+		System.out.println("Inserisci la mail del contatto da modificare");
+		String m = scanner.nextLine();
+		boolean b = false;
+		for(int i=0;i<contatti.size();i++) {
+			if(contatti.get(i).getEmail().equalsIgnoreCase(m)) {
+				System.out.println("Inserisci il nome dell' utente");
+				String name = scanner.nextLine();
+				System.out.println("Inserisci il cognome dell' utente");
+				String surname = scanner.nextLine();
+				System.out.println("Inserisci il recapito telefonico dell' utente");
+				String telephone = scanner.nextLine();
+				System.out.println("Inserisci l' indirizzo email dell' utente");
+				String email = scanner.nextLine();	
+				c1=contatti.get(i);	
+				c1.setName(name);
+				c1.setSurname(surname);
+				c1.setTelephone(telephone);
+				c1.setEmail(email);
+				if(c1.getEmail().equals("")) {
+					b=false;
+				}
+				else {
+					b=true;
+					session.update(c1);
+				}
+			}
+		}
+		if(b=true)
+		transaction.commit();
+		else
+			transaction.rollback();
 
-		Contatto c1 = contatti.get(contatti.size()-1);
-		c1.setName("Pippo");
-		c1.setSurname("Vredi");
-		c1.setEmail("Pippo@beije.it");
-
-		session.save(c1);
-
+	}
+	public static void delete(List<Contatto> contatti) {
+		Session session = HybernateSessionManager.getSession();
+		Transaction transaction = session.beginTransaction();
+		Contatto c1;
+		System.out.println("Inserisci la mail del contatto da eliminare");
+		String m = scanner.nextLine();
+		for(int i=0;i<contatti.size();i++) {
+			if(contatti.get(i).getEmail().equalsIgnoreCase(m)) {
+				c1 = contatti.get(i);
+				contatti.remove(i);
+				session.delete(c1);	
+			}
+		}
+		System.out.println("Contatto eliminato");
 		transaction.commit();
 		//transaction.rollback();
-
-		session.close();
-		sessionFactory.close();
 	}
+
 }

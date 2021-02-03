@@ -8,7 +8,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
-import it.beije.ananke.Contatto;
+import it.beije.ananke.hib.prova.Contatto;
 
 
 public class HDBmanager {
@@ -28,7 +28,7 @@ public class HDBmanager {
 		//SQL : "SELECT * FROM contatti"
 		//HQL
 		String hqlSelect = "SELECT c FROM Contatto as c";
-		Query<Contatto> query = session.createQuery(hqlSelect);
+		Query<it.beije.ananke.hib.prova.Contatto> query = session.createQuery(hqlSelect);
 		List<Contatto> contatti = query.list();
 		System.out.println(contatti.size());
 		

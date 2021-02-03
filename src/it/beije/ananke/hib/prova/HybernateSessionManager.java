@@ -1,4 +1,4 @@
-package it.beije.ananke.database;
+package it.beije.ananke.hib.prova;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
