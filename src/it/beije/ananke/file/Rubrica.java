@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -62,13 +63,13 @@ public class Rubrica {
 	
 	
 	public void choice(String i, String path, Scanner s, String format) throws Exception{
-		ArrayList<ContattoMio> contatti = read(path, s, format);
+		List<ContattoMio> contatti = read(path, s, format);
 		switch(i) {
 			case "0": stampa(path, contatti); break;
 			case "1": aggiungiVoce(path, s, contatti); break;
 			case "2": inizializzaNuova(s, path); break;
 			case "3": modificaContatto(path, s, contatti); break;
-			case "4": break;
+			case "4": delete(path, s, format); break;
 			case "5": ricerca(path, s, contatti); break;
 			case "6": break;
 			case "7": break;
@@ -77,7 +78,7 @@ public class Rubrica {
 	}
 	
 	
-	public void stampa(String path, ArrayList<ContattoMio> contatti) throws Exception {
+	public void stampa(String path, List<ContattoMio> contatti) throws Exception {
 		//ArrayList<Contatto> contatti = letturaCsv(path);
 /*		StringBuilder sb = new StringBuilder();
 		sb.append(contatti.get(0).getName()).append(" ")
@@ -97,7 +98,7 @@ public class Rubrica {
 	}
 	
 	
-	public ArrayList<ContattoMio> read(String path, Scanner s, String st) throws Exception{
+	public List<ContattoMio> read(String path, Scanner s, String st) throws Exception{
 		//System.out.println("Formato file da leggere: ");
 		//String st = s.next();
 		
@@ -111,18 +112,18 @@ public class Rubrica {
 		}
 	}
 	
-	public ArrayList<ContattoMio> letturaCsv(String path) throws FileNotFoundException, IOException{
+	public List<ContattoMio> letturaCsv(String path) throws FileNotFoundException, IOException{
 		System.out.println("Sto leggendo un csv");
 		File file = new File(path);
 		FileReader fr = new FileReader(file);	
 		BufferedReader br = new BufferedReader(fr);
 		
-		ArrayList<String> rows = new ArrayList<String>();
+		List<String> rows = new ArrayList<String>();
 		while (br.ready()) {
 			rows.add(br.readLine());
 		}
 		
-		ArrayList<ContattoMio> lista = new ArrayList<ContattoMio>();
+		List<ContattoMio> lista = new ArrayList<ContattoMio>();
 		for(int i = 0; i < rows.size(); i++) {
 			
 			String[] rs = rows.get(i).split(";");
@@ -141,7 +142,7 @@ public class Rubrica {
 		return lista;
 	}
 	
-	public ArrayList<ContattoMio> letturaXml(String path) throws ParserConfigurationException, SAXException, IOException {
+	public List<ContattoMio> letturaXml(String path) throws ParserConfigurationException, SAXException, IOException {
 		System.out.println("Sto leggendo un xml");
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -150,7 +151,7 @@ public class Rubrica {
         Element docElement = document.getDocumentElement();       
         NodeList elementiContatto = docElement.getElementsByTagName("utente");
         
-        ArrayList<ContattoMio> contatti = new ArrayList<ContattoMio>();
+        List<ContattoMio> contatti = new ArrayList<ContattoMio>();
         for (int i = 0; i < elementiContatto.getLength(); i++) {
         	
         	ContattoMio contatto = new ContattoMio();
@@ -191,7 +192,7 @@ public class Rubrica {
 	
 	
 	public void inizializzaNuova(Scanner s, String path) throws Exception {
-		ArrayList<ContattoMio> contatti = new ArrayList<>();
+		List<ContattoMio> contatti = new ArrayList<>();
 		ContattoMio cont = defContatto(s);
 		if(cont == null) {
 			System.out.println("Inizializzazione fallita.");
@@ -202,7 +203,7 @@ public class Rubrica {
 	}
 	
 	
-	public void aggiungiVoce(String path, Scanner s, ArrayList<ContattoMio> contatti) throws Exception {
+	public void aggiungiVoce(String path, Scanner s, List<ContattoMio> contatti) throws Exception {
 		if(contatti.size() == 0) {
 			System.out.println("...");
 		}else {
@@ -263,7 +264,7 @@ public class Rubrica {
 		return cont;
 	}
 	
-	public void write(String path, ArrayList<ContattoMio> contatti, Scanner s) throws Exception {
+	public void write(String path, List<ContattoMio> contatti, Scanner s) throws Exception {
 		System.out.println("Formato output desiderato: ");
 		String st = s.next();
 		if(st.equalsIgnoreCase("csv")) {
@@ -275,7 +276,7 @@ public class Rubrica {
 		}
 	}
 	
-	public void scriviCsv(String path, ArrayList<ContattoMio> contatti) throws IOException, FileNotFoundException {
+	public void scriviCsv(String path, List<ContattoMio> contatti) throws IOException, FileNotFoundException {
 		File newFile = new File(path);
 		FileWriter fw = new FileWriter(newFile);
 		
@@ -295,7 +296,7 @@ public class Rubrica {
 		fw.close();		
 	}
 	
-	public void scriviXml(String path, ArrayList<ContattoMio> contatti) throws Exception {
+	public void scriviXml(String path, List<ContattoMio> contatti) throws Exception {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 		
@@ -350,7 +351,7 @@ public class Rubrica {
 	}
 	
 	
-	public void modificaContatto(String path, Scanner s, ArrayList<ContattoMio> contatti) throws Exception {
+	public void modificaContatto(String path, Scanner s, List<ContattoMio> contatti) throws Exception {
 		if(contatti == null) {
 			System.out.println("La rubrica è vuota.");
 		}else {
@@ -378,8 +379,8 @@ public class Rubrica {
 	}
 	
 	
-	public ArrayList<ContattoMio> scansione(String path, Scanner s, ArrayList<ContattoMio> contatti) throws Exception{
-		ArrayList<ContattoMio> appoggio = new ArrayList<>();
+	public List<ContattoMio> scansione(String path, Scanner s, List<ContattoMio> contatti) throws Exception{
+		List<ContattoMio> appoggio = new ArrayList<>();
 		
 		if(contatti.size() == 0) {
 			
@@ -433,15 +434,19 @@ public class Rubrica {
 		return appoggio;
 	}
 	
-	public void ricerca(String path, Scanner s, ArrayList<ContattoMio> contatti) throws Exception {
-		ArrayList<ContattoMio> stampa = scansione(path, s, contatti);
+	public void ricerca(String path, Scanner s, List<ContattoMio> contatti) throws Exception {
+		List<ContattoMio> stampa = scansione(path, s, contatti);
 		for(ContattoMio c : stampa) {
 			System.out.println(stampa.indexOf(c) + c.toString());
 		}
 	}
 	
-	public void rimuovi(String path, Scanner s, ArrayList<ContattoMio> contatti) throws Exception {
-		stampa(path, contatti);
+	public void delete(String path, Scanner s, String format) throws Exception {
+		List<ContattoMio> contatti = read(path, s, format);
+		rimuovi(path, s, contatti);
+	}
+	
+	public void rimuovi(String path, Scanner s, List<ContattoMio> contatti) throws Exception {
 		if(contatti.size() == 0) {
 			System.out.println("La rubrica è vuota.");
 		}else {
@@ -462,7 +467,7 @@ public class Rubrica {
 				write(path, contatti, s);
 				
 			}catch(NumberFormatException e) {
-				System.out.println("Formato non valido. La voce non è stata modificata.");
+				System.out.println("Formato non valido. La voce non è stata eliminata.");
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package it.beije.ananke.database;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import it.beije.ananke.file.Rubrica;
 
 public class RubricaJPA {
 	public Rubrica r = new Rubrica();
+	public final static String  STD_PATH= "C:\\Users\\Padawan04\\Desktop\\Snippets";
 	
 	public static void main(String[] args) throws IOException {
 		RubricaJPA rub = new RubricaJPA();
@@ -23,7 +25,7 @@ public class RubricaJPA {
 		Scanner s = new Scanner(System.in);
 		String st = s.next();
 
-		while (!st.equalsIgnoreCase("5")) {
+		while (!st.equalsIgnoreCase("6")) {
 			rub.choice(st, s);
 			DataManager.menu();
 			st = s.next();
@@ -38,13 +40,14 @@ public class RubricaJPA {
 	public void choice(String i, Scanner s) throws IOException {
 		EntityManager em = RubricaEntityManager.getEntityManager();
 		switch(i) {
-			case "0": lettura(em); break;
+			case "0": stampa(lettura(em)); break;
 			case "1": inserisci(em, s); break;
 			case "2": modifica(em, s); break;
 			case "3": eliminazione(em, s); break;
 			case "4": ricerca(em, s); break;
-			case "5": break;
+			case "5": salvataggioFile(s, em);break;
 			case "6": break;
+			case "7": break;
 			default: System.out.println("L'opzione selezionata non è valida.");
 		}
 		em.close();
@@ -67,7 +70,7 @@ public class RubricaJPA {
 		String jqlSelect = "SELECT c FROM ContattoMio as c";
 		Query query = em.createQuery(jqlSelect);
 		contatti = query.getResultList();
-		stampa(contatti);
+		//stampa(contatti);
 		return contatti;
 	}
 	
@@ -193,10 +196,36 @@ public class RubricaJPA {
 	}
 	
 	
-	
-	
-	
-	
+	public void salvataggioFile(Scanner s, EntityManager em) {
+		System.out.println("Fornire il path del file.\n(Inserire 0 se si desidera creare un nuovo file.\n"
+				+ "Tale file verrà creato nella cartella '" + STD_PATH + "')");
+		String path = s.next();
+		String nome = "";
+		
+		if(path.trim().equalsIgnoreCase("0")) {
+			System.out.println("Inserire il nome da dare al nuovo file: ");
+			nome = s.next();
+			path = STD_PATH + "\\" + nome;
+		}	
+		
+		System.out.println("In che formato si vuole salvare la rubrica?");
+		String format = s.next();
+		
+		List<ContattoMio> lista = new ArrayList<>();
+		lista = lettura(em);
+		
+		try {
+			if(format.equalsIgnoreCase("csv")){
+				r.scriviCsv(path, lista);
+			}else if(format.equalsIgnoreCase("xml")){
+				r.scriviXml(path, lista);
+			}else {
+				System.out.println("Il formato selezionato non è disponibile.");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 }

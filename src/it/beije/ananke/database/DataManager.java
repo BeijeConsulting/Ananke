@@ -16,6 +16,7 @@ import it.beije.ananke.file.ContattoMio;
 
 public class DataManager {
 	public Rubrica r = new Rubrica();
+	public final static String  STD_PATH= "C:\\Users\\Padawan04\\Desktop\\Snippets";
 	
 	public static void main(String[] args) {
 		DataManager data = new DataManager();
@@ -23,7 +24,7 @@ public class DataManager {
 		Scanner s = new Scanner(System.in);
 		String st = s.next();
 
-		while (!st.equalsIgnoreCase("5")) {
+		while (!st.equalsIgnoreCase("6")) {
 			data.choice(st, s);
 			menu();
 			st = s.next();
@@ -42,8 +43,9 @@ public class DataManager {
 		System.out.println("-Digita 2 per modificare una voce");
 		System.out.println("-Digita 3 per cancellare una voce");
 		System.out.println("-Digita 4 per cercare un contatto");
-		System.out.println("-Digita 5 per uscire");
-		System.out.println("-Digita 6 per ristampare il menù");
+		System.out.println("-Digita 5 per salvare in un file");
+		System.out.println("-Digita 6 per uscire");
+		System.out.println("-Digita 7 per ristampare il menù");
 	}
 	
 	public void choice(String i, Scanner s) {
@@ -62,8 +64,9 @@ public class DataManager {
 				case "2": modificaEntry(connection, statement, rs, s); break;
 				case "3": eliminaVoce(connection, statement, rs, s); break;
 				case "4": ricerca(connection, statement, rs, s); break;
-				case "5": break;
+				case "5": salvataggioFile(s, statement, connection, rs);break;
 				case "6": break;
+				case "7": break;
 				default: System.out.println("L'opzione selezionata non è valida.");
 			}
 		} catch (Exception e) {
@@ -135,13 +138,11 @@ public class DataManager {
 		}
 	}
 	
-	//sistemare, problemi con rs.next()
 	public void modificaEntry(Connection connection, Statement statement, ResultSet rs, Scanner s) {
 		System.out.println("Si stanno apportando modifiche alla tabella.");
 		try {
 			rs = scan(connection, statement, rs, s);
 			if(rs != null) {
-				stampa(rs);
 				ArrayList<Integer> modif = new ArrayList<>();
 				while(rs.next()) {
 					int i = rs.getInt("id");
@@ -304,4 +305,56 @@ public class DataManager {
 		}
 		
 	}
+	
+	public void salvataggioFile(Scanner s, Statement statement, Connection connection, ResultSet rs) {
+		System.out.println("Fornire il path del file.\n(Inserire 0 se si desidera creare un nuovo file.\n"
+				+ "Tale file verrà creato nella cartella '" + STD_PATH + "')");
+		String path = s.next();
+		String nome = "";
+		
+		if(path.trim().equalsIgnoreCase("0")) {
+			System.out.println("Inserire il nome da dare al nuovo file: ");
+			nome = s.next();
+			path = STD_PATH + "\\" + nome;
+		}	
+		
+		System.out.println("In che formato si vuole salvare la rubrica?");
+		String format = s.next();
+		
+		try {
+			statement = connection.createStatement();
+			rs = statement.executeQuery("SELECT * FROM rubrica");
+			ArrayList<ContattoMio> lista = new ArrayList<>();
+			while(rs.next()) {
+				ContattoMio cont = new ContattoMio();
+				cont.setId(rs.getInt("id"));
+				cont.setName(rs.getString("name"));
+				cont.setSurname(rs.getString("surname"));
+				cont.setEmail(rs.getString("email"));
+				cont.setTelephone(rs.getString("telephone"));
+				lista.add(cont);
+			}
+			
+			if(format.equalsIgnoreCase("csv")){
+				r.scriviCsv(path, lista);
+			}else if(format.equalsIgnoreCase("xml")){
+				r.scriviXml(path, lista);
+			}else {
+				System.out.println("Formato scelto non disponibile.");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 }
