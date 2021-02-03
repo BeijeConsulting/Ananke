@@ -79,7 +79,7 @@ public class Contatto {
 		
 		StringBuilder builder = new StringBuilder("[")
 				.append("id : ").append(id)
-//				.append(", name : ").append(name)
+				.append(", name : ").append(name)
 				.append(", surname : ").append(surname)
 				.append(", telephone : ").append(telephone)
 				.append(", email : ").append(email).append("]");
