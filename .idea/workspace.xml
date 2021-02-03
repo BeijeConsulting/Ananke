@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="23d58219-8514-4541-a790-136a86124d31" name="Default Changelist" comment="" />
+    <list default="true" id="23d58219-8514-4541-a790-136a86124d31" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/.project" beforeDir="false" afterPath="$PROJECT_DIR$/src/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Bank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Bank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/BankView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/BankView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Contatto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Contatto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Runner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Runner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/ScannerExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/ScannerExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Singleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Singleton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Tree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Tree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Try.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Try.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/WrapperTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/WrapperTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/database/HDBmanager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/database/HDBmanager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/file/XmlManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/file/XmlManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/hbmanager/HybernateSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/hbmanager/HybernateSessionManager.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,7 +34,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>

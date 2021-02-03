@@ -3,12 +3,10 @@ package it.beije.ananke.database;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
-import it.beije.ananke.Contatto;
+import it.beije.ananke.altro.Contatto;
 import it.beije.ananke.rubricahbm.hbmanager.HybernateSessionManager;
 
 

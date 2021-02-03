@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.altro;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package it.beije.ananke;
+package it.beije.ananke.altro;
 
 public class Runner {
 

@@ -4,7 +4,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import it.beije.ananke.Contatto;
 import it.beije.ananke.rubricahbm.Contact;
 
 public class HybernateSessionManager {
