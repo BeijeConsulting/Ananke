@@ -7,7 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import it.beije.ananke.altro.Contatto;
-import it.beije.ananke.rubricahbm.hbmanager.HybernateSessionManager;
+import it.beije.ananke.rubrica.rubricahbm.hbmanager.HybernateSessionManager;
 
 
 public class HDBmanager {

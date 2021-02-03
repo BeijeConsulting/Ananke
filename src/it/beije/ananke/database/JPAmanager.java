@@ -8,7 +8,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import it.beije.ananke.Contatto;
+import it.beije.ananke.rubrica.Contact;
 
 
 public class JPAmanager {
@@ -26,13 +26,13 @@ public class JPAmanager {
 		//JPQL
 		String jpqlSelect = "SELECT c FROM Contatto as c";
 		Query query = entityManager.createQuery(jpqlSelect);
-		List<Contatto> contatti = query.getResultList();
+		List<Contact> contatti = query.getResultList();
 
-		for (Contatto contatto : contatti) {
+		for (Contact contatto : contatti) {
 			System.out.println("id : " + contatto.getId());
-			System.out.println("name : " + contatto.getName());
-			System.out.println("surname : " + contatto.getSurname());
-			System.out.println("telephone : " + contatto.getTelephone());
+			System.out.println("name : " + contatto.getFirstName());
+			System.out.println("surname : " + contatto.getLastName());
+			System.out.println("telephone : " + contatto.getPhoneNumber());
 			System.out.println("email : " + contatto.getEmail());
 		}
 
@@ -49,9 +49,9 @@ public class JPAmanager {
 //		System.out.println("c1 ID POST save :" + c1.getId());
 		
 		//INSERT
-		Contatto newContatto = new Contatto();
-		newContatto.setName("Piero");
-		newContatto.setSurname("Pelù");
+		Contact newContatto = new Contact();
+		newContatto.setFirstName("Piero");
+		newContatto.setLastName("Pelù");
 		newContatto.setEmail("ppelu@beije.it");
 		
 		System.out.println("newContatto ID PRE save  :" + newContatto.getId());

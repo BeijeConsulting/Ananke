@@ -1,50 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="23d58219-8514-4541-a790-136a86124d31" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/.project" beforeDir="false" afterPath="$PROJECT_DIR$/src/.project" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Bank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Bank.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/BankView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/BankView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Contatto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Contatto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Runner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Runner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/ScannerExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/ScannerExample.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Singleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Singleton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Tree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Tree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/Try.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/Try.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/WrapperTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/WrapperTest.java" afterDir="false" />
+    <list default="true" id="2e6e1171-7ee1-4516-a8b8-988d3ef6f50b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__antlr_antlr_2_7_7.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_classmate_1_5_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_protobuf_protobuf_java_3_11_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_sun_istack_istack_commons_runtime_3_0_7.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_sun_xml_fastinfoset_FastInfoset_1_2_15.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_activation_javax_activation_api_1_2_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_persistence_javax_persistence_api_2_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_xml_bind_jaxb_api_2_3_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__mysql_mysql_connector_java_8_0_23.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_bytebuddy_byte_buddy_1_10_10.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_dom4j_dom4j_2_1_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jaxb_jaxb_runtime_2_3_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jaxb_txw2_2_3_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hibernate_common_hibernate_commons_annotations_5_1_0_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hibernate_hibernate_core_5_4_21_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_javassist_javassist_3_24_0_GA.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jboss_jandex_2_1_3_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jboss_logging_jboss_logging_3_3_2_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jboss_spec_javax_transaction_jboss_transaction_api_1_2_spec_1_1_1_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jvnet_staxex_stax_ex_1_8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Contact.hbm.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/Contact.hbm.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/database/HDBmanager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/database/HDBmanager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/file/XmlManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/file/XmlManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/hbmanager/HybernateSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/hbmanager/HybernateSessionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/database/JPAmanager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/database/JPAmanager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/Contact.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/Contact.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/Rubrica.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricahbm/Rubrica.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/RubricaTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricahbm/RubricaTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/csvmanager/CSVManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricahbm/csvmanager/CSVManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/hbmanager/HBManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricahbm/hbmanager/HBManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/hbmanager/HybernateSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricahbm/hbmanager/HybernateSessionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/rubrica_" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricahbm/rubrica_" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/rubrica_.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricahbm/rubrica_.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/rubrica_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricahbm/rubrica_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/rubricacopyyy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricahbm/rubricacopyyy.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricahbm/xmlmanager/XMLManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricahbm/xmlmanager/XMLManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricajdbc/Contact.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricajdbc/Rubrica.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricajdbc/Rubrica.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricajdbc/RubricaTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricajdbc/RubricaTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricajdbc/csvmanager/CSVManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricajdbc/csvmanager/CSVManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricajdbc/jdbcmanager/JDBCManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricajdbc/jdbcmanager/JDBCManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricajdbc/jdbcmanager/JDBCTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricajdbc/jdbcmanager/JDBCTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricajdbc/rubrica_.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricajdbc/rubrica_.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricajdbc/rubricacopyyy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricajdbc/rubricacopyyy.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/rubricajdbc/xmlmanager/XMLManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/rubrica/rubricajdbc/xmlmanager/XMLManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/tombolone/Cartella.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/tombolone/Cartella.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/tombolone/NumeriTombola.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/tombolone/NumeriTombola.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/tombolone/Tombola.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/tombolone/Tombola.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/it/beije/ananke/tombolone/TombolaTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/it/beije/ananke/altro/tombolone/TombolaTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="main" />
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1nNakK0VeHrvocK6mASpWXabSKB" />
+  <component name="ProjectId" id="1ny6nvMnaTPoH2zRF3PN3yDpJM2" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunManager">
-    <configuration name="TombolaTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="it.beije.javaix.tombolone.TombolaTest" />
+    <configuration name="HBManager" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="it.beije.ananke.rubrica.rubricahbm.hbmanager.HBManager" />
       <module name="Ananke" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.beije.javaix.tombolone.*" />
+          <option name="PATTERN" value="it.beije.ananke.rubrica.rubricahbm.hbmanager.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -54,19 +103,30 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.TombolaTest" />
+        <item itemvalue="Application.HBManager" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="23d58219-8514-4541-a790-136a86124d31" name="Default Changelist" comment="" />
-      <created>1611233143748</created>
+      <changelist id="2e6e1171-7ee1-4516-a8b8-988d3ef6f50b" name="Default Changelist" comment="" />
+      <created>1612350159291</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1611233143748</updated>
+      <updated>1612350159291</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
