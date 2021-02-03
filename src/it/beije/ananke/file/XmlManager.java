@@ -78,10 +78,10 @@ public class XmlManager {
 						contatto.setName(valore.getTextContent());
 						break;
 					case "cognome":
-						contatto.setSurname(valore.getTextContent());
+						contatto.setLastName(valore.getTextContent());
 						break;
 					case "telefono":
-						contatto.setTelephone(valore.getTextContent());
+						contatto.setPhone(valore.getTextContent());
 						break;
 					case "email":
 						contatto.setEmail(valore.getTextContent());

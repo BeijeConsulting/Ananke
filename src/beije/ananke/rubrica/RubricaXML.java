@@ -81,7 +81,6 @@ public class RubricaXML {
 	            contatti.add(contatto);
 	        }
 	         return contatti;
-	        //System.out.println("contatti size : " + contatti.size());
 	}
 		
 	//write contacts on XML

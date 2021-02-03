@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
+import javax.persistence.EntityManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -41,28 +42,24 @@ public class HibernateManager {
 		
 		System.out.println("Sei nel menu del database. Scegli una funzionalita:");
 
-			do {
+			do {			
+				System.out.println("[1] Inserisci un nuovo contatto\n[2] Modifica un contatto\n[3] Cerca un contatto\n[4] "
+						+ "Elimina un contatto\n[5] Esporta rubrica su file xml o csv\n[6] Importa una rubrica su db."
+						+ "\n[7] Esci");
 			
-			System.out.println("[1] Inserisci un nuovo contatto\n[2] Modifica un contatto\n[3] Cerca un contatto\n[4] "
-					+ "Elimina un contatto\n[5] Esporta rubrica su file xml\n[6] Esporta rubrica su file csv\n"
-					+ "[7] Importa una rubrica su db.\n[8] Esci");
-		
-			 result = input.next();
-			 
-			 switch(result)
-			 {
-			 case "1": HibernateManager.aggiungiContatto(input); break;
-			 case "2": HibernateManager.modificaContatto(input); break;
-			 case "3": HibernateManager.cercaContatto(input); break;
-			 case "4": HibernateManager.eliminaContatto(input); break;
-			 case "5": HibernateManager.exportOnXml(input);break;
-			 case "6": HibernateManager.exportOnCsv(input);break;
-			 case "7": HibernateManager.importOnDB(input);break;
-			 case "8": System.out.println("Uscita database..");break;		 
-			 }
-			 }while(!result.equals("8"));
-			
-			
+				 result = input.next();
+				 
+				 switch(result)
+				 {
+				 case "1": HibernateManager.aggiungiContatto(input); break;
+				 case "2": HibernateManager.modificaContatto(input); break;
+				 case "3": HibernateManager.cercaContatto(input); break;
+				 case "4": HibernateManager.eliminaContatto(input); break;
+				 case "5": HibernateManager.exportDB(input);break;
+				 case "6": HibernateManager.importOnDB(input);break;
+				 case "7": System.out.println("Uscita database..");break;		 
+				 }
+				 }while(!result.equals("7"));		
  	}
 	
 	public static void aggiungiContatto(Scanner input)
@@ -217,33 +214,28 @@ public class HibernateManager {
 		
 	}
 
-	public static void exportOnXml(Scanner input) throws Exception
+	public static void exportDB(Scanner input) throws Exception
 	{
 			Session session = HybernateSessionManager.getSession();
-			String result;
+			String result,last3,xml="xml",csv="txt";
 			String hqlSelect = "SELECT c FROM Contatto as c";
 			Query<Contatto> query = session.createQuery(hqlSelect);
 			List<Contatto> contatti = query.list();
 			
 			System.out.println("Inserisci il path in cui esportare la rubrica:");
 			result = input.next();
+			last3 = result.substring(result.length()-3);
 			
-			RubricaXML.writeContactXML((ArrayList<Contatto>)contatti,result);
-					
-	}
-
-	public static void exportOnCsv(Scanner input) throws IOException
-	{
-		Session session = HybernateSessionManager.getSession();
-		String result;
-		String hqlSelect = "SELECT c FROM Contatto as c";
-		Query<Contatto> query = session.createQuery(hqlSelect);
-		List<Contatto> contatti = query.list();
-		
-		System.out.println("Inserisci il path in cui esportare la rubrica:");
-		result = input.next();
-		
-		Rubrica.writeContacts(new File(result),(ArrayList<Contatto>)contatti);
+			 if(last3.equals(xml))
+			 {
+           		 RubricaXML.writeContactXML((ArrayList<Contatto>)contatti,result);
+			 }
+			 else if(last3.equals(csv))
+			 {
+				 Rubrica.writeContacts(new File(result),(ArrayList<Contatto>)contatti);
+			 }
+			 
+		      session.close();					
 	}
 
 	public static void importOnDB(Scanner input) throws ParserConfigurationException, SAXException, IOException

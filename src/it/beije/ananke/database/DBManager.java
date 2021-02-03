@@ -36,26 +36,24 @@ public class DBManager {
 		
 		System.out.println("Sei nel menu del database. Scegli una funzionalita:");
 
-			do {
+			do {			
+				System.out.println("[1] Inserisci un nuovo contatto\n[2] Modifica un contatto\n[3] Cerca un contatto\n[4] "
+						+ "Elimina un contatto\n[5] Esporta rubrica su file xml o csv\n[6] Importa una rubrica su db."
+						+ "\n[7] Esci");
 			
-			System.out.println("[1] Inserisci un nuovo contatto\n[2] Modifica un contatto\n[3] Cerca un contatto\n[4] "
-					+ "Elimina un contatto\n[5] Esporta rubrica su file xml\n[6] Esporta rubrica su file csv\n"
-					+ "[7] Importa una rubrica su db.\n[8] Esci");
-		
-			 result = input.next();
-			 
-			 switch(result)
-			 {
-			 case "1": DBManager.aggiungiContatto(input); break;
-			 case "2": DBManager.modificaContatto(input); break;
-			 case "3": DBManager.cercaContatto(input); break;
-			 case "4": DBManager.eliminaContatto(input); break;
-			 case "5": DBManager.exportOnXml(input); break;
-			 case "6": DBManager.exportOnCsv(input);break;
-			 case "7": DBManager.importOnDB(input);break;
-			 case "8": System.out.println("Uscita database..");;break;		 
-			 }
-			 }while(!result.equals("8"));
+				 result = input.next();
+				 
+				 switch(result)
+				 {
+				 case "1": DBManager.aggiungiContatto(input); break;
+				 case "2": DBManager.modificaContatto(input); break;
+				 case "3": DBManager.cercaContatto(input); break;
+				 case "4": DBManager.eliminaContatto(input); break;
+				 case "5": DBManager.exportDB(input);break;
+				 case "6": DBManager.importOnDB(input);break;
+				 case "7": System.out.println("Uscita database..");break;		 
+				 }
+				 }while(!result.equals("7"));		
  	}
 	
 	public static void aggiungiContatto(Scanner input)
@@ -269,12 +267,12 @@ public class DBManager {
 		}
 	}
 
-	public static void exportOnXml(Scanner input)
+	public static void exportDB(Scanner input)
 	{
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet rs = null;	
-		String result;
+		String result,last3,xml="xml",csv="txt";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");	
@@ -285,10 +283,10 @@ public class DBManager {
 			
 			System.out.println("Inserisci il path in cui esportare la rubrica:");
 			result = input.next();
+			last3 = result.substring(result.length()-3);
 			
 			rs = statement.executeQuery("SELECT * FROM contatti ");
-					 
-			
+					 	
 			while (rs.next()) {
 				cont.setLastName(rs.getString("surname"));
 				cont.setName(rs.getString("name"));
@@ -298,64 +296,15 @@ public class DBManager {
 				
 			}
 			
-			RubricaXML.writeContactXML(contatti,result);
+			if(last3.equals(xml))
+			 {
+          		 RubricaXML.writeContactXML((ArrayList<Contatto>)contatti,result);
+			 }
+			 else if(last3.equals(csv))
+			 {
+				 Rubrica.writeContacts(new File(result),(ArrayList<Contatto>)contatti);
+			 }
 			
-						
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-				System.out.println(connection.isClosed());
-					
-				rs.close();
-				statement.close();
-			
-			} catch (SQLException sqlEx) {
-				sqlEx.printStackTrace();
-			}
-		}
-	}
-
-	public static void exportOnCsv(Scanner input)
-	{
-		Connection connection = null;
-		Statement statement = null;
-		ResultSet rs = null;	
-		String result;
-
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");	
-			connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-			statement = connection.createStatement();
-			ArrayList<Contatto> contatti = new ArrayList<>();
-			Contatto cont= new Contatto();
-			
-			System.out.println("Inserisci il path in cui esportare la rubrica:");
-			result = input.next();
-			
-			rs = statement.executeQuery("SELECT * FROM contatti ");
-					 
-			
-			while (rs.next()) {
-				cont.setLastName(rs.getString("surname"));
-				cont.setName(rs.getString("name"));
-				cont.setEmail(rs.getString("email"));
-				cont.setPhone(rs.getString("telephone"));
-				contatti.add(cont);
-				
-			}
-			
-			RubricaXML.writeContactXML(contatti,result);
-			
-			Rubrica.writeContacts(new File(result),contatti);
-			
-			System.out.println("Rubrica esportata");
-			
-			System.out.println("Stampo il file:");
-			
-			Rubrica.printFile(new File(result));
-		
 						
 		} catch (Exception e) {
 			e.printStackTrace();

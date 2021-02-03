@@ -15,7 +15,6 @@ public class Cartella {
 	
 	//METHODS
 	
-	
 	public int[][] populate(ArrayList<Integer> pool)
 	{
 		ArrayList<Integer> spaces = this.setSpaces();
@@ -70,7 +69,7 @@ public class Cartella {
 		do {
 			 generated = gen.nextInt(9)+1;
 		}while(!pooly.contains(generated));
-			return generated; 
+			return generated;
 		case 1: generated = gen.nextInt(10)+10;
 				do {
 					 generated = gen.nextInt(10)+10;

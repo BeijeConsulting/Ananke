@@ -4,28 +4,7 @@ import java.util.*;
 
 public class Tombola {
 
-	public Tombola(int num)
-	{
-		this.fill();
-		for(int i=0;i<num;i++)
-		{
-			cards.add(new Cartella());
-			if(cards.get(i).getCount()%6==0)
-			{
-				this.fill();
-				cards.get(i).populate(pool);
-			}
-			else {
-				cards.get(i).populate(pool);
-				
-			}
-			
-		}
-			
-	}
-
-	
-	
+		
 	public void allCards() {
 		
 		for(Cartella car : cards)
@@ -44,7 +23,23 @@ public class Tombola {
 	
 	public static void main(String[] args) {
 		
-		Tombola tomb = new Tombola(6);
+		Tombola tomb = new Tombola();
+		tomb.fill();
+		
+		for(int i=0;i<6;i++)
+		{
+			tomb.cards.add(new Cartella());
+			if(tomb.cards.get(i).getCount()%6==0)
+			{
+				tomb.fill();
+				tomb.cards.get(i).populate(tomb.pool);
+			}
+			else {
+				tomb.cards.get(i).populate(tomb.pool);
+				
+			}
+			
+		}
 		tomb.allCards();
 		
 	}
