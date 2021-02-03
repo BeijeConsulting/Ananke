@@ -22,8 +22,8 @@ public class UsersInHibernateManager implements UserManager {
 		//Configuration configuration = new Configuration().configure();  for classic hybernate
 		Configuration configuration = new Configuration().configure() //for annotated hybernation
 				.addAnnotatedClass(User.class);
-		this.sessionFactory = configuration.buildSessionFactory();
-		Session session = this.sessionFactory.openSession();
+		UsersInHibernateManager.sessionFactory = configuration.buildSessionFactory();
+		Session session = UsersInHibernateManager.sessionFactory.openSession();
 		return session;
 	} 
 	@Override

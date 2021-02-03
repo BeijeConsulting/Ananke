@@ -9,23 +9,27 @@ import java.util.Scanner;
 public class Utility {
 	
 	private static Scanner scanner = new Scanner(System.in);
+	static UserManager userManager = new UsersInHibernateManager();
 	
-	public static void mainMenu() {
+	public static void usersMenuManager() throws IOException, SQLException {
 		System.out.println("Press 1 to see all Contacts!");
 		System.out.println("Press 2 to see a specific contact!");
 		System.out.println("Press 3 to add a contact!");
 		System.out.println("Press 4 to delete a contact!");
 		System.out.println("Press 5 to remove a contact!");
 		System.out.println("Press 0 to eixt!");
+		int n = scanner.nextInt();
+		serviceCallingManager(n);
 	}
-	public static void serviceCallingManager(int n, UserManager userManager) throws IOException, SQLException {
+	public static void serviceCallingManager(int n) throws IOException, SQLException {
 		switch(n) {
 		case 1 :
 		    {
 			List<User> usersList = new ArrayList<>();
 			usersList = userManager.getAllUsers();
 			printUsers(usersList);
-			mainMenu();
+			System.out.println("####################################");
+			usersMenuManager();
 			break;
 		     }
 		case 2 : {
@@ -36,7 +40,7 @@ public class Utility {
 			   if(user!=null) {
 			   user.displayUser();
 			   System.out.println("####################################");
-			    mainMenu();
+			    usersMenuManager();
 			   }
 			   else {
 				   System.out.println("Sorry this contact is not exists in the database!");
@@ -47,7 +51,8 @@ public class Utility {
 		         {
 			     if( userManager.setUser(getUserFromKeyBoard())){
 			         System.out.println("Contact added successfully!");
-			    	 mainMenu();
+			         System.out.println("####################################");
+			    	 usersMenuManager();
 			     }
 			     else {
 			    	 System.out.println("this Contact is already exists!");
@@ -59,7 +64,8 @@ public class Utility {
 			      System.out.println("Enter the email address of the user to delete!");
 			      String email =scanner.nextLine();
 			      userManager.removeUser(email);
-			      mainMenu();
+			      System.out.println("####################################");
+			      usersMenuManager();
 			      break;
 		         }
 		 case 5 : 
