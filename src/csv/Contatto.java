@@ -1,18 +1,34 @@
 package csv;
 
-public class Contatto implements Comparable{
+import javax.persistence.Column;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name="contatti")
+public class Contatto {
+@Id
+@GeneratedValue(strategy=GenerationType.IDENTITY)
+@Column(name="id") 
+int id;
+@Column(name="name")
 private String nome;
+@Column(name="surname")
 private String cognome;
+@Column(name="telephone")
 private String tel;
+@Column(name="email")
 private String email;
 public Contatto() {
-	 nome="";
-		cognome="";
-		 tel="";
-		 email="";
+
 	}
 public Contatto(String nome, String cognome, String tel, String email) {
-	super();
 	this.nome = nome;
 	this.cognome = cognome;
 	this.tel = tel;
@@ -46,11 +62,14 @@ public void setEmail(String email) {
 public String toString() {
 	return nome+";"+cognome+";"+email+";"+tel;
 }
-@Override
-public int compareTo(Object o) {
-Contatto c= (Contatto)o;
-	return nome.compareTo(c.getNome());
-	
+
+
+public int getId() {
+	return id;
 }
+public void setId(int id) {
+	this.id = id;
+}
+
 
 }

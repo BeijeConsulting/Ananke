@@ -39,7 +39,9 @@ contatti=new ArrayList<>();
 		 Scanner s = new Scanner(System.in);
 		 File file=null;
 		 String pathcsv;
-		 
+		 /*
+		  * Funzione usata per ricevere i path di un file in formato csv e leggerlo
+		  * */
 		 do {
 		 System.out.println("Inserire il nuovo path del file csv");
 			 pathcsv= s.next();
@@ -53,6 +55,9 @@ contatti=new ArrayList<>();
 				contatti.add(c);
 		 
 	 }
+	 /*
+	  * Funzione usata per ricevere i path di un file in formato csv e leggerlo
+	  * */
 	 public void readContattiXml() {
 		 Scanner s = new Scanner(System.in);
 		 String pathxml;
@@ -78,6 +83,9 @@ contatti=new ArrayList<>();
 					 
 	 }
 	
+	 /*
+	  * Funzione usata per ricevere i path di un file xml e salvare un nuovo file in formato csv
+	  * */
 public void importXmlExsportCsv() {
 	Scanner s = new Scanner(System.in);
 	File file=null;
@@ -162,6 +170,9 @@ do {
 public boolean isEmpty() {
 	return contatti.isEmpty();
 }
+/*
+ * Funzione usata per stampare a video la lista dei contatti in memoria
+ * */
 public void stampaContatti() {
 	if(isEmpty()) {
 		System.out.println("----Attualmente la tua rubrica è vuota----\n");
@@ -172,6 +183,9 @@ public void stampaContatti() {
 	}
 	}
 }
+/*
+ * Funzione usata per aggiungere un contatto in memoria
+ * */
 public void addContatto() {
 	Scanner s = new Scanner(System.in);
 	String nome,cognome,email,telefono;
@@ -241,6 +255,9 @@ try {
 }		
 }
 
+/*
+ * Funzione usata per ricercare il contatto in memoria
+ * */
 public ArrayList<Contatto> ricercaContatto() {
 	Scanner s=new Scanner(System.in);
 	 ArrayList<Contatto> trovati= new ArrayList<>();
@@ -318,6 +335,9 @@ public ArrayList<Contatto> ricercaContatto() {
 	
 }
 
+/*
+ * Funzione usata per modificare il contatto in memoria
+ * */
 public void replaceContatto() {
 	stampaContatti();
 	if(!isEmpty()) {
@@ -404,7 +424,7 @@ public void aggiungiContatoDB() {
 	
 	System.out.println("Inserisci il nuovo numero di telefono  o lascia uno spazio bianco per non effettuare l'insermento");
 	 telefono=s.nextLine();
-	 if(nome.length()>0||cognome.length()>0||email.length()>0||telefono.length()>0) {
+	 if(nome.trim().length()>0||cognome.trim().length()>0||email.trim().length()>0||telefono.trim().length()>0) {
 		 Contatto c= new Contatto(nome,cognome,telefono,email);
 gestoreDB.addContatto(c);
 stop=false;

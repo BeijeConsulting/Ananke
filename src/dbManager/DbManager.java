@@ -246,6 +246,17 @@ private void stampaResult(ResultSet rs) {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			if(preparedStatement!=null&&connesione!=null) {
+			try {
+				preparedStatement.close();
+				connesione.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			}
 		}
 		return false;
 	}

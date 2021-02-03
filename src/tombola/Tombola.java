@@ -43,7 +43,7 @@ public void stampaCartelle() {
 }
 	public static void main(String[] args) {
 		
-Tombola napoli=new Tombola(30);
+Tombola napoli=new Tombola(6);
 napoli.stampaCartelle();
 	}
 

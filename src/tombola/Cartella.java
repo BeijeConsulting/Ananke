@@ -71,7 +71,7 @@ public void resetCartelle() {
 			{
 				estrazione.aggiungiNumero(numero);
 				emergenza++;
-				if(emergenza==400)
+				if(emergenza==100)
 					throw new  ImpossibileGenerareCartella();
 			}
 			}while(ripetizione);
