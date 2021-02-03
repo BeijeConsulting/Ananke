@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DBManager {
@@ -52,10 +53,6 @@ public class DBManager {
 		}	
 		closeConnection(connection);
 	}
-	
-	public void modificaContattoDB() {
-		
-	}
 
 	public void ricercaContattoDB(Contatto contatto) {
 		Connection connection = getConnection();
@@ -68,8 +65,7 @@ public class DBManager {
 				+ "(telephone=? OR ?)";
 		
 		try {
-			preparedStatement = connection.prepareStatement(ricerca);	
-			
+			preparedStatement = connection.prepareStatement(ricerca);				
 			preparedStatement.setString(1, contatto.getNome());
 			
 			if(contatto.getNome().equals("")) {
@@ -142,9 +138,34 @@ public class DBManager {
 		
 	}
 	
-	public void importaCsvDB(List<Contatto> contatti) {
+	public void importaDB(List<Contatto> contatti) {
 		for(Contatto contatto : contatti) {
 			aggiungiContattoDB(contatto);
 		}
+		System.out.println("Contatti importati");
+	}
+	
+	public List<Contatto> esportaDB() {
+		Connection connection = getConnection();
+		String select = "SELECT * FROM contatti";
+		Statement statement = null;
+		ResultSet rs = null;
+		Contatto contatto = null;
+		List<Contatto> contatti = new ArrayList<Contatto>();
+		try {
+			statement = connection.createStatement();
+			rs = statement.executeQuery(select);	
+			while(rs.next()) {
+				contatto = new Contatto();
+				contatto.setNome(rs.getString("name"));
+				contatto.setCognome(rs.getString("surname"));
+				contatto.setEmail(rs.getString("email"));
+				contatto.setTelefono(rs.getString("telephone"));
+				contatti.add(contatto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		return contatti;
 	}
 }

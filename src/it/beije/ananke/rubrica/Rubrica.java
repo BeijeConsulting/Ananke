@@ -37,6 +37,7 @@ public class Rubrica {
 	List<Contatto> contatti = new ArrayList<Contatto>();
 	DBManager dbManager = new DBManager("root","Beije09","jdbc:mysql://localhost:3306/ananke?serverTimezone=CET");
 	HDBManager hdbManager = new HDBManager();
+	JPAmanager jpaManager = new JPAmanager();
 	
 	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerException {
 		Rubrica rubrica = new Rubrica();
@@ -69,7 +70,8 @@ public class Rubrica {
 						+ "7 = Elimina contatto\n"
 						+ "8 = Modifica contatto\n"
 						+ "9 = Operazioni DB\n"
-						+ "10 = Operazioni HDB");
+						+ "10 = Operazioni HDB\n"
+						+ "11 = Operazioni JPA");
 				try {
 					opzioneScelta = Integer.parseInt(sc.next());
 					controllo = true;
@@ -86,6 +88,7 @@ public class Rubrica {
 				case 0: System.exit(0);
 				case 1: {
 					aggiungiContatto(filePath);
+					System.out.println("Contatto aggiunto");
 					break;
 				}
 				case 2: {
@@ -93,7 +96,7 @@ public class Rubrica {
 					break;
 				}
 				case 3: {
-					esportaCsv(filePath);
+					esportaCsv(filePath, contatti);
 					break;
 				}
 				case 4: {
@@ -101,7 +104,7 @@ public class Rubrica {
 					break;
 				}
 				case 5: {
-					esportaXml(filePath);
+					esportaXml(filePath, contatti);
 					break;
 				}
 				case 6: {
@@ -124,7 +127,10 @@ public class Rubrica {
 					Session s = hdbManager.getSession();
 					menuHDB(s);
 					s.close();
-					
+				}
+				case 11: {
+					menuJPA();
+					break;
 				}
 			}
 			controllo = false;
@@ -146,7 +152,11 @@ public class Rubrica {
 					+ "1 = Aggiungi contatto\n"
 					+ "2 = Ricerca contatto\n"
 					+ "3 = Elimina contatto\n"
-					+ "4 = Modifica contatto");
+					+ "4 = Modifica contatto"
+					+ "5 = Importa la lista dei contatti da csv\n"
+					+ "6 = Esporta la lista dei contatti in un file csv\n"
+					+ "7 = Importa la lista dei contatti da un file xml\n"
+					+ "8 = Esporta la lista dei contatti in un file xml");
 	
 		try {
 			opzioneScelta = Integer.parseInt(sc.next());
@@ -162,6 +172,7 @@ public class Rubrica {
 			}
 			case 1: {
 				hdbManager.aggiungiContattoHDB(letturaContatto(),session);
+				System.out.println("Contatto aggiunto");
 				break;
 			}
 			case 2: {
@@ -178,6 +189,22 @@ public class Rubrica {
 				System.out.println("Modifica contatti");
 				Contatto contattoModificato = letturaContatto();
 				hdbManager.modificaContattoHDB(contattiTrovati, contattoModificato, session);
+				break;
+			}
+			case 5: {
+				hdbManager.importaHDB(importaCsv(leggiFilePath()), session);
+				break;
+			}
+			case 6: {
+				esportaCsv(leggiFilePath(),hdbManager.esportaHDB(session));
+				break;
+			}
+			case 7: {
+				hdbManager.importaHDB(importaXml(leggiFilePath()), session);
+				break;
+			}
+			case 8: {
+				esportaXml(leggiFilePath(),hdbManager.esportaHDB(session));
 				break;
 			}
 			
@@ -217,6 +244,7 @@ public class Rubrica {
 			}
 			case 1: {
 				dbManager.aggiungiContattoDB(letturaContatto());
+				System.out.println("Contatto aggiunto");
 				break;
 			}
 			case 2: {
@@ -231,16 +259,91 @@ public class Rubrica {
 				break;
 			}
 			case 5: {
-				dbManager.importaCsvDB(importaCsv(leggiFilePath()));
+				dbManager.importaDB(importaCsv(leggiFilePath()));
 				break;
 			}
 			case 6: {
+				esportaCsv(leggiFilePath(),dbManager.esportaDB());
 				break;
 			}
 			case 7: {
+				dbManager.importaDB(importaXml(leggiFilePath()));
 				break;
 			}
 			case 8: {
+				esportaXml(leggiFilePath(),dbManager.esportaDB());
+				break;
+			}
+			
+		}
+		}
+	}
+	
+	public void menuJPA() throws IOException, ParserConfigurationException, SAXException, TransformerException{
+		boolean controllo = false;
+		int opzioneScelta = 0;
+		System.out.println("Menu JPA");
+		
+		while(!controllo) {
+			System.out.println("Seleziona l'operazione da svolgere\n"
+					+ "0 = Torna al menu principale\n"
+					+ "1 = Aggiungi contatto\n"
+					+ "2 = Ricerca contatto\n"
+					+ "3 = Elimina contatto\n"
+					+ "4 = Modifica contatto\n"
+					+ "5 = Importa la lista dei contatti da csv\n"
+					+ "6 = Esporta la lista dei contatti in un file csv\n"
+					+ "7 = Importa la lista dei contatti da un file xml\n"
+					+ "8 = Esporta la lista dei contatti in un file xml\n");
+		
+		
+		try {
+			opzioneScelta = Integer.parseInt(sc.next());
+			controllo = true;
+		}catch(NumberFormatException e) {
+			System.out.println("Opzione non disponibile");
+		}
+		
+		
+		switch(opzioneScelta) {
+			case 0:{
+				menuPrincipale();
+				break;
+			}
+			case 1: {
+				jpaManager.aggiungiContattoJPA(letturaContatto());
+				System.out.println("Contatto aggiunto");
+				break;
+			}
+			case 2: {
+				jpaManager.ricercaContattoJPA(letturaContatto());
+				break;
+			}
+			case 3: {
+				jpaManager.eliminaContattoJPA(jpaManager.ricercaContattoJPA(letturaContatto()));
+				break;
+			}
+			case 4: {
+				System.out.println("Ricerca contatti");
+				List<Contatto> contattiTrovati = jpaManager.ricercaContattoJPA(letturaContatto());
+				System.out.println("Modifica contatti");
+				jpaManager.modificaContattoJPA(contattiTrovati, letturaContatto());
+				break;
+			}
+			case 5: {
+				jpaManager.importaJPA(importaCsv(leggiFilePath()));
+				break;
+			}
+			case 6: {
+				esportaCsv(leggiFilePath(),jpaManager.esportaJPA());
+				break;
+			}
+			case 7: {
+				jpaManager.importaJPA(importaXml(leggiFilePath()));
+				break;
+			}
+			case 8: {
+				esportaXml(leggiFilePath(),jpaManager.esportaJPA());
 				break;
 			}
 			
@@ -357,18 +460,21 @@ public class Rubrica {
 		return contatti;
 	}
 	
-	public void esportaCsv(String filePath) throws IOException {
+	public void esportaCsv(String filePath, List<Contatto> contatti) throws IOException {
 		
 		File file = new File(filePath);
+
 		FileWriter fw = new FileWriter(file);
 		
 		for(Contatto contatto : contatti) {
 			fw.write(contatto.toString() + "\n");
 		}
 		fw.close();
+		
+		System.out.println("Contatti esportati");
 	}
 	
-	public void importaXml(String filePath) throws ParserConfigurationException, SAXException, IOException {
+	public List<Contatto> importaXml(String filePath) throws ParserConfigurationException, SAXException, IOException {
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -412,9 +518,10 @@ public class Rubrica {
         }
         contatti.add(contatto);
         }
+        return contatti;
 	}
 	
-	public void esportaXml(String filePath) throws ParserConfigurationException, TransformerException {
+	public void esportaXml(String filePath, List<Contatto> contatti) throws ParserConfigurationException, TransformerException {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();

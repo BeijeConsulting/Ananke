@@ -1,30 +1,21 @@
 package it.beije.ananke.rubrica;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
-public class HDBManager {
-	Configuration configuration = new Configuration().configure()
-			.addAnnotatedClass(Contatto.class);
-	SessionFactory sessionFactory = configuration.buildSessionFactory();
+import org.hibernate.Session;
+
+public class JPAmanager {
+	EntityManager entityManager = RubricaEntityManager.getEntityManager();
 	
-	public Session getSession() {	
-		Session session = sessionFactory.openSession();
-		return session;
-	}
-	
-	public void aggiungiContattoHDB(Contatto contatto, Session session) {
-		Transaction transaction = session.beginTransaction();
+	public void aggiungiContattoJPA(Contatto contatto) {
+		//apro transazione
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
 		
 		Contatto newContatto = new Contatto();
 		newContatto.setNome(contatto.getNome());
@@ -32,39 +23,34 @@ public class HDBManager {
 		newContatto.setEmail(contatto.getEmail());
 		newContatto.setTelefono(contatto.getTelefono());
 		
-		session.save(newContatto);
-		transaction.commit();
-		System.out.println("Contatto aggiunto");
+		entityManager.persist(newContatto);
+		
+		entityTransaction.commit();
 			
 	}
-
-	public List<Contatto> ricercaContattoHDB(Contatto contatto, Session session) {
-		
-		System.out.println("Ricerca contatti");
+	
+	public List<Contatto> ricercaContattoJPA(Contatto contatto) {
 		boolean controlloAnd = false;
 		String ricerca = "SELECT c FROM Contatto as c WHERE ";
 		
 		if(!contatto.getNome().trim().equals("")) {
 			ricerca += "nome ='" + contatto.getNome() + "'"; 
 			controlloAnd = true;
-		}
-		
+		}		
 		if(!contatto.getCognome().trim().equals("")) {
 			if(controlloAnd) {
 				ricerca += " AND ";
 			}
 			ricerca += "cognome ='" + contatto.getCognome() + "'";
 			controlloAnd = true;
-		}
-		
+		}		
 		if(!contatto.getEmail().trim().equals("")) {
 			if(controlloAnd) {
 				ricerca += " AND ";
 			}
 			ricerca += "email ='" + contatto.getEmail() + "'";
 			controlloAnd = true;
-		}
-				
+		}				
 		if(!contatto.getTelefono().trim().equals("")) {
 			if(controlloAnd) {
 				ricerca += " AND ";
@@ -72,9 +58,8 @@ public class HDBManager {
 			ricerca += "telefono ='" + contatto.getTelefono() + "'";
 		}
 				
-		Query<Contatto> query = session.createQuery(ricerca);
-		
-		List<Contatto> contatti = query.list();
+		Query query = entityManager.createQuery(ricerca);
+		List<Contatto> contatti = query.getResultList();
 				
 		for(Contatto c : contatti) {
 			System.out.println(c.toString());
@@ -82,9 +67,10 @@ public class HDBManager {
 		
 		return contatti;
 	}
-	
-	public void modificaContattoHDB(List<Contatto> contatti,Contatto contattoModificato, Session session) {
-		Transaction transaction = session.beginTransaction();
+
+	public void modificaContattoJPA(List<Contatto> contatti,Contatto contattoModificato) {
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
 		
 		for(Contatto contatto: contatti) {
 			if(!contattoModificato.getNome().equals("")) {
@@ -99,37 +85,37 @@ public class HDBManager {
 			if(!contattoModificato.getTelefono().equals("")) {
 				contatto.setTelefono(contattoModificato.getTelefono());
 			}
-			session.save(contatto);
+			entityManager.persist(contatto);
 		}	
-		transaction.commit();
-		
+		entityTransaction.commit();
 		System.out.println("Contatti modificati");
 	}
 	
-	public void eliminaContattoHDB(List<Contatto> contatti, Session session) {
-		Transaction transaction = session.beginTransaction();
+	public void eliminaContattoJPA(List<Contatto> contatti) {
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		
 		for(Contatto contatto : contatti) {
-			session.delete(contatto);
+			entityManager.remove(contatto);
 		}
-		transaction.commit();
+		entityTransaction.commit();
 		System.out.println("Contatti eliminati");
 	}
 	
-	public void importaHDB(List<Contatto> contatti, Session session) {
+	public void importaJPA(List<Contatto> contatti) {
 		for(Contatto contatto : contatti) {
-			aggiungiContattoHDB(contatto, session);
+			aggiungiContattoJPA(contatto);
 		}
 		System.out.println("Contatti importati");
 	}
 	
-	public List<Contatto> esportaHDB(Session session) {
+	public List<Contatto> esportaJPA() {
 		String select = "SELECT c FROM contatto as c";
 		Contatto contatto = null;
 		List<Contatto> contatti = new ArrayList<Contatto>();
 		
-		Query<Contatto> query = session.createQuery(select);
-		
-		contatti = query.list();
+		Query query = entityManager.createQuery(select);
+		contatti = query.getResultList();
 		
 		return contatti;
 	}
