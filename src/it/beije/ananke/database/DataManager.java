@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import it.beije.ananke.file.Rubrica;
-import it.beije.ananke.file.Contatto;
+import it.beije.ananke.file.ContattoMio;
 
 
 public class DataManager {
@@ -114,7 +114,7 @@ public class DataManager {
 	}
 	
 	public void aggiungiVoce(Connection connection, Statement statement, Scanner s) throws IOException {
-		Contatto cont = r.defContatto(s);
+		ContattoMio cont = r.defContatto(s);
 		if(cont != null) {
 			try {
 				statement = connection.createStatement();
@@ -137,6 +137,12 @@ public class DataManager {
 	
 	
 	public void modificaEntry(Connection connection) {
+		System.out.println("Si stanno apportando modifiche alla tabella.");
+	/*	try {
+			
+		}catch{
+			
+		}*/
 		
 	}
 	
@@ -236,10 +242,9 @@ public class DataManager {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		} finally {
+			return rs;
+		}
 		
-		
-		
-		return rs;
 	}
 }

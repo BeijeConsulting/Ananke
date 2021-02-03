@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import it.beije.ananke.file.Contatto;
+import it.beije.ananke.file.ContattoMio;
 
 public class HybernateSessionManager {
 	
@@ -16,7 +16,7 @@ public class HybernateSessionManager {
 		
 		if (sessionFactory == null) {
 			Configuration configuration = new Configuration().configure()
-					.addAnnotatedClass(Contatto.class);
+					.addAnnotatedClass(ContattoMio.class);
 
 			sessionFactory = configuration.buildSessionFactory();
 		}

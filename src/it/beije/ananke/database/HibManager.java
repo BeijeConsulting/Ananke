@@ -1,6 +1,6 @@
 package it.beije.ananke.database;
 
-import it.beije.ananke.file.Contatto;
+import it.beije.ananke.file.ContattoMio;
 import it.beije.ananke.file.Rubrica;
 import it.beije.ananke.Singleton;
 
@@ -66,9 +66,9 @@ public class HibManager {
 	}
 	
 	
-	public void stampa(List<Contatto> contatti) {
+	public void stampa(List<ContattoMio> contatti) {
 		if(contatti.size() != 0) {
-			for(Contatto c : contatti) {
+			for(ContattoMio c : contatti) {
 				System.out.println(c.toString());
 			}
 		}else {
@@ -77,22 +77,22 @@ public class HibManager {
 	}
 	
 	
-	public List<Contatto> lettura(Session session){
-		List<Contatto> contatti = new ArrayList<>();
+	public List<ContattoMio> lettura(Session session){
+		List<ContattoMio> contatti = new ArrayList<>();
 		String hqlSelect = "SELECT c FROM Contatto as c";
-		Query<Contatto> query = session.createQuery(hqlSelect);
+		Query<ContattoMio> query = session.createQuery(hqlSelect);
 		contatti = query.list();
 		stampa(contatti);
 		return contatti;
 	}
 	
 	
-	public List<Contatto> scan(Session session, Scanner s){
+	public List<ContattoMio> scan(Session session, Scanner s){
 		System.out.println("Scegliere in quale campo cercare:\n"
 				+ "0: ID\n1: NOME\n2: COGNOME\n3: EMAIL\n4: TELEFONO\n"
 				+ "(Attenzione il numero di telefono deve contenere eventuali prefissi)");
 		String str = s.next();
-		List<Contatto> contatti = new ArrayList<>();
+		List<ContattoMio> contatti = new ArrayList<>();
 		try {
 			int indice = Integer.parseInt(str);
 			
@@ -115,7 +115,7 @@ public class HibManager {
 			str = s.next();
 			
 			String select = "FROM Contatto c WHERE c." + search + " = '" + str + "'";
-			Query<Contatto> query = session.createQuery(select);
+			Query<ContattoMio> query = session.createQuery(select);
 			contatti = query.list();
 			
 		} catch (NumberFormatException e) {
@@ -127,7 +127,7 @@ public class HibManager {
 	
 	
 	public void ricerca(Session session, Scanner s) {
-		List<Contatto> contatti = scan(session, s);
+		List<ContattoMio> contatti = scan(session, s);
 		if(contatti.size() == 0) {
 			System.out.println("Non ci sono elementi che corrispondono ai criteri di ricerca.");
 		}else {
@@ -138,7 +138,7 @@ public class HibManager {
 	
 	public void inserisci(Session session, Scanner s) throws IOException {
 		Transaction transaction = session.beginTransaction();
-		Contatto contatto = r.defContatto(s);
+		ContattoMio contatto = r.defContatto(s);
 		session.save(contatto);
 		transaction.commit();
 		System.out.println("La voce è stata inserita correttamente.");
@@ -146,11 +146,11 @@ public class HibManager {
 	
 	
 	public void eliminazione(Session session, Scanner s) {
-		List<Contatto> contatti = scan(session, s);
+		List<ContattoMio> contatti = scan(session, s);
 		if(contatti.size() == 0) {
 			System.out.println("Non ci sono elementi che corrispondono ai criteri di ricerca.");
 		}else {
-			for(Contatto c : contatti) {
+			for(ContattoMio c : contatti) {
 				Transaction transaction = session.beginTransaction();
 				session.delete(c);
 				transaction.commit();
@@ -161,7 +161,7 @@ public class HibManager {
 	
 	
 	public void modifica(Session session, Scanner s) {
-		List<Contatto> contatti = scan(session, s);
+		List<ContattoMio> contatti = scan(session, s);
 		if(contatti.size() == 0) {
 			System.out.println("Non ci sono elementi che corrispondono ai criteri di ricerca.");
 		}else {
@@ -182,7 +182,7 @@ public class HibManager {
 				System.out.println("Inserire il nuovo valore da salvare: ");
 				String nuovo = s.next();
 				
-				for(Contatto c : contatti) {
+				for(ContattoMio c : contatti) {
 					Transaction transaction = session.beginTransaction();
 					switch(i) {
 						case 1: c.setName(nuovo); break;
