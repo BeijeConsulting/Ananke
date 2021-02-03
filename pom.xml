@@ -13,7 +13,13 @@
         </excludes>
       </resource>
     </resources>
-   
+<!--        <repositories> -->
+<!-- 		<repository> -->
+<!-- 			<id>jakarta.oss.sonatype.org</id> -->
+<!-- 			<name>Jakarta OSS Sonatype Staging</name> -->
+<!-- 			<url>https://jakarta.oss.sonatype.org/content/repositories/staging</url> -->
+<!-- 		</repository> -->
+<!-- 	</repositories> -->
     <plugins>
     
       <plugin>
@@ -33,6 +39,16 @@
     <artifactId>hibernate-core</artifactId>
     <version>5.4.27.Final</version>
 </dependency>
+  	<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>2.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.1.0</version>
+		</dependency>
   
 <dependency>
     <groupId>mysql</groupId>
