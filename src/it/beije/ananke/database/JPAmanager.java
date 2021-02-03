@@ -8,8 +8,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import it.beije.ananke.Contatto;
-
+import it.beije.ananke.rubrica.Contact;
 
 public class JPAmanager {
 
@@ -20,15 +19,15 @@ public class JPAmanager {
 		
 		EntityManager entityManager = RubricaEntityManager.getEntityManager();
 		
-//		Contatto contatto1 = entityManager.find(Contatto.class, 1);
+//		Contact contatto1 = entityManager.find(Contatto.class, 1);
 //		System.out.println(contatto1);
 
 		//JPQL
-		String jpqlSelect = "SELECT c FROM Contatto as c";
+		String jpqlSelect = "SELECT c FROM Contact as c";
 		Query query = entityManager.createQuery(jpqlSelect);
-		List<Contatto> contatti = query.getResultList();
+		List<Contact> contatti = query.getResultList();
 
-		for (Contatto contatto : contatti) {
+		for (Contact contatto : contatti) {
 			System.out.println("id : " + contatto.getId());
 			System.out.println("name : " + contatto.getName());
 			System.out.println("surname : " + contatto.getSurname());
@@ -37,19 +36,20 @@ public class JPAmanager {
 		}
 
 		//apro transazione
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
+//		EntityTransaction entityTransaction = entityManager.getTransaction();
+//		entityTransaction.begin();
 		
 //		//UPDATE
-//		Contatto c1 = contatti.get(contatti.size()-1);
+//		Contact c1 = contatti.get(contatti.size()-1);
 //		c1.setTelephone("123456789");
 //		
 //		System.out.println("c1 ID PRE save  :" + c1.getId());
 //		entityManager.persist(c1);
 //		System.out.println("c1 ID POST save :" + c1.getId());
 		
+		/*
 		//INSERT
-		Contatto newContatto = new Contatto();
+		Contact newContatto = new Contact();
 		newContatto.setName("Piero");
 		newContatto.setSurname("Pelù");
 		newContatto.setEmail("ppelu@beije.it");
@@ -57,8 +57,9 @@ public class JPAmanager {
 		System.out.println("newContatto ID PRE save  :" + newContatto.getId());
 		entityManager.persist(newContatto);
 		System.out.println("newContatto ID POST save :" + newContatto.getId());
+		*/
 		
-		entityTransaction.commit();
+//		entityTransaction.commit();
 //		entityTransaction.rollback();
 		
 		entityManager.close();
