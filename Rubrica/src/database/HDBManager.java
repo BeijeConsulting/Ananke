@@ -138,9 +138,7 @@ public class HDBManager {
 		    query.executeUpdate();
 		    
 		    transaction.commit();
-		    
-		    
-		    
+		     
 		}
 		
 		public void modificaNomeContattoDb(Contatto contatto, String nomeNuovo) throws SQLException {
