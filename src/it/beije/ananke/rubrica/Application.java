@@ -12,7 +12,7 @@ public class Application {
 	
 	public Application() {
 		System.out.println("Benvenuto in iRubrica\n");
-		JDBCManager db = new JDBCManager();
+		
 		
 		 menu();
 	}
@@ -22,7 +22,7 @@ public class Application {
 		Scanner sc = new Scanner(System.in);
 		String s;
 		System.out.println("Inserisci il nome del file");
-		 s = "/Users/Gianni/Desktop/" + sc.next();
+		 s = "/Users/Padawan10/Desktop/" + sc.next();
 		 try {
 		 if(s.substring(s.length()-3).equals("csv")) {
 			 l = CSVManager.readCSV(s);
@@ -45,7 +45,7 @@ public class Application {
 		String s;
 		
 		System.out.println("Inserisci il nome del file");
-		 s = "/Users/Gianni/Desktop/" + sc.next().trim();
+		 s = "/Users/Padawan10/Desktop/" + sc.next().trim();
 		 System.out.println(s.substring(s.length()-3, s.length()));
 		 try {
 		 if(s.substring(s.length()-3).equals("csv")) {
@@ -63,6 +63,7 @@ public class Application {
 	public void menu() {
 		Scanner sc = new Scanner(System.in);
 		Rubrica r1 = new Rubrica();
+		List<Contatti> l = new ArrayList<>();
 		
 		String s,addmore;
 		do {
@@ -72,20 +73,27 @@ public class Application {
 
 			 switch(s) {
 			 case "1":
-				 System.out.println("Inserisci email dei contatti da cercare: ");
+				 System.out.println("Inserisci un campo da cerca: ");
 				 String e1 = sc.next();
 			
-					HDBManager.containContacts(e1);
+					JPAManager.containContacts(e1);
 			
 				 break;
 			 case "2":
-				HDBManager.addContact(r1.addContact());
-				
+				 l = r1.addContact();
+				 for (Contatti c : l) {
+				JPAManager.insertContact(c);
+				 }
 				 break;
 			 case "3":
-				 System.out.println("Inserisci email del contatto da eliminare: ");
+				 System.out.println("Inserisci un campo dei contatti da eliminare: ");
 				 String e = sc.next();
-				 HDBManager.deleteContacts(e);
+				 l = JPAManager.containContacts(e);
+				 if(!l.isEmpty()) {
+				 for(Contatti c : l) {
+					 JPAManager.deleteContacts(c);
+				 }
+				 }
 				 break;
 			 case "4":
 				

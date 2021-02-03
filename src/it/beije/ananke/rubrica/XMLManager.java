@@ -85,7 +85,7 @@ public static void writeXML(List<Contatti> l, String s) throws ParserConfigurati
         Element surname = null;
         Element email = null;
         Element telephone = null;
-        int i=0;
+        int i=1;
         for(Contatti c : l ) {
         	contatto = document.createElement("contatto");
         	contatto.setAttribute("id", Integer.toString(i++));
