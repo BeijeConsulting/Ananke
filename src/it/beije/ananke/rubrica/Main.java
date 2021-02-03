@@ -33,8 +33,13 @@ public class Main {
 		//RubricaSQL.provaConnessione();
 		//RubricaHQL.cercaContatti("Mario");
 		//RubricaHQL.inserisciContatto("Rossi","Rossi","3437866","rossi.r@gmail.com");
-		RubricaHQL.visualizzaDB();
-		RubricaHQL.eliminaContattoDB("Rossi");
+		//RubricaHQL.visualizzaDB();
+		//RubricaHQL.eliminaContattoDB("Rossi");
+		//RubricaJPA.provaConnessione();
+		//RubricaJPA.cercaContatti("Blossi");
+		//RubricaJPA.inserisciContatto("Aimone", "Romizzi", "389666741", "a.romizzi@ibero.it");
+		//RubricaJPA.eliminaContattoDB("Tina");
+		//RubricaJPA.eliminaContattoDB("Tina");
 		stampaMenu();
 		String comando = "";
 		

@@ -24,6 +24,12 @@ public class RubricaHQL {
 		@SuppressWarnings("unchecked")
 		Query<Contatto> query = session.createQuery(hqlSelect);
 		listC = query.list();
+		
+		if (listC.size() == 0) {
+			System.out.print("NESSUN CONTATTO TROVATO!");
+			return null;
+		}
+		
 		for(Contatto c : listC)
 			c.visualizzaContatto();
 		//System.out.println(listC.size());
@@ -56,7 +62,7 @@ public class RubricaHQL {
 		Transaction transaction;
 		
 		if(list == null) {
-			System.out.println("NESSUN CONTATTO PRESENTE!");
+			//System.out.println("NESSUN CONTATTO PRESENTE!");
 			return;
 		}
 		
@@ -86,9 +92,9 @@ public class RubricaHQL {
 		int indice = Integer.parseInt(comando);
 		int idDaModificare = list.get(indice - 1).getId();
 		
-		System.out.println("------------------------------");
+		System.out.println("----------------------------");
 		System.out.println("QAULE CAMPO VUOI MODIFICARE?");
-		System.out.println("------------------------------");
+		System.out.println("----------------------------");
 		System.out.println("1 - Nome");
 		System.out.println("2 - Cognome");
 		System.out.println("3 - Numero di telefono");
@@ -133,6 +139,7 @@ public class RubricaHQL {
 			transaction = session.beginTransaction();
 			c = contatti.get(indiceDaModificare);
 			c.setCognome(cmd);
+			session.update(c);
 			session.save(c);
 			transaction.commit();
 
@@ -146,6 +153,7 @@ public class RubricaHQL {
 			transaction = session.beginTransaction();
 			c = contatti.get(indiceDaModificare);
 			c.setNumeroTel(cmd);
+			session.update(c);
 			session.save(c);
 			transaction.commit();
 						
@@ -159,6 +167,7 @@ public class RubricaHQL {
 			transaction = session.beginTransaction();
 			c = contatti.get(indiceDaModificare);
 			c.setMail(cmd);
+			session.update(c);
 			session.save(c);
 			transaction.commit();
 			
@@ -188,9 +197,9 @@ public class RubricaHQL {
 		Scanner s = new Scanner(System.in);
 		
 		System.out.println();
-		System.out.println("-------------------------------");
+		System.out.println("------------------------------");
 		System.out.println("QAULE CONTATTO VUOI ELIMINARE?");
-		System.out.println("-------------------------------");
+		System.out.println("------------------------------");
 
 		for(Contatto contatto : list) {
 			i++;
