@@ -1,4 +1,4 @@
-package contatti;
+package dao;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -8,6 +8,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import model.User;
 
 public class UsersInJpaManager implements UserManager {
 
@@ -61,5 +63,6 @@ public class UsersInJpaManager implements UserManager {
 		entityManager.getTransaction().commit();
 		return allUsers;
 	}
+	
 
 }

@@ -1,7 +1,9 @@
-package contatti;
+package dao;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+
+import model.User;
 
 public interface UserManager {
 
@@ -10,5 +12,6 @@ public interface UserManager {
 	void updateUser(User user);
 	User getUser(String email);
 	List<User> getAllUsers();
+	default void funn() {}
 	
 }

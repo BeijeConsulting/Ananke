@@ -1,10 +1,14 @@
-package contatti;
+package app;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import dao.UserInFileManager;
+import dao.UserManager;
+import model.User;
 
 
 public class ContactsApp {

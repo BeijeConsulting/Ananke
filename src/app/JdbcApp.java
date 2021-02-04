@@ -1,9 +1,13 @@
-package contatti;
+package app;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import dao.UserManager;
+import dao.UsersInJdbcManager;
+import model.User;
 
 public class JdbcApp {
 

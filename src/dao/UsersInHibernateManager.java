@@ -1,4 +1,4 @@
-package contatti;
+package dao;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -10,6 +10,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+
+import model.User;
 
 public class UsersInHibernateManager implements UserManager {
 
