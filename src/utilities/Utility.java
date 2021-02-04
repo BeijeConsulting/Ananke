@@ -25,6 +25,7 @@ public class Utility {
 		 int i= Integer.parseInt(inputFromKeyboard);
 		serviceCallingManager(i,userManager);
 	}
+	@SuppressWarnings("null")
 	public static void serviceCallingManager(int n,UserManager userManager) throws IOException, SQLException {
 		switch(n) {
 		case 1 :
@@ -58,7 +59,7 @@ public class Utility {
 		 case 3 :
 		         {
 		        	 User user=null;
-		        	 user = getUserFromKeyBoard(userManager);
+		        	 user = getUpdatedInfoOfTheUserFromKeyBoard(userManager);
 		        	   if( !isUserExistInDatabase(user.getEmail(),userManager) ) {
 			           userManager.setUser(user);
 			         System.out.println("Contact added successfully!");
@@ -93,8 +94,9 @@ public class Utility {
 		         }
 		 case 5 :
 		      {
-			     User user = getUserFromKeyBoard(userManager);
-			     if(isUserExistInDatabase(user.getEmail(), userManager)) {
+		    	  User user;
+			      user = getUpdatedInfoOfTheUserFromKeyBoard(userManager);
+			     if(user!=null) {
 			    	 userManager.updateUser(user);
 			    	 System.out.println("User updated successfully!");
 			    	 System.out.println("####################################");
@@ -102,7 +104,7 @@ public class Utility {
 			    	 break;
 			     }
 			     else {
-			    	 System.out.println("Sorry this user is not exists to update!");
+			    	 System.out.println("Sorry this user is not exist to update!");
 			    	 System.out.println("####################################");
 				      mainMenu(userManager);
 			    	 break;
@@ -124,25 +126,29 @@ public class Utility {
 			user.displayUser();
 		}
 	}
-	private static User getUserFromKeyBoard(UserManager userManager) {
+	private static User getUpdatedInfoOfTheUserFromKeyBoard(UserManager userManager) {
 		User user = new User();
 		String data,email;
-		System.out.println("Enter first name of the user : ");
-		data = scanner.next();
-		user.setFirstName(data);
-		
-		System.out.println("Enter last name of the user : ");
-		data = scanner.next();
-		user.setLastName(data);
-		
-		System.out.println("Enter email address of the user : ");
+		System.out.println("Enter the email address of the user to update his info: ");
 		email = scanner.next();
-		user.setEmail(email);
+		user = userManager.getUser(email);
+		if(user!=null) {
+
+			System.out.println("update firstName of the user : ");
+			data = scanner.next();
+			user.setFirstName(data);
+			
+			System.out.println("update lastName of the user : ");
+			data = scanner.next();
+			user.setLastName(data);
+			
+			System.out.println("update phone number of the user: ");
+			data = scanner.next();
+			user.setPhoneNumber(data);
+		return user;
+		}
 		
-		System.out.println("Enter phone number of the user : ");
-		data = scanner.next();
-		user.setPhoneNumber(data);
-	return user;	
+		return null;	
 	}
 	
 	public static boolean isUserExistInDatabase(String email,UserManager userManager) {

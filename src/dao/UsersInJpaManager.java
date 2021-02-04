@@ -28,8 +28,8 @@ public class UsersInJpaManager implements UserManager {
 
 	@Override
 	public void removeUser(String email) {
-		User user= null;
-		user= entityManager.find(User.class, email);
+		User user = null;
+		user = this.getUser(email);
 		entityManager.getTransaction().begin();
 		entityManager.remove(user);
 		entityManager.getTransaction().commit();
