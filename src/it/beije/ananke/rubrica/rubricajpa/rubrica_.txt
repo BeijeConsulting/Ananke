@@ -1,0 +1,17 @@
+Alan;Caligiuri;202032536;alan.caligiuri@tiscali.it;
+Alessandro;Fantastico;258963123;Alessandroiltop@gmail.com;
+Alessio;Bernacchioli;3353266895;ilberna91@gmail.com;
+Chiara;Negri;336523653;Chiara.negri@gmail.com;
+Eleonora;Pecin;3363353235;epecin@gmail.com;
+Fabrizio;Meloni;3338294662;melofabriss@gmail.com;
+Federico;Giuliani;147536951;Federico.giuliani@gmail.com;
+Francesco;Gilardi;13466963;francesco.gilardi@gmail.com;
+Gianfranco;Esposito;14525265;gianniilbello@gmail.com;
+Giulio;Golia;123456789;giulio.golia@gmail.com;
+Luisa;Alcini;3460209555;luisa.alcini@gmail.com;
+Massimo;Costante;141425253;massimo.costante@gmail.com;
+Sara;Allievi;258147258;sara.allievi@gmail.com;
+Stefano;Alessi;777456536;stefano.alessi@gmail.com;
+Stefano;Bestetti;3396153654;stefano.bestetti94@gmail.com;
+Stefano;Mariani;256258333;stefmariani@gmail.com;
+Stefano;D'alessandro;3396858965;alexstiv@gmail.com;
