@@ -11,7 +11,7 @@ public class Principal {
 		ArrayList <Contatto> cont = new ArrayList<>();
 		ServiceApp serv = new ServiceApp();
 		
-		cont = serv.CaricaFileCsv("C:\\Users\\Padawan11\\Desktop\\FileDoc", "contatti");
+		cont = (ArrayList<Contatto>) serv.CaricaFileCsv("C:\\Users\\Padawan11\\Desktop\\FileDoc", "contatti");
 		serv.aggiornaContattiDB(cont);
 		
 	}

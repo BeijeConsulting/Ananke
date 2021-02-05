@@ -19,7 +19,7 @@ public class ServiceApp {
 	Statement statement = null;
 	ResultSet rs = null;
 
-	public ArrayList<Contatto> CaricaFileCsv(String path, String nomeFile) throws IOException {	
+	public List<Contatto> CaricaFileCsv(String path, String nomeFile) throws IOException {	
 		ArrayList<Contatto> listContatti = new ArrayList<Contatto>();
 		List <String> lista = new ArrayList<String>();
 		File file = new File(path + "\\" + nomeFile + ".csv");
