@@ -101,7 +101,8 @@ public class Application {
 				
 				 break;
 			 case "5":
-				exportFile(r1.r);
+				 l = JPAManager.getAllUsers();
+				exportFile(l);
 				 break;
 			 case "6":
 				 try {
@@ -128,6 +129,6 @@ public class Application {
 	
 	public static void main(String[] args) {
 		Application app = new Application();
-		HDBManager.getSf().close();
+		
 	}
 }
